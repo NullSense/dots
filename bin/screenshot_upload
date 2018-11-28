@@ -1,0 +1,3 @@
+#!/bin/bash
+
+maim -s /tmp/screenshot.png; imgur /tmp/screenshot.png | xclip -selection clipboard
