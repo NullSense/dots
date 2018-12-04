@@ -2,6 +2,7 @@
 # ~/.bashrc
 #
 export PATH=$PATH:~/bin/
+export EDITOR=vim
 
 source ~/.git-prompt.sh
 source "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"
