@@ -1,6 +1,7 @@
 set nocompatible
 set background=dark
 set encoding=utf-8 "windows specific rendering option
+set t_Co=256
 
 "Vim general
 set number "Number lines
@@ -26,13 +27,35 @@ filetype plugin indent on
 syntax on "Syntax highlighting
 
 "Airline
-let g:airline_powerline_fonts = 1 "Fix airline font bug
-set rop=type:directx,gamma:1.0,contrast:0.5,level:1,geom:1,renmode:4,taamode:1 "Windows specific rendering
+let g:airline_powerline_fonts = 1
+
 if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
+    let g:airline_symbols = {}
 endif
-let g:airline_symbols.space = "\ua0"
-let g:airline_theme='gruvbox'
+
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
+
+
+" airline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
 
 "GitGutter settings
 let g:signify_vcs_list = [ 'git', 'hg' ] "git and mercurial
@@ -43,6 +66,7 @@ let g:signify_sign_change = '~'
 call plug#begin()
 Plug 'morhetz/gruvbox'
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'mhinz/vim-signify'
 Plug 'jiangmiao/auto-pairs'
 call plug#end()

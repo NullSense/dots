@@ -5,9 +5,16 @@ export PATH=$PATH:~/bin/
 
 source ~/.git-prompt.sh
 source "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"
+source <(kitty + complete setup bash)
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
+
+alias shutdown='sudo shutdown now'
+alias restart='sudo reboot'
+alias hibernate='sudo systemctl suspend'
+alias suspend='sudo systemctl suspend'
+
 
 #-----------------------------------------------------------------------
 #

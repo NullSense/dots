@@ -1,0 +1,8 @@
+"screenshot_clipb"
+    Print
+
+"screenshot_upload"
+    control + Print
+
+"maim /tmp/screenshot.png; imgur.sh /tmp/screenshot.png | xclip -selection clipboard"
+    control + alt + Print
