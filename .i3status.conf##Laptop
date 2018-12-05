@@ -27,16 +27,16 @@ order += "tztime local"
 
 weather_yahoo {
     woeid = 729028
-    format_today = "{icon}{temp}°{unit}"
+    format_today = "{temp}°{unit}"
 }
 
 volume master {
     format = "墳: %volume"
-    format_muted = "ﱝ: %volume"
+    format_muted = "ﱝ"
 }
 
 cpu_usage {
-    format = ": %usage"
+    format = ": %usage"
 }
 
 cpu_temperature 0 {
@@ -44,8 +44,8 @@ cpu_temperature 0 {
 }
 
 wireless _first_ {
-    format_up = ""
-    format_down = ""
+    format_up = "直"
+    format_down = "睊"
 }
 
 ethernet _first_ {
@@ -56,13 +56,13 @@ ethernet _first_ {
 
 battery 0 {
     format = "%status: %percentage"
-    status_chr = ""
-    status_bat = ""
-    status_full = ""
+    status_chr = ""
+    status_bat = ""
+    status_full = ""
 }
 
 tztime local {
-    format = "%H:%M  : %Y-%m-%d "
+    format = ": %H:%M  : %Y-%m-%d "
 }
 
 load {
@@ -70,5 +70,5 @@ load {
 }
 
 disk "/" {
-    format = " :%avail"
+    format = ": %avail"
 }
