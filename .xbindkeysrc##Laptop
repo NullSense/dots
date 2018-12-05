@@ -1,0 +1,20 @@
+"screenshot_clipb"
+    Print
+
+"screenshot_upload"
+    control + Print
+
+"maim /tmp/screenshot.png; imgur.sh /tmp/screenshot.png | xclip -selection clipboard"
+    control + alt + Print
+
+# Mute volume
+"pactl set-sink-mute @DEFAULT_SINK@ toggle"
+   XF86AudioMute
+
+# Increase backlight
+"xbacklight -inc 5"
+   XF86MonBrightnessUp
+   
+# Decrease backlight
+"xbacklight -dec 5"
+   XF86MonBrightnessDown
