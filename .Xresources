@@ -4,12 +4,12 @@ Xft.antialias: 1
 Xft.rgba: rgb
 Xfg.hinting: 1
 Xft.lcdfilter: lcddefault
-Xft.hintstyle: hintsfull
+Xft.hintstyle: hintfull
 
 !URxvt.font: xft:Source\ Code\ Pro\ Medium:pixelsize=13:antialias=true:hinting=true,xft:Source\ Code\ Pro\ Medium:pixelsize=13:antialias=true:hinting=true
-!URxvt.font: xft:Source Code Pro:size=8:antialias=true
-!jURxvt.boldFont: xft:Source Code Pro Bold:size=8:antialias=true
-!URxvt.letterSpace: 1
+URxvt.font: xft:Source Code Pro:size=8:antialias=true
+URxvt.boldFont: xft:Source Code Pro Bold:sizeaa:antialias=true
+URxvt.letterSpace: -1
 
 
 !URxvt*terminalName: rxvt-unicode-256color

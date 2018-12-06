@@ -3,6 +3,7 @@
 #
 export PATH=$PATH:~/bin/
 export EDITOR=vim
+export BROWSER=chromium
 
 source ~/.git-prompt.sh
 source "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"

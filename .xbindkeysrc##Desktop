@@ -4,5 +4,17 @@
 "screenshot_upload"
     control + Print
 
-"maim /tmp/screenshot.png; imgur.sh /tmp/screenshot.png | xclip -selection clipboard"
-    control + alt + Print
+"maim /tmp/screenshot.png; imgur /tmp/screenshot.png | xclip -selection clipboard"
+    control + Alt + Print
+
+# open ranger directly
+"kitty -e ranger"
+    control + r
+
+# Increase volume
+"pactl set-sink-volume @DEFAULT_SINK@ +1000"
+    Mod4+period
+
+# Decrease volume
+"pactl set-sink-volume @DEFAULT_SINK@ -1000"
+    Mod4+comma
