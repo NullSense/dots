@@ -19,6 +19,20 @@ focus_follows_mouse no
 for_window [class="^.*"] border pixel 1
 smart_borders on
 
+## Custom binds
+# Screenshots
+bindsym Print exec "maim -s | xclip -selection clipboard -t image/png"
+bindsym control+Print exec "maim -s /tmp/screenshot.png; imgur /tmp/screenshot.png | xclip -selection clipboard"
+bindsym control+Alt+Print exec "maim /tmp/screenshot.png; imgur /tmp/screenshot.png | xclip -selection clipboard"
+
+
+# Increase volume
+bindsym $mod+period exec "pactl set-sink-volume @DEFAULT_SINK@ +1000"
+#    Mod4+period
+
+# Decrease volume
+bindsym $mod+comma exec "pactl set-sink-volume @DEFAULT_SINK@ -1000"
+
 set $shutdown sudo shutdown now
 set $reboot sudo reboot
 
