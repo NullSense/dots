@@ -16,6 +16,7 @@ alias shutdown='sudo shutdown now'
 alias restart='sudo reboot'
 alias hibernate='sudo systemctl suspend'
 alias suspend='sudo systemctl suspend'
+alias hotspot='sudo systemctl restart create_ap.service'
 
 
 #-----------------------------------------------------------------------

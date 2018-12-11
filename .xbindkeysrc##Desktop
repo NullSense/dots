@@ -9,7 +9,7 @@
 
 # open ranger directly
 "kitty -e ranger"
-    control + r
+    control + Shift + r
 
 # Increase volume
 "pactl set-sink-volume @DEFAULT_SINK@ +1000"

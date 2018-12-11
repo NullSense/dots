@@ -17,14 +17,7 @@ font pango:Hack Nerd Font 8
 set $mod Mod4
 focus_follows_mouse no
 for_window [class="^.*"] border pixel 1
-gaps inner 5
-gaps outer 5
 smart_borders on
-
-bindsym $mod+s			gaps inner current plus 5
-bindsym $mod+Shift+s		gaps inner current minus 5
-
-bindsym $mod+Shift+t		gaps inner current set 5; gaps outer current set 5
 
 set $shutdown sudo shutdown now
 set $reboot sudo reboot
@@ -45,8 +38,7 @@ bindsym $mod+Shift+q kill
 #bindsym $mod+d exec dmenu_run
 
 # Start rofi
-bindsym $mod+d exec rofi -show run
-bindsym $mod+Shift+d		gaps inner current set 0; gaps outer current set 0
+bindsym $mod+d exec rofi -show drun -show-icons
 
 # change focus
 bindsym $mod+h focus left
