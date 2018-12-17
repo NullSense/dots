@@ -13,18 +13,16 @@ exec --no-startup-id xautolock -time 10 -locker lock
 font pango:Source Code Pro 8
 
 # #---Basic Definitions---# #
-# Needed for i3-gaps
 set $mod Mod4
 focus_follows_mouse no
 for_window [class="^.*"] border pixel 1
-gaps inner 15
-gaps outer 15
 smart_borders on
 
-bindsym $mod+s			gaps inner current plus 5
-bindsym $mod+Shift+s		gaps inner current minus 5
-
-bindsym $mod+Shift+t		gaps inner current set 15; gaps outer current set 15
+## Custom binds
+# Screenshots
+bindsym Print exec "maim -s | xclip -selection clipboard -t image/png"
+bindsym control+Print exec "maim -s /tmp/screenshot.png; imgur /tmp/screenshot.png | xclip -selection clipboard"
+bindsym control+Alt+Print exec "maim /tmp/screenshot.png; imgur /tmp/screenshot.png | xclip -selection clipboard"
 
 set $shutdown sudo shutdown now
 set $reboot sudo reboot
@@ -45,8 +43,7 @@ bindsym $mod+Shift+q kill
 #bindsym $mod+d exec dmenu_run
 
 # Start rofi
-bindsym $mod+d exec rofi -show run
-bindsym $mod+Shift+d		gaps inner current set 0; gaps outer current set 0
+bindsym $mod+d exec rofi -show drun -show-icons
 
 # change focus
 bindsym $mod+h focus left
