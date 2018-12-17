@@ -1,7 +1,7 @@
 #
 # ~/.bashrc
 #
-export PATH=$PATH:~/bin/
+export PATH=$PATH:~/bin
 export EDITOR=vim
 export BROWSER=chromium
 
