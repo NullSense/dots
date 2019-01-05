@@ -70,6 +70,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'mhinz/vim-signify'
 Plug 'jiangmiao/auto-pairs'
 Plug 'Valloric/YouCompleteMe'
+Plug 'suan/vim-instant-markdown'
 call plug#end()
 
 

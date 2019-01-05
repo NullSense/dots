@@ -8,6 +8,8 @@ export BROWSER=chromium
 source ~/.git-prompt.sh
 source "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"
 source <(kitty + complete setup bash)
+source ~/bin/spectro
+source ~/bin/resample_16_bit
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -17,7 +19,7 @@ alias restart='sudo reboot'
 alias hibernate='sudo systemctl suspend'
 alias suspend='sudo systemctl suspend'
 alias hotspot='sudo systemctl restart create_ap.service'
-
+alias android='sudo jmtpfs -o allow_other,uid=1000 ~/Android'
 
 #-----------------------------------------------------------------------
 #

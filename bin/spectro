@@ -1,0 +1,11 @@
+# upload a file to 0x0.st
+0x0() {
+    [ -n "$2" ] && local fn=";filename=$2"
+    echo $(curl --http1.1 -# -o /dev/stdout -F "file=@$1$fn" https://0x0.st) # prevents statusbar from eating the url
+}
+
+# produce a spectrogram of an audio file and upload it to 0x0.st
+spectro() {
+    [ -n "$2" ] && local trim="trim"
+    sox "$1" -n $trim $2 $3 remix 1 spectrogram -x 1280 -y 320 -t "$(basename "$1")" -o - | 0x0 - spectro.png
+}
