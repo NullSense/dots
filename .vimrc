@@ -1,3 +1,6 @@
+let mapleader="\<Space>"
+noremap <leader>y "+y
+
 set nocompatible
 set background=dark
 set encoding=utf-8 "windows specific rendering option
@@ -72,7 +75,6 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'Valloric/YouCompleteMe'
 Plug 'suan/vim-instant-markdown'
 call plug#end()
-
 
 let g:gruvbox_contrast_dark='soft'
 colorscheme gruvbox

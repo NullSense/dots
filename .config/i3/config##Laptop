@@ -21,8 +21,8 @@ smart_borders on
 ## Custom binds
 # Screenshots
 bindsym Print exec "maim -s | xclip -selection clipboard -t image/png"
-bindsym control+Print exec "maim -s /tmp/screenshot.png; imgur /tmp/screenshot.png | xclip -selection clipboard"
-bindsym control+Alt+Print exec "maim /tmp/screenshot.png; imgur /tmp/screenshot.png | xclip -selection clipboard"
+bindsym control+Print exec "maim -s | imgur | sed 1q | xclip -i -selection clipboard"
+bindsym control+Alt+Print exec "maim | imgur | sed 1q | xclip -i -selection clipboard"
 
 # Volume
 # Increase volume
