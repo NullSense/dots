@@ -106,3 +106,4 @@ dht.mode.set = off
 #scgi_port = 127.0.0.1:5000
 #scgi_local = /home/user/rtorrent/rpc.socket
 #schedule = scgi_permission,0,0,"execute.nothrow=chmod,\"g+w,o=\",/home/user/rtorrent/rpc.socket"
+

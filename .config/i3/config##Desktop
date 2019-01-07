@@ -15,7 +15,7 @@ font pango:Hack Nerd Font 7
 # #---Basic Definitions---# #
 # Needed for i3-gaps
 set $mod Mod4
-set $alt Mod1
+set $alt Alt_L
 focus_follows_mouse no
 for_window [class="^.*"] border pixel 1
 smart_borders on
@@ -24,26 +24,14 @@ smart_borders on
 # Screenshots
 bindsym Print exec "maim -s | xclip -selection clipboard -t image/png ; notify-send -u low \\"image in clipboard\\""
 bindsym control+Print exec bash -c 'maim -s | imgur.sh | sed 1q | tee >(xclip -i -selection clipboard) >(xargs notify-send -u low)'
-bindsym control+$alt+Print exec bash -c 'maim -s | imgur.sh | sed 1q | tee >(xclip -i -selection clipboard) >(xargs notify-send -u low)'
-
 
 # Increase volume
 bindsym $mod+period exec "pactl set-sink-volume @DEFAULT_SINK@ +1000"
-#    Mod4+period
-
 # Decrease volume
 bindsym $mod+comma exec "pactl set-sink-volume @DEFAULT_SINK@ -1000"
 
-set $shutdown sudo shutdown now
-set $reboot sudo reboot
-
 # i3Lock
-bindsym control+Shift+Escape exec lock.sh
-set $shutdown sudo shutdown now
-set $reboot sudo reboot
-
-# No borders when opening new window
-#new_window pixel 1
+bindsym control+Delete exec lock.sh
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -178,8 +166,8 @@ bar {
         tray_output DisplayPort-0
         output DisplayPort-0
         position top
-        status_command py3status
-        font pango:Hack Nerd Font 8
+        status_command i3blocks
+        font pango:Hack Nerd Font 7
         separator_symbol " "
 
         colors {
@@ -197,7 +185,7 @@ bar {
 bar {
         output DVI-1
         position top
-        status_command py3status
+        status_command i3blocks
         font pango:Hack Nerd Font 7
         separator_symbol " "
 

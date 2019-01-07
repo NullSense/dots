@@ -1,0 +1,12 @@
+#!/bin/sh
+
+case $BLOCK_BUTTON in
+	1) $TERMINAL -e nmtui ;;
+esac
+
+[ "$(cat /sys/class/net/w*/operstate)" = 'down' ] && wifiicon="睊"
+
+[ ! -n "${wifiicon+var}" ] && wifiicon=$(grep "^\s*w" /proc/net/wireless | awk '{ print "直"}')
+
+printf "%s %s" "$wifiicon" "$(cat /sys/class/net/e*/operstate | sed "s/down/❎/;s/up//")"
+
