@@ -2,6 +2,7 @@
 # ~/.bashrc
 #
 export PATH=$PATH:~/bin
+export GOPATH=$HOME/go
 export EDITOR=vim
 export BROWSER=chromium
 

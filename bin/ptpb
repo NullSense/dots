@@ -1,0 +1,15 @@
+#!/bin/bash
+
+file="$@"
+ext="${file##*.}"
+url="$(curl -F c="@$file" "https://ptpb.pw/?u=1")"
+
+case "${ext}" in
+    sh|py|php|js|hs|c|java)
+        echo "${url}/${ext}" | xclip -sel c -i
+        ;;
+    *)
+        echo "${url}" | xclip -sel c -i
+        ;;
+esac
+notify-send "pbpst" "Successfully uploaded.\nURL: $url"
