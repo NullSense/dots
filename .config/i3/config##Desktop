@@ -26,12 +26,31 @@ bindsym Print exec "maim -s | xclip -selection clipboard -t image/png ; notify-s
 bindsym control+Print exec bash -c 'maim -s | imgur.sh | sed 1q | tee >(xclip -i -selection clipboard) >(xargs notify-send -u low)'
 
 # Increase volume
-bindsym $mod+period exec "pactl set-sink-volume @DEFAULT_SINK@ +1000"
+bindsym $mod+period exec "pactl set-sink-volume @DEFAULT_SINK@ +1000 && pkill -RTMIN+10 i3blocks"
 # Decrease volume
-bindsym $mod+comma exec "pactl set-sink-volume @DEFAULT_SINK@ -1000"
+bindsym $mod+comma exec "pactl set-sink-volume @DEFAULT_SINK@ -1000 && pkill -RTMIN+10 i3blocks"
 
 # i3Lock
 bindsym control+Delete exec lock.sh
+
+# Shutdown, reboot, lock screen
+set $Locker exec lock.sh && sleep 1
+
+set $mode_system System (l) lock, (e) logout, (s) suspend, (r) reboot, (Shift+s) shutdown
+mode "$mode_system" {
+    bindsym l exec --no-startup-id $Locker, mode "default"
+    bindsym e exec --no-startup-id i3-msg exit, mode "default"
+    bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
+    #bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym control+Shift+Escape mode "$mode_system"
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod

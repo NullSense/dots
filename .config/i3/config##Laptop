@@ -25,18 +25,18 @@ bindsym control+Print exec bash -c 'maim -s | imgur.sh | sed 1q | tee >(xclip -i
 
 # Volume
 # Increase volume
-bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume @DEFAULT_SINK@ +1000"
+bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume @DEFAULT_SINK@ +1000 && pkill -RTMIN+10 i3blocks"
 # Decrease volume
-bindsym XF86AudioLowerVolume exec "pactl set-sink-volume @DEFAULT_SINK@ -1000"
+bindsym XF86AudioLowerVolume exec "pactl set-sink-volume @DEFAULT_SINK@ -1000 && pkill -RTMIN+10 i3blocks"
 # Mute volume
-bindsym XF86AudioMute exec "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+bindsym XF86AudioMute exec "pactl set-sink-mute @DEFAULT_SINK@ toggle && pkill -RTMIN+10 i3blocks"
 
 
 # Backlight
 # Increase backlight
-bindsym XF86MonBrightnessUp exec "xbacklight -inc 5"
+bindsym XF86MonBrightnessUp exec "xbacklight -inc 5 && pkill -RTMIN+5 i3blocks"
 # Decrease backlight
-bindsym XF86MonBrightnessDown exec "xbacklight -dec 5"
+bindsym XF86MonBrightnessDown exec "xbacklight -dec 5 && pkill -RTMIN+5 i3blocks"
 
 # i3Lock
 #bindsym control+Shift+Escape exec lock.sh
