@@ -52,5 +52,5 @@ case $charging_status in
         icon=""
     esac
 
-    echo "$icon:$percentage%"
+    echo "$icon: $percentage%"
 
