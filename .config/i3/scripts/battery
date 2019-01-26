@@ -3,46 +3,54 @@
 percentage=$(< /sys/class/power_supply/BAT0/capacity)
 charging_status=$(< /sys/class/power_supply/BAT0/status)
 
-if [[ $charging_status == *"Charging"* ]]; then
-    if (( percentage >= "99")); then
-        icon=""
-    elif (( percentage >= "90")); then
-        icon=""
-    elif (( percentage >= "80")); then
-        icon=""
-    elif (( percentage >= "60")); then
-        icon=""
-    elif (( percentage >= "40")); then
-        icon=""
-    elif (( percentage >= "30")); then
-        icon=""
-    elif (( percentage >= "1")); then
-        icon=""
-    fi
-elif [[ $charging_status == *"Discharging"* ]]; then
-    if (( percentage >= "99")); then
-        icon=""
-    elif (( percentage >= "90")); then
-        icon=""
-    elif (( percentage >= "80")); then
-        icon=""
-    elif (( percentage >= "70")); then
-        icon=""
-    elif (( percentage >= "60")); then
-        icon=""
-    elif (( percentage >= "50")); then
-        icon=""
-    elif (( percentage >= "40")); then
-        icon=""
-    elif (( percentage >= "30")); then
-        icon=""
-    elif (( percentage >= "20")); then
-        icon=""
-    elif (( percentage >= "10")); then
-        icon=""
-    elif (( percentage >= "1")); then
-        icon=""
-    fi
-fi
+case $charging_status in
+    Charging)
+        if (( percentage >= 99)); then
+            icon=""
+        elif (( percentage >= 90)); then
+            icon=""
+        elif (( percentage >= 80)); then
+            icon=""
+        elif (( percentage >= 60)); then
+            icon=""
+        elif (( percentage >= 40)); then
+            icon=""
+        elif (( percentage >= 30)); then
+            icon=""
+        elif (( percentage >= 20)); then
+            icon=""
+        elif (( percentage >= 0)); then
+            icon=""
+        fi
+        ;;
+    Discharging)
+        if (( percentage >= 99)); then
+            icon=""
+        elif (( percentage >= 90)); then
+            icon=""
+        elif (( percentage >= 80)); then
+            icon=""
+        elif (( percentage >= 70)); then
+            icon=""
+        elif (( percentage >= 60)); then
+            icon=""
+        elif (( percentage >= 50)); then
+            icon=""
+        elif (( percentage >= 40)); then
+            icon=""
+        elif (( percentage >= 30)); then
+            icon=""
+        elif (( percentage >= 20)); then
+            icon=""
+        elif (( percentage >= 10)); then
+            icon=""
+        elif (( percentage >= 0)); then
+            icon=""
+        fi
+        ;;
+    *) # Unknown status
+        icon=""
+    esac
 
-echo $icon':'$((percentage))%
+    echo "$icon:$percentage%"
+
