@@ -3,6 +3,15 @@ separator_block_width=30
 color=#F3F4F5
 markup=none
 
+[battery]
+command=~/.config/i3/scripts/battery
+interval=15
+
+[brightness]
+command=~/.config/i3/scripts/brightness
+interval=once
+signal=5]
+
 [weather]
 command=~/.config/i3/scripts/weather
 interval=1200
