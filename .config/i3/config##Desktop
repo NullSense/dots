@@ -77,6 +77,9 @@ bindsym $mod+Ctrl+less move workspace to output left
 # Start rofi
 bindsym $mod+d exec --no-startup-id rofi -show drun -show-icons
 
+# Rofi calculator
+bindsym $mod+c exec --no-startup-id rofi -show calc -modi calc -no-show-match -no-sort
+
 # rofi for open applications
 bindsym $mod+x exec --no-startup-id "rofi -show window -show-icons" 
 
@@ -142,6 +145,10 @@ set $ws7 "7"
 set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
+
+# Set workspace outputs (monitors)
+workspace 8 output DisplayPort-0
+workspace 9 output DisplayPort-0
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
