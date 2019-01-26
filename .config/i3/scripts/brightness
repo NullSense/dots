@@ -1,0 +1,4 @@
+#!/bin/bash
+
+brightness=$(cat /sys/class/backlight/nvidia_0/actual_brightness)
+echo : $brightness
