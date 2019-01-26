@@ -13,12 +13,14 @@ source <(kitty + complete setup bash)
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+alias ls='ls -hN --color=auto --group-directories-first'
 alias shutdown='sudo shutdown now'
 alias restart='sudo reboot'
 alias hibernate='sudo systemctl suspend'
 alias suspend='sudo systemctl suspend'
 alias hotspot='sudo systemctl restart create_ap.service'
 alias android='sudo jmtpfs -o allow_other,uid=1000 ~/Android'
+alias rsync='rsync --info=progress2'
 
 #-----------------------------------------------------------------------
 #
@@ -64,5 +66,4 @@ txtrst='\e[0m'    # Text Reset
 PS1='\[\e[0;31m\]────── \[\e[0;32m\]\W\[\e[0m\] $(__git_ps1 "\[\e[0;33m\]at\[\e[0m\] \[\e[0;34m\]%s\[\e[0m\]") '
 
 
-alias ls='ls -hN --color=auto --group-directories-first'
 #PS1='\u@\h \W > '

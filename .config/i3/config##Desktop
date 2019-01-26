@@ -31,7 +31,7 @@ bindsym $mod+period exec "pactl set-sink-volume @DEFAULT_SINK@ +1000 && pkill -R
 bindsym $mod+comma exec "pactl set-sink-volume @DEFAULT_SINK@ -1000 && pkill -RTMIN+10 i3blocks"
 
 # i3Lock
-bindsym control+Delete exec lock.sh
+#bindsym control+Delete exec lock.sh
 
 # Shutdown, reboot, lock screen
 set $Locker exec lock.sh && sleep 1
@@ -50,7 +50,7 @@ mode "$mode_system" {
     bindsym Escape mode "default"
 }
 
-bindsym control+Shift+Escape mode "$mode_system"
+bindsym control+Delete mode "$mode_system"
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
