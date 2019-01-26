@@ -39,7 +39,27 @@ bindsym XF86MonBrightnessUp exec "xbacklight -inc 5"
 bindsym XF86MonBrightnessDown exec "xbacklight -dec 5"
 
 # i3Lock
-bindsym control+Shift+Escape exec lock.sh
+#bindsym control+Shift+Escape exec lock.sh
+
+# Shutdown, reboot, lock screen
+set $Locker exec lock.sh && sleep 1
+
+set $mode_system System (l) lock, (e) logout, (s) suspend, (r) reboot, (Shift+s) shutdown
+mode "$mode_system" {
+    bindsym l exec --no-startup-id $Locker, mode "default"
+    bindsym e exec --no-startup-id i3-msg exit, mode "default"
+    bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
+    #bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym control+Shift+Escape mode "$mode_system"
+
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -172,8 +192,8 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
         position top
-        status_command py3status
-        font pango:Hack Nerd Font 10
+        status_command i3blocks
+        font pango:Hack Nerd Font 7
         separator_symbol " "
 
         colors {
