@@ -5,7 +5,7 @@ exec xset -b # Turns off annoying loud beep
 exec --no-startup-id i3-msg 'workspace 1; exec firefox'
 exec --no-startup-id i3-msg 'workspace 2; exec signal-desktop'
 exec --no-startup-id i3-msg 'workspace 2; exec kitty -e weechat'
-exec --no-startup-id i3-msg 'workspace 8; exec kitty -e rtorrent'
+exec --no-startup-id i3-msg 'workspace 9; exec kitty -e rtorrent'
 
 # Autostart background applications
 exec --no-startup-id nm-applet --sm-disable
@@ -14,9 +14,6 @@ exec --no-startup-id unclutter
 exec --no-startup-id caffeine
 exec --no-startup-id "killall -q compton; compton --config ~/.config/compton.conf"
 exec xautolock -detectsleep -time 10 -locker "~/bin/lock.sh"
-
-# Polybar (need to config)
-#exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 # Font for window titles
 font pango:Hack Nerd Font 7
@@ -39,9 +36,6 @@ bindsym $mod+period exec "pactl set-sink-volume @DEFAULT_SINK@ +1000 && pkill -R
 # Decrease volume
 bindsym $mod+comma exec "pactl set-sink-volume @DEFAULT_SINK@ -1000 && pkill -RTMIN+10 i3blocks"
 
-# i3Lock
-#bindsym control+Delete exec lock.sh
-
 # Shutdown, reboot, lock screen
 set $Locker exec lock.sh && sleep 1
 
@@ -49,10 +43,10 @@ set $mode_system System (l) lock, (e) logout, (s) suspend, (r) reboot, (Shift+s)
 mode "$mode_system" {
     bindsym l exec --no-startup-id $Locker, mode "default"
     bindsym e exec --no-startup-id i3-msg exit, mode "default"
-    bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
+    bindsym s exec --no-startup-id $Locker && sudo systemctl suspend, mode "default"
     #bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
-    bindsym r exec --no-startup-id systemctl reboot, mode "default"
-    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
+    bindsym r exec --no-startup-id sudo systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id sudo systemctl poweroff -i, mode "default"
 
     # back to normal: Enter or Escape
     bindsym Return mode "default"
@@ -147,6 +141,7 @@ set $ws9 "9"
 set $ws10 "10"
 
 # Set workspace outputs (monitors)
+workspace 2 output DVI-1
 workspace 8 output DisplayPort-0
 workspace 9 output DisplayPort-0
 
@@ -181,7 +176,7 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+#bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {

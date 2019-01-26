@@ -4,7 +4,7 @@
 export PATH=$PATH:~/bin
 export GOPATH=$HOME/go
 export EDITOR=vim
-export BROWSER=chromium
+export BROWSER=firefox
 
 source ~/.git-prompt.sh
 source "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"
@@ -15,9 +15,6 @@ source <(kitty + complete setup bash)
 
 alias ls='ls -hN --color=auto --group-directories-first'
 alias shutdown='sudo shutdown now'
-alias restart='sudo reboot'
-alias hibernate='sudo systemctl suspend'
-alias suspend='sudo systemctl suspend'
 alias hotspot='sudo systemctl restart create_ap.service'
 alias android='sudo jmtpfs -o allow_other,uid=1000 ~/Android'
 alias rsync='rsync --info=progress2'
