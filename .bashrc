@@ -9,8 +9,6 @@ export BROWSER=chromium
 source ~/.git-prompt.sh
 source "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"
 source <(kitty + complete setup bash)
-source ~/bin/spectro
-source ~/bin/resample_16_bit
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
