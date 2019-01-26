@@ -1,15 +1,25 @@
 #!/bin/bash
 
-file="$@"
-ext="${file##*.}"
-url="$(curl -F c="@$file" "https://ptpb.pw/?u=1")"
+num_args=$#
+if (( num_args == 1)); then # It's a file
+    file="$1"
+    ext="${file##*.}" # File extension
+    url="$(curl -F c="@$file" "https://ptpb.pw/?u=1")"
 
-case "${ext}" in
-    sh|py|php|js|hs|c|java)
-        echo "${url}/${ext}" | xclip -sel c -i
-        ;;
-    *)
-        echo "${url}" | xclip -sel c -i
-        ;;
-esac
-notify-send "pbpst" "Successfully uploaded.\nURL: $url"
+    case "${ext}" in
+        sh|py|php|js|hs|c|java) # Extensions to apply lexxing to
+            echo "${url}/${ext}" | xclip -sel c -i
+            ;;
+        *)
+            echo "${url}" | xclip -sel c -i # Don't lex if extension not in first case
+            ;;
+    esac
+    notify-send "pbpst" "Successfully uploaded.\nURL: $url"
+elif (( num_args > 1 )); then
+    notify-send "Only one variable input allowed."
+else # Piping in data
+    pipevar=$(cat /dev/stdin)
+    url="$(curl -F c=@- https://ptpb.pw/?u=1 <<< "$pipevar")"
+    echo "${url}" | xclip -sel c -i
+    notify-send "pbpst" "Successfully uploaded.\nURL: $url"
+fi

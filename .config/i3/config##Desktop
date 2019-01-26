@@ -170,6 +170,7 @@ bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 
 for_window [class="Pavucontrol"] floating enable
+for_window [class="signal-desktop"] move container to workspace 2
 
 # reload the configuration file
 bindsym $mod+Shift+c reload

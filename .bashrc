@@ -1,11 +1,14 @@
 #
 # ~/.bashrc
 #
+#export TERM=kitty
 export PATH=$PATH:~/bin
 export GOPATH=$HOME/go
 export EDITOR=vim
 export BROWSER=firefox
 
+source ~/bin/spectro
+source ~/bin/resample_16_bit
 source ~/.git-prompt.sh
 source "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"
 source <(kitty + complete setup bash)
