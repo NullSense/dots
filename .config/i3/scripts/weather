@@ -2,21 +2,20 @@
 time=${1-30} # Time defaults to 30min
 region=${2:-nl} # Default region to NL
 
-# Default lat and lon values (Eindhoven)
-var2=$(echo 51.4393 | bc)
-var3=$(echo 5.47863 | bc)
+# Latitude and Longitude (default - Eindhoven)
+lat=${3:-51.4393}
+lon=${4:-5.47863}
 
-# Latitude and Longitude
-lat=${3:-$var2}
-lon=${4:-$var3}
+response=$(curl "https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat=$lat&lon=$lon&region=$region&unit=mm/u")
 
-#url=$(curl "https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat="$lat"&lon="$lon"&region="$region"&unit=mm/u")
-url=$(curl "https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat=""$lat""&lon=""$lon""&region=""$region""&unit=mm/u")
-
-temp=$(echo "$url" | jq -r .temp) # Temperature
+temp=$(echo "$response" | jq -r .temp) # Temperature
 
 precipitation_info() { # Output all precipitation data
-    mapfile -t whole < <(jq -r .precip[] <<< "$url") # All precipitation data in array whole
+    mapfile -t whole < <(jq -r .precip[] <<< "$response") # All precipitation data in array whole
+}
+
+print_precipitation() {
+    precipitation_info
 
     for each in "${whole[@]}"
     do
@@ -27,21 +26,22 @@ precipitation_info() { # Output all precipitation data
 precipitation_info1() {
     indice=$(($1 / 5)) # buienalarm sends precipitation data every 5min
 
-    precip=$(echo "$url" | jq --argjson indice "$indice" ' .precip[:$indice] | max')
-
-    if (( $(echo "$precip > 2.5" |bc -l)  )); then
-        echo "Heavy"
-    elif (( $(echo "$precip > 1" |bc -l) )); then
-        echo "Moderate"
-    elif (( $(echo "$precip > 0.25" |bc -l) )); then
-        echo "Light"
-    elif (( $(echo "$precip > 0.15" |bc -l) )); then
-        echo "Drizzle"
-    else
-        printf "\nNo Rain\n"
-    fi
+    jq -r --argjson indice "$indice" \
+        '.precip[:$indice] |
+         max |
+         if . > 2.5 then
+             "Heavy"
+         elif . > 1 then
+             "Moderate"
+         elif . > 0.25 then
+             "Light"
+         elif . > 0.15 then
+             "Drizzle"
+         else
+             "\nNo rain\n"
+         end' <<< "$response"
 }
 
 precipitation=$(precipitation_info1 "$time")
 
-echo ""$temp"°C "$1"min:"$precipitation""
+echo ""$temp"°C "$time"min:"$precipitation""
