@@ -1,0 +1,8 @@
+#!/bin/bash
+url=$(curl 'https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat=51.4393&lon=5.47863&region=nl&unit=mm/u')
+
+temp=$(echo $url | jq -r .temp)
+precipitation=$(echo $url | jq -r .precip[0])
+levels=$(echo $url | jq -r .levels)
+
+echo $temp°C $precipitation

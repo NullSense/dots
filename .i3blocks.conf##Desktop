@@ -4,8 +4,8 @@ color=#F3F4F5
 markup=none
 
 [weather]
-command=~/.config/i3/scripts/weather
-interval=1200
+command=~/.config/i3/scripts/weather2
+interval=1
 
 [volume]
 command=~/.config/i3/scripts/volume
