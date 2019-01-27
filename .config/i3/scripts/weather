@@ -1,26 +1,27 @@
 #!/bin/bash
-time=${1-30} # Time defaults to 30min
+
+time=${1-30}
 region=${2:-nl} # Default region to NL
 
 # Latitude and Longitude (default - Eindhoven)
 lat=${3:-51.4393}
 lon=${4:-5.47863}
 
-response=$(curl "https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat=$lat&lon=$lon&region=$region&unit=mm/u")
+response=$(curl -s "https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat=$lat&lon=$lon&region=$region&unit=mm/u")
 
 temp=$(echo "$response" | jq -r .temp) # Temperature
 
-precipitation_info() { # Output all precipitation data
+precipitation_data() {
     mapfile -t whole < <(jq -r .precip[] <<< "$response") # All precipitation data in array whole
 }
 
 print_precipitation() {
-    precipitation_info
+    precipitation_data
 
     for each in "${whole[@]}"
-    do
-        echo "$each"
-    done
+        do
+            echo "$each"
+        done
 }
 
 precipitation_info1() {
@@ -30,13 +31,13 @@ precipitation_info1() {
         '.precip[:$indice] |
          max |
          if . > 2.5 then
-             "Heavy"
+             "殺: Heavy"
          elif . > 1 then
-             "Moderate"
+             "殺: Moderate"
          elif . > 0.25 then
-             "Light"
+             "殺: Light"
          elif . > 0.15 then
-             "Drizzle"
+             "殺: Drizzle"
          else
              "\nNo rain\n"
          end' <<< "$response"
@@ -44,4 +45,4 @@ precipitation_info1() {
 
 precipitation=$(precipitation_info1 "$time")
 
-echo ""$temp"°C "$time"min:"$precipitation""
+echo ": $temp°C $precipitation"
