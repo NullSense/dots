@@ -1,4 +1,21 @@
 #!/bin/bash
 
 brightness=$(cat /sys/class/backlight/nvidia_0/actual_brightness)
-echo : $brightness
+
+case $BLOCK_BUTTON in
+	3) xbacklight -set 0 && pkill -RTMIN+5 i3blocks;;
+	4) xbacklight -inc 5;;
+	5) xbacklight -dec 5;;
+esac
+
+if (( $brightness > 75 )); then
+    icon=
+elif (( $brightness > 50 )); then
+    icon=
+elif (( $brightness > 25 )); then
+    icon=
+elif (( $brightness >= 0 )); then
+    icon=
+fi
+
+echo $icon: $brightness%
