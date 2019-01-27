@@ -50,7 +50,7 @@ case $charging_status in
         ;;
     *) # Unknown status
         icon=""
-    esac
+esac
 
-    echo "$icon: $percentage%"
+echo "$icon: $percentage%"
 

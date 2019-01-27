@@ -1,11 +1,46 @@
-#!/bin/sh
-curl -s wttr.in > /tmp/weatherreport
-[ "$(stat -c %y /tmp/weatherreport | awk '{print $1}')" != "$(date '+%Y-%m-%d')" ] && getforecast
+#!/bin/bash
+region=${2:-nl}
 
-case $BLOCK_BUTTON in
-    1) $TERMINAL -e less -S /tmp/weatherreport ;;
-esac
+# Default lat and lon values (Eindhoven)
+var2=$(echo 51.4393 | bc)
+var3=$(echo 5.47863 | bc)
 
-printf "%s" "$(sed '16q;d' /tmp/weatherreport | grep -wo "[0-9]*%" | sort -n | sed -e '$!d' | sed -e "s/^/ /g" | tr -d '\n')"
+# Latitude and Longitude
+lat=${3:-$var2}
+lon=${4:-$var3}
 
-sed '13q;d' /tmp/weatherreport | grep -o "m\\(-\\)*[0-9]\\+" | sort -n -t 'm' -k 2n | sed -e 1b -e '$!d' | tr '\n|m' ' ' | awk '{print " ",$1 "°","",$2 "°"}'
+#url=$(curl "https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat="$lat"&lon="$lon"&region="$region"&unit=mm/u")
+url=$(curl "https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat=""$lat""&lon=""$lon""&region=""$region""&unit=mm/u")
+
+temp=$(echo "$url" | jq -r .temp) # Temperature
+
+precipitation_info() { # Output all precipitation data
+    mapfile -t whole < <(jq -r .precip[] <<< "$url") # All precipitation data in array whole
+
+    for each in "${whole[@]}"
+    do
+        echo "$each"
+    done
+}
+
+precipitation_info1() {
+    indice=$(($1 / 5)) # buienalarm sends precipitation data every 5min
+
+    precip=$(echo "$url" | jq --argjson indice "$indice" ' .precip[:$indice] | max')
+
+    if (( $(echo "$precip > 2.5" |bc -l)  )); then
+        echo "Heavy"
+    elif (( $(echo "$precip > 1" |bc -l) )); then
+        echo "Moderate"
+    elif (( $(echo "$precip > 0.25" |bc -l) )); then
+        echo "Light"
+    elif (( $(echo "$precip > 0.15" |bc -l) )); then
+        echo "Drizzle"
+    else
+        printf "\nNo Rain\n"
+    fi
+}
+
+precipitation=$(precipitation_info1 "$1")
+
+echo ""$temp"°C "$1"min:"$precipitation""
