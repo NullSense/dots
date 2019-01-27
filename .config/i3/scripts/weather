@@ -1,5 +1,6 @@
 #!/bin/bash
-region=${2:-nl}
+time=${1-30} # Time defaults to 30min
+region=${2:-nl} # Default region to NL
 
 # Default lat and lon values (Eindhoven)
 var2=$(echo 51.4393 | bc)
@@ -41,6 +42,6 @@ precipitation_info1() {
     fi
 }
 
-precipitation=$(precipitation_info1 "$1")
+precipitation=$(precipitation_info1 "$time")
 
 echo ""$temp"°C "$1"min:"$precipitation""
