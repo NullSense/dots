@@ -5,10 +5,12 @@ exec --no-startup-id redshift-gtk
 exec --no-startup-id caffeine
 exec --no-startup-id unclutter
 exec --no-startup-id "killall -q compton; compton --config ~/.config/compton.conf"
-exec xautolock -detectsleep -time 5 -locker "~/bin/lock.sh"
 
-# Polybar (need to config)
-#exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+#Locking
+exec --no-startup-id xset s 60 30
+exec --no-startup-id xset dpms 120
+#Start XSS for lock on lid shutdown
+exec --no-startup-id xss-lock -n ~/bin/dim-screen.sh -- ~/bin/lock1.sh
 
 # Font for window titles
 font pango:Hack 8
@@ -49,18 +51,17 @@ set $mode_system System (l) lock, (e) logout, (s) suspend, (r) reboot, (Shift+s)
 mode "$mode_system" {
     bindsym l exec --no-startup-id $Locker, mode "default"
     bindsym e exec --no-startup-id i3-msg exit, mode "default"
-    bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
+    bindsym s exec --no-startup-id sudo systemctl suspend, mode "default"
     #bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
-    bindsym r exec --no-startup-id systemctl reboot, mode "default"
-    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
+    bindsym r exec --no-startup-id sudo systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id sudo systemctl poweroff -i, mode "default"
 
     # back to normal: Enter or Escape
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
 
-bindsym control+Shift+Escape mode "$mode_system"
-
+bindsym control+Delete mode "$mode_system"
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -70,9 +71,6 @@ bindsym $mod+Return exec kitty
 
 # kill focused window
 bindsym $mod+Shift+q kill
-
-# start dmenu (a program launcher)
-#bindsym $mod+d exec dmenu_run
 
 # Start rofi
 bindsym $mod+d exec rofi -show drun -show-icons
@@ -166,7 +164,7 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+#bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {

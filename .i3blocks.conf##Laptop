@@ -14,7 +14,7 @@ signal=5]
 
 [weather]
 command=~/.config/i3/scripts/weather
-interval=1200
+interval=60
 
 [volume]
 command=~/.config/i3/scripts/volume
