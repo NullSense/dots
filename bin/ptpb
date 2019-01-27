@@ -5,7 +5,7 @@ num_args=$#
 if (( num_args == 1)); then # It's a file
     file="$1"
     ext="${file##*.}" # File extension
-    url="$(curl -F c="@$file" "https://ptpb.pw/?u=1")"
+    url="$(curl -s -F c="@$file" "https://ptpb.pw/?u=1")"
 
     case "${ext}" in
         sh|py|php|js|hs|c|java) # Extensions to apply lexxing to
@@ -19,7 +19,7 @@ if (( num_args == 1)); then # It's a file
 elif (( num_args > 1 )); then
     notify-send "Only one variable input allowed."
 else # Piping in data
-    url="$(curl -F c=@- https://ptpb.pw/?u=1)"
+    url="$(curl -s -F c=@- https://ptpb.pw/?u=1)"
     echo "${url}" | xclip -sel c -i
     notify-send "pbpst" "Successfully uploaded.\nURL: $url"
 fi
