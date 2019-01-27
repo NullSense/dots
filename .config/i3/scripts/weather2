@@ -1,8 +1,41 @@
 #!/bin/bash
 url=$(curl 'https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat=51.4393&lon=5.47863&region=nl&unit=mm/u')
 
-temp=$(echo $url | jq -r .temp)
-precipitation=$(echo $url | jq -r .precip[0])
+#url_amsterdam=$(curl 'https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat=52.3728&lon=4.8936&region=nl&unit=mm/u')
+url_bonn=$(curl 'https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat=50.7359&lon=7.10066&region=nl&unit=mm/u')
+urlt=$(curl 'https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat=50.6109&lon=4.45107&region=be&unit=mm/u')
+
+temp=$(echo $url_bonn | jq -r .temp)
 levels=$(echo $url | jq -r .levels)
+
+mapfile -t test < <(jq -r .precip[] <<< "$url_bonn")
+
+precipitation_info() {
+    for each in "${test[@]}"
+    do
+        echo "$each"
+    done
+}
+
+precipitation_info1() {
+    indice=$(($1 / 5)) # buienalarm sends precipitation data every 5min
+
+    echo indice:$indice
+
+    precip=$(echo $url_bonn | jq --argjson indice "$indice" ' .precip[:$indice] | max')
+
+    if (( $(echo "$precip > 2.5" |bc -l)  )); then
+        echo "Heavy"
+    elif (( $(echo "$precip > 1" |bc -l) )); then
+        echo "Moderate"
+    elif (( $(echo "$precip > 0.25" |bc -l) )); then
+        echo "Light"
+    fi
+
+    echo max precipitation in $1min:$precip
+}
+precipitation_info1 "$1"
+
+precipitation_info
 
 echo $temp°C $precipitation
