@@ -31,15 +31,15 @@ precipitation_info1() {
         '.precip[:$indice] |
          max |
          if . > 2.5 then
-             "殺: Heavy"
+             ": Heavy"
          elif . > 1 then
-             "殺: Moderate"
+             ": Moderate"
          elif . > 0.25 then
-             "殺: Light"
+             ": Light"
          elif . > 0.15 then
-             "殺: Drizzle"
+             ": Drizzle"
          else
-             "\nNo rain\n"
+             empty
          end' <<< "$response"
 }
 
