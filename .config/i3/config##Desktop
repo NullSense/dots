@@ -5,14 +5,13 @@ exec xset -b # Turns off annoying loud beep
 exec --no-startup-id i3-msg 'workspace 1; exec firefox'
 exec --no-startup-id i3-msg 'workspace 2; exec signal-desktop'
 exec --no-startup-id i3-msg 'workspace 2; exec kitty -e weechat'
-exec --no-startup-id i3-msg 'workspace 9; exec kitty -e rtorrent'
+exec --no-startup-id i3-msg 'workspace 9; exec transmission-gtk'
 
 # Autostart background applications
-exec --no-startup-id nm-applet --sm-disable
+exec --no-startup-id redshift-gtk
 exec --no-startup-id unclutter
 exec --no-startup-id caffeine
-exec --no-startup-id redshift-gtk
-exec --no-startup-id "killall -q compton; compton --config ~/.config/compton.conf"
+exec --no-startup-id "compton --config ~/.config/compton.conf"
 exec --no-startup-id xss-lock -n -- ~/bin/lock.sh
 
 # Font for window titles
@@ -57,6 +56,8 @@ bindsym control+Delete mode "$mode_system"
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
+
+floating_maximum_size 1920 x 1080
 
 # start a terminal
 bindsym $mod+Return exec kitty 
@@ -171,7 +172,7 @@ bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 
 for_window [class="Pavucontrol"] floating enable
-for_window [class="signal-desktop"] move container to workspace 2
+for_window [class="Signal"] move container to workspace 2
 
 # reload the configuration file
 bindsym $mod+Shift+c reload

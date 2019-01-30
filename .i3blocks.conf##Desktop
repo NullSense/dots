@@ -6,8 +6,9 @@ markup=none
 [mediaplayer]
 command=~/.config/i3/scripts/mediaplayer
 instance=banshee
-#interval=5
+interval=5
 signal=10
+min_width=700
 
 [weather]
 command=~/.config/i3/scripts/weather 20
@@ -15,7 +16,7 @@ interval=60
 
 [volume]
 command=~/.config/i3/scripts/volume
-interval=30
+interval=5
 signal=10
 
 [disk-root]

@@ -7,7 +7,9 @@ region=${2:-nl} # Default region to NL
 lat=${3:-51.4393}
 lon=${4:-5.47863}
 
+
 response=$(curl -s "https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat=$lat&lon=$lon&region=$region&unit=mm/u")
+
 
 temp=$(echo "$response" | jq -r .temp) # Temperature
 
@@ -45,4 +47,8 @@ precipitation_info1() {
 
 precipitation=$(precipitation_info1 "$time")
 
-echo ": $temp°C $precipitation"
+rain_type_lat=$( awk -v n=$lat 'BEGIN{printf("%.f\n", n*100)}')
+rain_type_lon=$( awk -v n=$lon 'BEGIN{printf("%.f\n", n*100)}')
+rain_type=$(curl "https://api.meteoplaza.com/v2/meteo/completelocation/$rain_type_lat.$rain_type_lon?lang=en" | jq -r .MeteoWarning.Title)
+
+echo ": $temp°C | $precipitation | Type: $rain_type"
