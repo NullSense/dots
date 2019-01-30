@@ -209,7 +209,7 @@ bar {
         output DisplayPort-0
         position top
         status_command i3blocks
-        font pango:Hack Nerd Font 7
+        font pango:Hack Nerd Font 6
         separator_symbol " "
 
         colors {
@@ -228,7 +228,7 @@ bar {
         output DVI-1
         position top
         status_command i3blocks
-        font pango:Hack Nerd Font 7
+        font pango:Hack Nerd Font 6
         separator_symbol " "
 
         colors {

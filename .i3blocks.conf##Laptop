@@ -3,6 +3,12 @@ separator_block_width=30
 color=#F3F4F5
 markup=none
 
+[mediaplayer]
+command=~/.config/i3/scripts/mediaplayer
+instance=banshee
+interval=5
+signal=10
+
 [battery]
 command=~/.config/i3/scripts/battery
 interval=15
@@ -13,7 +19,7 @@ interval=once
 signal=5]
 
 [weather]
-command=~/.config/i3/scripts/weather
+command=~/.config/i3/scripts/weather 20
 interval=60
 
 [volume]
