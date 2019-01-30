@@ -3,13 +3,19 @@ separator_block_width=30
 color=#F3F4F5
 markup=none
 
+[mediaplayer]
+command=~/.config/i3/scripts/mediaplayer
+instance=banshee
+#interval=5
+signal=10
+
 [weather]
 command=~/.config/i3/scripts/weather 20
 interval=60
 
 [volume]
 command=~/.config/i3/scripts/volume
-interval=once
+interval=30
 signal=10
 
 [disk-root]

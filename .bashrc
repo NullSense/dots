@@ -3,6 +3,7 @@
 #
 #export TERM=kitty
 export PATH=$PATH:~/bin
+export PATH="$HOME/.cargo/bin:$PATH"
 export GOPATH=$HOME/go
 export EDITOR=vim
 export BROWSER=firefox

@@ -41,7 +41,7 @@
     # The transparency of the window.  Range: [0; 100].
     # This option will only work if a compositing window manager is
     # present (e.g. xcompmgr, compiz, etc.).
-    transparency = 45
+    transparency = 10
 
     # The height of the entire notification.  If the height is smaller
     # than the font height and padding combined, it will be raised
@@ -85,7 +85,7 @@
 
     ### Text ###
 
-    font = Hack 9
+    font = Hack 10
 
     # The spacing between lines.  If the height is smaller than the
     # font height, it will get raised to the font height.
@@ -165,8 +165,7 @@
     max_icon_size = 42
 
     # Paths to default icons.
-    icon_path = /usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/
-
+    icon_path = /usr/share/icons/Arc/status/32@2x:/usr/share/icons/Arc/devices/32@2x
     ### History ###
 
     # Should a notification popped up from history be sticky or timeout
@@ -265,7 +264,7 @@
     frame_color = "#ff0000"
     timeout = 0
     # Icon for notifications with critical urgency, uncomment to enable
-    #icon = /path/to/icon
+    #icon = /usr/share/icons/Arc/status/32@2x/dialog-error.png
 
 # Every section that isn't one of the above is interpreted as a rules to
 # override settings for certain messages.

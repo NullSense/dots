@@ -60,20 +60,17 @@ let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
 
-"GitGutter settings
-let g:signify_vcs_list = [ 'git', 'hg' ] "git and mercurial
-let g:signify_realtime = 1
-let g:signify_sign_change = '~'
+set updatetime=10
 
 "Plug plugins
 call plug#begin()
 Plug 'morhetz/gruvbox'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'mhinz/vim-signify'
 Plug 'jiangmiao/auto-pairs'
 Plug 'Valloric/YouCompleteMe'
-Plug 'suan/vim-instant-markdown'
 call plug#end()
 
 let g:gruvbox_contrast_dark='soft'
