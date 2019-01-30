@@ -51,4 +51,8 @@ rain_type_lat=$( awk -v n=$lat 'BEGIN{printf("%.f\n", n*100)}')
 rain_type_lon=$( awk -v n=$lon 'BEGIN{printf("%.f\n", n*100)}')
 rain_type=$(curl "https://api.meteoplaza.com/v2/meteo/completelocation/$rain_type_lat.$rain_type_lon?lang=en" | jq -r .MeteoWarning.Title)
 
-echo ": $temp°C | $precipitation | Type: $rain_type"
+if [ "$precipitation" ]; then
+    echo ": $temp°C | $precipitation | Type: $rain_type"
+else
+    echo ": $temp°C"
+fi

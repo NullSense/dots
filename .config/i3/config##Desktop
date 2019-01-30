@@ -30,10 +30,20 @@ smart_borders on
 bindsym Print exec "maim -s | xclip -selection clipboard -t image/png ; notify-send -i camera -u low \\"image in clipboard\\""
 bindsym control+Print exec bash -c 'maim -s | imgur.sh | sed 1q | tee >(xclip -i -selection clipboard) >(xargs notify-send -i camera -u low)'
 
+# Music player
+bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
+for_window [title="Banshee"] move scratchpad
+bindsym control+space [title="Banshee"] scratchpad show, fullscreen enable
+
+
+## Volume
 # Increase volume
 bindsym $mod+period exec "pactl set-sink-volume @DEFAULT_SINK@ +1000 && pkill -RTMIN+10 i3blocks"
 # Decrease volume
 bindsym $mod+comma exec "pactl set-sink-volume @DEFAULT_SINK@ -1000 && pkill -RTMIN+10 i3blocks"
+# Mute volume
+bindsym $mod+slash exec "pactl set-sink-mute @DEFAULT_SINK@ toggle && pkill -RTMIN+10 i3blocks"
+
 
 # Shutdown, reboot, lock screen
 set $Locker exec lock.sh && sleep 1
