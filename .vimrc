@@ -9,6 +9,7 @@ set t_Co=256
 "Vim general
 set number "Number lines
 set relativenumber
+set scrolloff=1
 set hlsearch "highlight searches 
 set incsearch "highlight while searching
 set nowrapscan

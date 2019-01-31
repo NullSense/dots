@@ -4,9 +4,9 @@ monitor_layout.sh
 xrandr --auto
 
 xrdb -I$HOME ~/.Xresources
-xbindkeys
 ~/.fehbg &
 xinput --set-prop 9 'libinput Accel Profile Enabled' 0, 1
+xset m 0 0
 
 userresources=$HOME/.Xresources
 usermodmap=$HOME/.Xmodmap

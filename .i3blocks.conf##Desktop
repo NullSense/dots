@@ -5,7 +5,7 @@ markup=none
 
 [mediaplayer]
 command=~/.config/i3/scripts/mediaplayer
-instance=banshee
+instance=Lollypop
 interval=5
 signal=8
 

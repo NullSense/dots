@@ -8,9 +8,10 @@ exec --no-startup-id i3-msg 'workspace 2; exec kitty -e weechat'
 exec --no-startup-id i3-msg 'workspace 9; exec transmission-gtk'
 
 # Autostart background applications
-exec --no-startup-id redshift-gtk
+exec --no-startup-id redshift
 exec --no-startup-id unclutter
 exec --no-startup-id caffeine
+exec --no-startup-id lollypop
 exec --no-startup-id "compton --config ~/.config/compton.conf"
 exec --no-startup-id xss-lock -n -- ~/bin/lock.sh
 
@@ -32,9 +33,8 @@ bindsym control+Print exec bash -c 'maim -s | imgur.sh | sed 1q | tee >(xclip -i
 
 # Music player
 bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
-for_window [title="Banshee"] move scratchpad
-bindsym control+space [title="Banshee"] scratchpad show, fullscreen enable
-
+for_window [class="Lollypop"] move scratchpad, border pixel 1, sticky enable, move position center
+bindsym control+space [class="Lollypop"] scratchpad show, move position center
 
 ## Volume
 # Increase volume
@@ -160,7 +160,7 @@ workspace 9 output DisplayPort-0
 # switch to workspace
 bindsym $mod+1 workspace $ws1
 bindsym $mod+2 workspace $ws2
-bindsym $mod+3 workspace $ws3; exec banshee
+bindsym $mod+3 workspace $ws3
 bindsym $mod+4 workspace $ws4
 bindsym $mod+5 workspace $ws5
 bindsym $mod+6 workspace $ws6
