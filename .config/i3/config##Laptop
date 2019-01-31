@@ -1,7 +1,6 @@
 # STARTUP EXECUTIONS
 exec xset -b # Turns off annoying loud beep
-exec --no-startup-id nm-applet --sm-disable
-exec --no-startup-id redshift-gtk
+exec --no-startup-id redshift
 exec --no-startup-id caffeine
 exec --no-startup-id unclutter
 exec --no-startup-id "killall -q compton; compton --config ~/.config/compton.conf"
