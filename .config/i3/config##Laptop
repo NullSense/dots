@@ -2,6 +2,7 @@
 exec xset -b # Turns off annoying loud beep
 exec --no-startup-id redshift
 exec --no-startup-id caffeine
+exec --no-startup-id lollypop
 exec --no-startup-id unclutter
 exec --no-startup-id "killall -q compton; compton --config ~/.config/compton.conf"
 
@@ -24,6 +25,12 @@ smart_borders on
 # Screenshots
 bindsym Print exec "maim -s | xclip -selection clipboard -t image/png ; notify-send -u low \\"image in clipboard\\""
 bindsym control+Print exec bash -c 'maim -s | imgur.sh | sed 1q | tee >(xclip -i -selection clipboard) >(xargs notify-send -u low)'
+
+# Music player
+bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
+for_window [class="Lollypop"] move scratchpad, sticky enable, move position center, resize set 1820 980
+bindsym control+space [class="Lollypop"] scratchpad show, move position center
+
 
 # Volume
 # Increase volume
@@ -98,11 +105,8 @@ bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
-# split in horizontal orientation
-bindsym $mod+Ctrl+h split h
-
-# split in vertical orientation
-bindsym $mod+v split v
+# split orientation toggle
+bindsym $mod+v split toggle
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
