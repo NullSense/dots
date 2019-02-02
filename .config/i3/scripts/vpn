@@ -1,0 +1,17 @@
+#!/bin/bash
+
+request_connection=$(curl -s https://am.i.mullvad.net/json)
+
+port=${1-9976}
+request_reachable=$(curl -s "https://am.i.mullvad.net/port/$port")
+
+mullvad_exit_ip=$(echo $request_connection | jq -r .mullvad_exit_ip)
+blacklisted=$(echo $request_connection | jq -r .blacklisted.blacklisted)
+
+reachable=$(echo $request_reachable | jq -r .reachable)
+
+if [[ $mullvad_exit_ip && reachable ]]; then
+    echo ""
+else
+    echo ""
+fi
