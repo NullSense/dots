@@ -21,12 +21,17 @@ signal=10
 [disk-root]
 label=/:
 command=df -h / | tail -1 | awk '{print $4}'
-interval=60
+interval=30
 
 [disk-home]
 label=~:
 command=df -h ~ | tail -1 | awk '{print $4}'
-interval=60
+interval=30
+
+[vpn]
+command=~/.config/i3/scripts/vpn
+markup=pango
+interval=5
 
 [internet]
 command=~/.config/i3/scripts/wifi

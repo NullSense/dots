@@ -13,5 +13,6 @@ reachable=$(echo $request_reachable | jq -r .reachable)
 if [[ $mullvad_exit_ip && reachable ]]; then
     echo ""
 else
-    echo ""
+    notify-send -u critical "VPN OFF"
+    echo "<span color='red'></span>"
 fi

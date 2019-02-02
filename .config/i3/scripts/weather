@@ -21,9 +21,9 @@ print_precipitation() {
     precipitation_data
 
     for each in "${whole[@]}"
-        do
-            echo "$each"
-        done
+    do
+        echo "$each"
+    done
 }
 
 precipitation_info1() {
@@ -31,24 +31,24 @@ precipitation_info1() {
 
     jq -r --argjson indice "$indice" \
         '.precip[:$indice] |
-         max |
-         if . > 2.5 then
-             ": Heavy"
-         elif . > 1 then
-             ": Moderate"
-         elif . > 0.25 then
-             ": Light"
-         elif . > 0.15 then
-             ": Drizzle"
-         else
-             empty
-         end' <<< "$response"
-}
+        max |
+        if . > 2.5 then
+            ": Heavy"
+        elif . > 1 then
+            ": Moderate"
+        elif . > 0.25 then
+            ": Light"
+        elif . > 0.15 then
+            ": Drizzle"
+        else
+            empty
+        end' <<< "$response"
+    }
 
 precipitation=$(precipitation_info1 "$time")
 
-rain_type_lat=$( awk -v n=$lat 'BEGIN{printf("%.f\n", n*100)}')
-rain_type_lon=$( awk -v n=$lon 'BEGIN{printf("%.f\n", n*100)}')
+rain_type_lat=$(awk -v n=$lat 'BEGIN{printf("%.f\n", n*100)}')
+rain_type_lon=$(awk -v n=$lon 'BEGIN{printf("%.f\n", n*100)}')
 rain_type=$(curl -s "https://api.meteoplaza.com/v2/meteo/completelocation/$rain_type_lat.$rain_type_lon?lang=en" | jq -r .MeteoWarning.Title)
 
 if [ "$precipitation" ]; then
