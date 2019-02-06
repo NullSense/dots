@@ -28,11 +28,6 @@ label=~:
 command=df -h ~ | tail -1 | awk '{print $4}'
 interval=30
 
-[vpn]
-command=~/.config/i3/scripts/vpn
-markup=pango
-interval=5
-
 [internet]
 command=~/.config/i3/scripts/wifi
 interval=10
