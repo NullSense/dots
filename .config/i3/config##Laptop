@@ -27,8 +27,7 @@ bindsym Print exec "maim -s | xclip -selection clipboard -t image/png ; notify-s
 bindsym control+Print exec bash -c 'maim -s | imgur.sh | sed 1q | tee >(xclip -i -selection clipboard) >(xargs notify-send -u low)'
 
 # Music player
-bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
-for_window [class="Lollypop"] move scratchpad, sticky enable, fullscreen enable 
+bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks" for_window [class="Lollypop"] move scratchpad, sticky enable, fullscreen enable 
 bindsym control+space [class="Lollypop"] scratchpad show, fullscreen enable
 
 # Volume
@@ -126,16 +125,16 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
-set $ws5 "5"
-set $ws6 "6"
-set $ws7 "7"
-set $ws8 "8"
-set $ws9 "9"
-set $ws10 "10"
+set $ws1 "01 "
+set $ws2 "02 "
+set $ws3 "03 "
+set $ws4 "04 "
+set $ws5 "05 "
+set $ws6 "06 "
+set $ws7 "07 "
+set $ws8 "08 "
+set $ws9 "09 "
+set $wsX "10 "
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -160,6 +159,9 @@ bindsym $mod+Shift+7 move container to workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
+
+for_window [class="Pavucontrol"] floating enable
+for_window [class="Signal"] move container to workspace $ws2
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -189,26 +191,43 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+# set primary gruvbox colorscheme colors
+set $bg #282828
+set $red #cc241d
+set $green #98971a
+set $yellow #d79921
+set $blue #458588
+set $purple #b16286
+set $aqua #689d68
+set $gray #a89984
+set $darkgray #1d2021
+set $orange #d65d0e
+
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
         position top
         status_command i3blocks
-        font pango:Hack Nerd Font 7
+        font pango:Hack Nerd Font 6
         separator_symbol " "
 
         colors {
-                separator #969896
-                background #1d1f21
-                statusline #c5c8c6
-                focused_workspace #81a2be #81a2be #1d1f21
-                active_workspace #373b41 #373b41 #ffffff
+                # text color used for blocks that do not have a color specified.
+                statusline $yellow
+                # workspaces section            
+                #                    border  backgr. text
+                focused_workspace    $blue $blue $darkgray
                 inactive_workspace #282a2e #282a2e #969896
-                urgent_workspace #cc6666 #cc6666 #ffffff
+                active_workspace #373b41 #373b41 #ffffff
+                urgent_workspace     $red $red $bg
+                #separator #969896
+                background $bg
+                statusline #c5c8c6
         }
 }
 
-client.focused #81a2be #81a2be #1d1f21 #282a2e
+# class border|backgr|text|indicator|child_border
+client.focused $blue $blue #1d1f21 #282a2e
 client.focused_inactive #373b41 #373b41 #969896 #282a2e
 client.unfocused #282a2e #282a2e #969896 #282a2e
-client.urgent #373b41 #cc6666 #ffffff #cc6666
+client.urgent #373b41 $red #ffffff $red

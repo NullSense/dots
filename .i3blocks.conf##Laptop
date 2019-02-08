@@ -30,12 +30,17 @@ signal=10
 [disk-root]
 label=/:
 command=df -h / | awk '/\/.*/ {print $3; exit 0}'
-interval=60
+interval=30
 
 [disk-home]
 label=~:
 command=df -h ~ | awk '/\/.*/ {print $3; exit 0}'
-interval=60
+interval=30
+
+[vpn]
+command=~/.config/i3/scripts/vpn
+markup=pango
+interval=10
 
 [internet]
 command=~/.config/i3/scripts/wifi
@@ -51,4 +56,3 @@ interval=5
 label=:
 command=date '+%a %d-%m-%Y '
 interval=60
-
