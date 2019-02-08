@@ -28,9 +28,8 @@ bindsym control+Print exec bash -c 'maim -s | imgur.sh | sed 1q | tee >(xclip -i
 
 # Music player
 bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
-for_window [class="Lollypop"] move scratchpad, sticky enable, move position center, resize set 1820 980
-bindsym control+space [class="Lollypop"] scratchpad show, move position center
-
+for_window [class="Lollypop"] move scratchpad, sticky enable, fullscreen enable 
+bindsym control+space [class="Lollypop"] scratchpad show, fullscreen enable
 
 # Volume
 # Increase volume

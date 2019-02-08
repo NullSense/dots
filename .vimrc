@@ -1,10 +1,12 @@
 let mapleader="\<Space>"
 noremap <leader>y "+y
 
+set termguicolors
 set nocompatible
 set background=dark
 set encoding=utf-8 "windows specific rendering option
 set t_Co=256
+let &t_ut=''
 
 "Vim general
 set number "Number lines
@@ -66,12 +68,15 @@ set updatetime=10
 "Plug plugins
 call plug#begin()
 Plug 'morhetz/gruvbox'
+Plug 'lilydjwg/colorizer'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'jiangmiao/auto-pairs'
 Plug 'Valloric/YouCompleteMe'
+Plug 'jceb/vim-orgmode'
+Plug 'tpope/vim-speeddating'
 call plug#end()
 
 let g:gruvbox_contrast_dark='soft'

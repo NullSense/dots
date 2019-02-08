@@ -33,8 +33,8 @@ bindsym control+Print exec bash -c 'maim -s | imgur.sh | sed 1q | tee >(xclip -i
 
 # Music player
 bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
-for_window [class="Lollypop"] move scratchpad, border pixel 1, sticky enable, move position center
-bindsym control+space [class="Lollypop"] scratchpad show, move position center
+for_window [class="Lollypop"] move scratchpad, sticky enable, fullscreen enable 
+bindsym control+space [class="Lollypop"] scratchpad show, fullscreen enable
 
 ## Volume
 # Increase volume
@@ -140,17 +140,16 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
-set $ws5 "5"
-set $ws6 "6"
-set $ws7 "7"
-set $ws8 "8"
-set $ws9 "9"
-set $ws10 "10"
-
+set $ws1 "01 "
+set $ws2 "02 "
+set $ws3 "03 "
+set $ws4 "04 "
+set $ws5 "05 "
+set $ws6 "06 "
+set $ws7 "07 "
+set $ws8 "08 "
+set $ws9 "09 "
+set $wsX "10 "
 # Set workspace outputs (monitors)
 workspace 1 output DisplayPort-0
 workspace 2 output DVI-1
@@ -212,8 +211,18 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
+# set primary gruvbox colorscheme colors
+set $bg #282828
+set $red #cc241d
+set $green #98971a
+set $yellow #d79921
+set $blue #458588
+set $purple #b16286
+set $aqua #689d68
+set $gray #a89984
+set $darkgray #1d2021
+set $orange #d65d0e
+
 bar {
         tray_output DisplayPort-0
         output DisplayPort-0
@@ -223,13 +232,17 @@ bar {
         separator_symbol " "
 
         colors {
-                separator #969896
-                background #1d1f21
-                statusline #c5c8c6
-                focused_workspace #81a2be #81a2be #1d1f21
-                active_workspace #373b41 #373b41 #ffffff
+                # text color used for blocks that do not have a color specified.
+                statusline $yellow
+                # workspaces section            
+                #                    border  backgr. text
+                focused_workspace    $blue $blue $darkgray
                 inactive_workspace #282a2e #282a2e #969896
-                urgent_workspace #cc6666 #cc6666 #ffffff
+                active_workspace #373b41 #373b41 #ffffff
+                urgent_workspace     $red $red $bg
+                #separator #969896
+                background $bg
+                statusline #c5c8c6
         }
 }
 
@@ -242,17 +255,23 @@ bar {
         separator_symbol " "
 
         colors {
-                separator #969896
-                background #1d1f21
-                statusline #c5c8c6
-                focused_workspace #81a2be #81a2be #1d1f21
-                active_workspace #373b41 #373b41 #ffffff
+                # text color used for blocks that do not have a color specified.
+                statusline $yellow
+                # workspaces section            
+                #                    border  backgr. text
+                focused_workspace    $blue $blue $darkgray
                 inactive_workspace #282a2e #282a2e #969896
-                urgent_workspace #cc6666 #cc6666 #ffffff
+                active_workspace #373b41 #373b41 #ffffff
+                urgent_workspace     $red $red $bg
+                #separator #969896
+                background $bg
+                statusline #c5c8c6
         }
+
 }
 
-client.focused #81a2be #81a2be #1d1f21 #282a2e
+# class border|backgr|text|indicator|child_border
+client.focused $blue $blue #1d1f21 #282a2e
 client.focused_inactive #373b41 #373b41 #969896 #282a2e
 client.unfocused #282a2e #282a2e #969896 #282a2e
-client.urgent #373b41 #cc6666 #ffffff #cc6666
+client.urgent #373b41 $red #ffffff $red

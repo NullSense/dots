@@ -20,7 +20,7 @@ source <(kitty + complete setup bash)
 alias ls='ls -hN --color=auto --group-directories-first'
 alias shutdown='sudo shutdown now'
 alias hotspot='sudo systemctl restart create_ap.service'
-alias android='sudo jmtpfs -o allow_other,uid=1000 ~/Android'
+alias android='sudo jmtpfs -o allow_other,uid=1000 ~/.Android'
 alias rsync='rsync --info=progress2'
 
 #-----------------------------------------------------------------------
@@ -63,8 +63,7 @@ bakcyn='\e[46m'   # Cyan
 bakwht='\e[47m'   # White
 txtrst='\e[0m'    # Text Reset
 
-#PS1='\[\e[1;37m\]┌─\e[0m\e[34m[\[\e[0m\e[0;33m\] \w\[\e[0m\] \e[34m]\e[0m $(__git_ps1 "\[\e[0;31m\]@\[\e[0m\]\[\e[1;32m\]\[\e[5m \]%s\[\e[25m\]\[\e[0m\]")\n└─>\[\e[0m\] '
-PS1='\[\e[0;31m\]────── \[\e[0;32m\]\W\[\e[0m\] $(__git_ps1 "\[\e[0;33m\]at\[\e[0m\] \[\e[0;34m\]%s\[\e[0m\]") '
 
+PS1='\[\e[0;31m\]── \[\e[0;32m\]\W\[\e[0m\] $(__git_ps1 "\[\e[0;33m\]@\[\e[0m\] \[\e[0;34m\]%s\[\e[0m\]") '
 
-#PS1='\u@\h \W > '
+#PS1="\${?#0}> "
