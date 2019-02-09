@@ -14,27 +14,38 @@ nnoremap <silent> <s-down>  :resize -2<cr>
 nnoremap <silent> <s-left>  :vertical resize -2<cr>
 nnoremap <silent> <s-right> :vertical resize +2<cr>
 " Moving between buffers
-map <M-l> :bn<CR>
-map <M-h> :bprev<CR>
+nnoremap <M-l> :bn<CR>
+nnoremap <M-h> :bprev<CR>
 " Close buffer
-map <M-d> :bd<CR>
+nnoremap <M-d> :bd<CR>
 
-" fzf Mappings
-"fuzzy search lines
-map <C-l> :Lines<CR>
-"open file in subdirectories
-map <C-p> :Files<CR>
+"fzf Mappings
+"Fuzzy search lines
+nnoremap <C-o> :Lines<CR>
+"Open file in subdirectories
+nnoremap <C-p> :Files<CR>
 
-" increment numbers
+" Increment numbers
 noremap + <c-a>
 noremap - <c-x>
 
 " Move line up/down
-map <Leader>j ddp
-map <Leader>k ddkP
+nnoremap <Leader>j ddp
+nnoremap <Leader>k ddkP
 " Easy indentation
-map <Leader>h <<
-map <Leader>l >>
+nnoremap <Leader>h <<
+nnoremap <Leader>l >>
+
+" Search and replace occurences of word under cursor
+nnoremap <Leader>r :%s/\<<C-r><C-w>\>/
+
+" Easymotion
+" to single leader instead of double
+map <Leader> <Plug>(easymotion-prefix)
+" follow next character
+nmap s <Plug>(easymotion-s)
+" follow 2 next characters
+nmap <Leader>s <Plug>(easymotion-s2)
 
 set nocompatible
 set encoding=utf-8 "windows specific rendering option
@@ -72,6 +83,9 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 
 call plug#begin()
+Plug 'tpope/vim-endwise'
+Plug 'easymotion/vim-easymotion'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'morhetz/gruvbox'
 Plug 'lilydjwg/colorizer'

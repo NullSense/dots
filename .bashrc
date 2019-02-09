@@ -78,7 +78,6 @@ PS1='\[\e[0;31m\]── \[\e[0;32m\]\W\[\e[0m\] $(__git_ps1 "\[\e[0;33m\]@\[\e[0
 # Fuzzy finder
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 export FZF_DEFAULT_OPTS="--ansi" # Colors
-#export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -g "!{.git,node_modules,.steam,Steam,Music}/*" 2> /dev/null'
 export FZF_DEFAULT_COMMAND="fd --color=always --type file --follow --hidden --exclude '{.local,.cache,.git,node_modules,.steam,Steam,Music}'"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
