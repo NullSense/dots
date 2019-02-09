@@ -1,14 +1,21 @@
 #
-# ~/.bashrc
+# ~/b.ashrc
 #
 #export TERM=kitty
 export PATH=$PATH:~/bin
 export PATH="$HOME/.cargo/bin:$PATH"
 export GOPATH=$HOME/go
-export EDITOR=vim
+export EDITOR=nvim
 export BROWSER=firefox
+export MANPAGER="nvim -c 'set ft=man' -"
+#Infinite history
+export HISTFILESIZE=
+export HISTSIZE=
+export WEECHAT_HOME=~/.config/weechat
 
 source ~/bin/spectro
+source ~/bin/fuzzy
+source ~/bin/extract
 source ~/bin/resample_16_bit
 source ~/.git-prompt.sh
 source "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"
@@ -22,6 +29,7 @@ alias shutdown='sudo shutdown now'
 alias hotspot='sudo systemctl restart create_ap.service'
 alias android='sudo jmtpfs -o allow_other,uid=1000 ~/.Android'
 alias rsync='rsync --info=progress2'
+alias vim='nvim'
 
 #-----------------------------------------------------------------------
 #
@@ -66,4 +74,13 @@ txtrst='\e[0m'    # Text Reset
 
 PS1='\[\e[0;31m\]── \[\e[0;32m\]\W\[\e[0m\] $(__git_ps1 "\[\e[0;33m\]@\[\e[0m\] \[\e[0;34m\]%s\[\e[0m\]") '
 
-#PS1="\${?#0}> "
+
+# Fuzzy finder
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+export FZF_DEFAULT_OPTS="--ansi" # Colors
+#export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -g "!{.git,node_modules,.steam,Steam,Music}/*" 2> /dev/null'
+export FZF_DEFAULT_COMMAND="fd --color=always --type file --follow --hidden --exclude '{.local,.cache,.git,node_modules,.steam,Steam,Music}'"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+bind -x '"\C-p": fe;'
+bind -x '"\C-k": fkill'
