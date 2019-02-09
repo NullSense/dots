@@ -1,5 +1,11 @@
+" Mappings
 let mapleader="\<Space>"
 noremap <leader>y "+y
+" For easy split navigation (Ctrl + hjkl)
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
 
 set termguicolors
 set nocompatible
@@ -68,6 +74,8 @@ set updatetime=10
 "Plug plugins
 call plug#begin()
 Plug 'morhetz/gruvbox'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'lilydjwg/colorizer'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
@@ -77,6 +85,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'Valloric/YouCompleteMe'
 Plug 'jceb/vim-orgmode'
 Plug 'tpope/vim-speeddating'
+Plug 'scrooloose/nerdcommenter'
 call plug#end()
 
 let g:gruvbox_contrast_dark='soft'
