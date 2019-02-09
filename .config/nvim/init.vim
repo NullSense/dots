@@ -25,6 +25,17 @@ map <C-l> :Lines<CR>
 "open file in subdirectories
 map <C-p> :Files<CR>
 
+" increment numbers
+noremap + <c-a>
+noremap - <c-x>
+
+" Move line up/down
+map <Leader>j ddp
+map <Leader>k ddkP
+" Easy indentation
+map <Leader>h <<
+map <Leader>l >>
+
 set nocompatible
 set encoding=utf-8 "windows specific rendering option
 
@@ -38,9 +49,9 @@ set inccommand=nosplit
 set nowrapscan
 set history=50
 set autowrite
-"set ignorecase
+set ignorecase
 set smartcase "only search case sensitive when a letter is capitalized
-"set listchars=tab:>·,trail:$,extends:>,precedes:<
+set listchars=tab:>·,trail:$,extends:>,precedes:<
 set list "Shows invisible characters
 
 " Indentation
@@ -59,7 +70,6 @@ set updatetime=10
 
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-
 
 call plug#begin()
 Plug 'junegunn/fzf.vim'
