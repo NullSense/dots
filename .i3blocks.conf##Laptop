@@ -37,15 +37,6 @@ label=~:
 command=df -h ~ | awk '/\/.*/ {print $3; exit 0}'
 interval=30
 
-[vpn]
-command=~/.config/i3/scripts/vpn
-markup=pango
-interval=10
-
-[internet]
-command=~/.config/i3/scripts/wifi
-interval=10
-
 [time]
 label=:
 command=date '+%H:%M'

@@ -1,8 +1,9 @@
 # STARTUP EXECUTIONS
 exec xset -b # Turns off annoying loud beep
+exec --no-startup-id nm-applet
+exec --no-startup-id lollypop
 exec --no-startup-id redshift
 exec --no-startup-id caffeine
-exec --no-startup-id lollypop
 exec --no-startup-id unclutter
 exec --no-startup-id "killall -q compton; compton --config ~/.config/compton.conf"
 
@@ -27,7 +28,8 @@ bindsym Print exec "maim -s | xclip -selection clipboard -t image/png ; notify-s
 bindsym control+Print exec bash -c 'maim -s | imgur.sh | sed 1q | tee >(xclip -i -selection clipboard) >(xargs notify-send -u low)'
 
 # Music player
-bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks" for_window [class="Lollypop"] move scratchpad, sticky enable, fullscreen enable 
+bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
+for_window [class="Lollypop"] move scratchpad, sticky enable, fullscreen enable 
 bindsym control+space [class="Lollypop"] scratchpad show, fullscreen enable
 
 # Volume
