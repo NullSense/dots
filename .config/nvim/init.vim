@@ -2,6 +2,9 @@
 let mapleader="\<Space>"
 noremap <leader>y "+y
 
+" Double esc to disable hlsearch
+nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
+
 " Splits and Buffers
 " For easy split navigation (Ctrl + hjkl)
 nnoremap <C-J> <C-W><C-J>
@@ -51,6 +54,7 @@ set nocompatible
 set encoding=utf-8 "windows specific rendering option
 
 "Vim general
+set undofile "persistent undo
 set number "Number lines
 set relativenumber
 set scrolloff=1
@@ -83,20 +87,19 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 
 call plug#begin()
-Plug 'tpope/vim-endwise'
-Plug 'easymotion/vim-easymotion'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}} "intellisense engine
+Plug 'tpope/vim-endwise' "pair matcher
+Plug 'easymotion/vim-easymotion' "move easier
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'morhetz/gruvbox'
-Plug 'lilydjwg/colorizer'
+Plug 'lilydjwg/colorizer' "colorize hexcodes
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'jiangmiao/auto-pairs'
 Plug 'Valloric/YouCompleteMe'
-Plug 'jceb/vim-orgmode'
-Plug 'tpope/vim-speeddating'
 Plug 'scrooloose/nerdcommenter'
 call plug#end()
 
