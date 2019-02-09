@@ -150,6 +150,7 @@ set $ws7 "07 "
 set $ws8 "08 "
 set $ws9 "09 "
 set $wsX "10 "
+
 # Set workspace outputs (monitors)
 workspace $ws1 output DisplayPort-0
 workspace $ws2 output DVI-1
