@@ -140,7 +140,7 @@ case "$mode" in
 	    echo "$file" | xclip -sel c;
 		dunstify -r 2500 -i "$icon"		\
 			 "$title"			\
-			 "$(printf "Screenshot successfully stored locally.\nPATH: %s" "$file")"
+			 "$(printf "Video successfully stored locally.\nPATH: %s" "$file")"
 	else
 	    file="$(recap rec)"
 	    echo "Ended"
@@ -149,7 +149,7 @@ case "$mode" in
 	    echo "$url" | xclip -sel c;
 		dunstify -r 2500 -i "$icon"		\
 			 "$title"			\
-			 "$(printf "Capture successfully uploaded.\nURL: %s" "$url")"
+			 "$(printf "Video successfully uploaded.\nURL: %s" "$url")"
 	fi
 	;;
 esac
