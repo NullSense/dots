@@ -1,5 +1,4 @@
 #
-#export TERM=kitty
 export PATH=$PATH:~/bin
 export PATH="$HOME/.cargo/bin:$PATH"
 export GOPATH=$HOME/go
@@ -75,9 +74,12 @@ PS1='\[\e[0;31m\]── \[\e[0;32m\]\W\[\e[0m\] $(__git_ps1 "\[\e[0;33m\]@\[\e[0
 
 # Fuzzy finder
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-export FZF_DEFAULT_OPTS="--ansi --preview='bat --color always -n {+}' --preview-window=down:10"
-#export FZF_DEFAULT_COMMAND="fd --color=always --type file --follow --hidden --exclude '{.local,.cache,.git,node_modules,.steam,Steam,Music}'"
-export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -g "!{.mozilla,*cache*,*Cache*,.node*,,.electron*,.local,.steam,.cache,.git,Steam,Music,Videos}" 2> /dev/null'
+export FZF_ALT_C_COMMAND='rg --files --hidden --folow -g "!{.mozilla,*cache*,*Cache*,.node*,.electron*,.cache,.git}" 2> /dev/null'
+export FZF_ALT_C_OPTS="--ansi --preview='file {}' --preview-window=down:1"
+
+export FZF_DEFAULT_OPTS='--ansi'
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -g "!{.mozilla,*cache*,*Cache*,.node*,.electron*,.local,.steam,.cache,.git,Steam,Music,Videos}" 2> /dev/null'
+
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 bind -x '"\C-p": fe;'
