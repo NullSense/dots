@@ -12,7 +12,6 @@ export WEECHAT_HOME=~/.config/weechat
 
 source ~/bin/spectro
 source ~/bin/fuzzy
-source ~/bin/extract
 source ~/bin/resample_16_bit
 source ~/.git-prompt.sh
 source "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"
@@ -27,6 +26,7 @@ alias hotspot='sudo systemctl restart create_ap.service'
 alias android='sudo jmtpfs -o allow_other,uid=1000 ~/.Android'
 alias rsync='rsync --info=progress2'
 alias vim='nvim'
+alias r='ranger'
 
 #-----------------------------------------------------------------------
 #
