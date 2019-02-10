@@ -6,7 +6,7 @@ icon="clipboard"
 # Defaults
 mode="screenshot"
 hide_cursor="Yes"
-service="clipboard"
+service="pbpst"
 
 while getopts ":lm:cs:" opt; do
     case $opt in
@@ -34,9 +34,6 @@ upload() {
     case "$service" in
         "pbpst" )
             pbpst -Sf "$file" -x 1d
-            ;;
-        "clipboard" )
-            xclip -selection clipboard -t image/png -i "$file"
             ;;
         * )
             exit
@@ -108,7 +105,7 @@ case "$mode" in
 		"No" )
 		    ;;
 		"Cancel" )
-		    icon="error-blue"
+		    icon="error"
 		    body="Cancelled"
 		    notify
 		    exit 0
@@ -120,8 +117,8 @@ case "$mode" in
 		    ;;
 	    esac
 	    if [ "$local" = true ]; then
-            echo "$file" | xclip -sel c;
-            dunstify -r 2500 -i "$icon"		\
+            echo "$file" | xclip -selection clipboard -t image/png -i "$file";
+                        dunstify -r 2500 -i "$icon"		\
                  "$title"			\
                  "$(printf "Screenshot successfully stored locally.\nPATH: %s" "$file")"
 	    else

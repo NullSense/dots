@@ -28,8 +28,8 @@ smart_borders on
 
 ## Custom binds
 # Screenshots
-bindsym Print exec "capture.sh -s clipboard"
-bindsym control+Print exec "capture.sh -S pbpst"
+bindsym Print exec "capture.sh -l" # Screenshot to clipboard and /tmp
+bindsym control+Print exec "capture.sh" # Upload screenshot
 
 # Music player
 bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"

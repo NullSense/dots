@@ -52,6 +52,7 @@
 
 "Vim general
 set nocompatible
+set mouse=a
 set encoding=utf-8 "windows specific rendering option
 set undofile "persistent undo
 set number "Number lines
