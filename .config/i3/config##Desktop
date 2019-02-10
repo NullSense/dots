@@ -28,8 +28,8 @@ smart_borders on
 
 ## Custom binds
 # Screenshots
-bindsym Print exec "capture.sh -l" # Screenshot to clipboard and temp
-bindsym control+Print exec "capture.sh" # Upload screenshot
+bindsym Print exec "capture.sh -l"
+bindsym control+Print exec "capture.sh"
 for_window [class="Mtpaint"] floating enable # Screenshot editor
 
 # Music player
@@ -227,7 +227,7 @@ bar {
         tray_output DisplayPort-0
         output DisplayPort-0
         position top
-        status_command i3blocks -c ~/.config/i3blocks/i3blocks.conf
+        status_command i3blocks
         font pango:Hack Nerd Font 6
         separator_symbol " "
 
