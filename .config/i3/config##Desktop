@@ -189,8 +189,6 @@ for_window [class="Signal"] move container to workspace $ws2
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
-# exit i3 (logs you out of your X session)
-#bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -229,14 +227,14 @@ bar {
         tray_output DisplayPort-0
         output DisplayPort-0
         position top
-        status_command i3blocks
+        status_command i3blocks -c ~/.config/i3blocks/i3blocks.conf
         font pango:Hack Nerd Font 6
         separator_symbol " "
 
         colors {
                 # text color used for blocks that do not have a color specified.
                 statusline $yellow
-                # workspaces section            
+                # workspaces section
                 #                    border  backgr. text
                 focused_workspace    $blue $blue $darkgray
                 inactive_workspace #282a2e #282a2e #969896
@@ -259,7 +257,7 @@ bar {
         colors {
                 # text color used for blocks that do not have a color specified.
                 statusline $yellow
-                # workspaces section            
+                # workspaces section
                 #                    border  backgr. text
                 focused_workspace    $blue $blue $darkgray
                 inactive_workspace #282a2e #282a2e #969896
