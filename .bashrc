@@ -14,7 +14,6 @@ source ~/bin/spectro
 source ~/bin/fuzzy
 source ~/bin/resample_16_bit
 source ~/.git-prompt.sh
-source "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"
 source <(kitty + complete setup bash)
 
 # If not running interactively, don't do anything

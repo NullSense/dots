@@ -52,6 +52,7 @@
 
 "Vim general
 set nocompatible
+let g:gruvbox_italic=1
 set mouse=a
 set encoding=utf-8 "windows specific rendering option
 set undofile "persistent undo
