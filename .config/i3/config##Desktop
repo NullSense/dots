@@ -28,13 +28,14 @@ smart_borders on
 
 ## Custom binds
 # Screenshots
-bindsym Print exec "maim -s | xclip -selection clipboard -t image/png ; notify-send -i camera -u low \\"image in clipboard\\""
-bindsym control+Print exec bash -c 'maim -s | imgur.sh | sed 1q | tee >(xclip -i -selection clipboard) >(xargs notify-send -i camera -u low)'
+bindsym Print exec "capture.sh -l"
+bindsym control+Print exec "capture.sh"
+for_window [class="Mtpaint"] floating enable # Screenshot editor
 
 # Music player
 bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
 for_window [class="Lollypop"] move scratchpad, sticky enable, fullscreen enable 
-bindsym control+space [class="Lollypop"] scratchpad show, fullscreen enable
+bindsym $mod+m [class="Lollypop"] scratchpad show, fullscreen enable
 
 ## Volume
 # Increase volume
@@ -188,8 +189,6 @@ for_window [class="Signal"] move container to workspace $ws2
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
-# exit i3 (logs you out of your X session)
-#bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -235,7 +234,7 @@ bar {
         colors {
                 # text color used for blocks that do not have a color specified.
                 statusline $yellow
-                # workspaces section            
+                # workspaces section
                 #                    border  backgr. text
                 focused_workspace    $blue $blue $darkgray
                 inactive_workspace #282a2e #282a2e #969896
@@ -258,7 +257,7 @@ bar {
         colors {
                 # text color used for blocks that do not have a color specified.
                 statusline $yellow
-                # workspaces section            
+                # workspaces section
                 #                    border  backgr. text
                 focused_workspace    $blue $blue $darkgray
                 inactive_workspace #282a2e #282a2e #969896
