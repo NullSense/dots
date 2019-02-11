@@ -31,7 +31,11 @@ precipitation_info1() {
     jq -r --argjson indice "$indice" \
         '.precip[:$indice] |
         max |
-        if . > 2.5 then
+        if . > 4.5 then
+            ": Extreme"
+        elif . > 3.5 then
+            ": Very Heavy"
+        elif . > 2.5 then
             ": Heavy"
         elif . > 1 then
             ": Moderate"
