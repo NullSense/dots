@@ -129,8 +129,16 @@ set shiftwidth=4
 set smarttab
 filetype plugin indent on
 
-"Plugins
+"Install plug
+    if empty(glob('~/.vim/autoload/plug.vim'))
+      silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+      autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
+
     call plug#begin()
+    Plug 'tpope/vim-fugitive'
+    Plug 'lervag/vimtex', { 'for': 'tex' }
     Plug 'mhinz/vim-startify'
     Plug 'ryanoasis/vim-devicons'
     Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}} "intellisense engine
