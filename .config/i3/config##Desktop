@@ -35,7 +35,7 @@ for_window [class="Mtpaint"] floating enable # Screenshot editor
 # Music player
 bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
 for_window [class="Lollypop"] move scratchpad, sticky enable, fullscreen enable 
-bindsym control+space [class="Lollypop"] scratchpad show, fullscreen enable
+bindsym $mod+m [class="Lollypop"] scratchpad show, fullscreen enable
 
 ## Volume
 # Increase volume
