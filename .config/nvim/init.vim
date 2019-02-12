@@ -25,7 +25,7 @@
 
     "fzf Mappings
     "Fuzzy search lines
-    nnoremap <C-o> :Lines<CR>
+    nnoremap <C-l> :Lines<CR>
     "Open file in subdirectories
     nnoremap <C-p> :Files<CR>
     "Open Buffers list
@@ -80,7 +80,7 @@
 
     " Remap keys for gotos
     nmap <silent> gd <Plug>(coc-definition)
-    nmap <silent> gy <Plug>(coc-type-definition)
+    nmap <silent> gt <Plug>(coc-type-definition)
     nmap <silent> gi <Plug>(coc-implementation)
     nmap <silent> gr <Plug>(coc-references)
 
@@ -94,6 +94,17 @@
             call CocAction('doHover')
         endif
     endfunction
+
+    " Auto expand braces
+    inoremap {<CR> {<C-o>o}<C-o>O
+    "ino <c-o> <esc>A {<cr>}<esc>O<c-t>
+    "ino <c-n> <esc>:call search('}')<cr>A
+
+    " Nerdtree toggle
+    map <C-n> :NERDTreeToggle<CR>
+    " Tagbar toggle
+    nmap <C-m> :TagbarToggle<CR>
+
 
 "Vim general
 set nocompatible
@@ -136,25 +147,37 @@ filetype plugin indent on
     endif
 
     call plug#begin()
-    Plug 'tpope/vim-fugitive'
-    Plug 'lervag/vimtex', { 'for': 'tex' }
-    Plug 'mhinz/vim-startify'
-    Plug 'ryanoasis/vim-devicons'
+    "Nerdtree
+    Plug 'scrooloose/nerdtree'
+    Plug 'Xuyuanp/nerdtree-git-plugin'
+    Plug 'majutsushi/tagbar'
+    "Autocompletion
     Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}} "intellisense engine
-    "Plug 'tpope/vim-endwise' "pair matcher
-    Plug 'easymotion/vim-easymotion' "move easier
+    "Fzf
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     Plug 'junegunn/fzf.vim'
+    "Formatting
+    Plug 'scrooloose/nerdcommenter'
+    Plug 'tpope/vim-surround'
+    "Looks
     Plug 'morhetz/gruvbox'
     Plug 'lilydjwg/colorizer' "colorize hexcodes
+    Plug 'mhinz/vim-startify' "Better start page
+    "Git
+    Plug 'tpope/vim-fugitive'
     Plug 'airblade/vim-gitgutter'
-    Plug 'tpope/vim-surround'
+    "Airline
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
+    Plug 'ryanoasis/vim-devicons'
+    "Markdown
     Plug 'godlygeek/tabular'
     Plug 'plasticboy/vim-markdown'
     Plug 'shime/vim-livedown'
-    Plug 'scrooloose/nerdcommenter'
+    "Latex
+    Plug 'lervag/vimtex', { 'for': 'tex' }
+    "Movement
+    Plug 'easymotion/vim-easymotion' "move easier
     call plug#end()
 
 
@@ -179,6 +202,7 @@ filetype plugin indent on
     endfunction
      " Open fzf Files
     map <C-p> :call Fzf_files_with_dev_icons($FZF_DEFAULT_COMMAND)<CR>
+    map <C-i> :Commands<CR>
 
 "Theming
     set termguicolors "sets to true colors
