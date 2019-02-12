@@ -151,7 +151,9 @@ filetype plugin indent on
     Plug 'tpope/vim-surround'
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
-    "Plug 'jiangmiao/auto-pairs'
+    Plug 'godlygeek/tabular'
+    Plug 'plasticboy/vim-markdown'
+    Plug 'shime/vim-livedown'
     Plug 'scrooloose/nerdcommenter'
     call plug#end()
 

@@ -24,8 +24,9 @@ smart_borders on
 
 ## Custom binds
 # Screenshots
-bindsym Print exec "capture.sh -l" # Screenshot to clipboard and /tmp
-bindsym control+Print exec "capture.sh" # Upload screenshot
+bindsym Print exec "capture.sh -l"
+bindsym control+Print exec "capture.sh"
+for_window [class="Mtpaint"] floating enable # Screenshot editor
 
 # Music player
 bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
@@ -163,7 +164,6 @@ bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 
 for_window [class="Pavucontrol"] floating enable
-for_window [class="Mtpaint"] floating enable
 for_window [class="Signal"] move container to workspace $ws2
 
 # reload the configuration file
