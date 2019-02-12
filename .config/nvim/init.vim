@@ -21,7 +21,7 @@
     nnoremap <M-l> :bn<CR>
     nnoremap <M-h> :bprev<CR>
     " Close buffer
-    nnoremap <M-d> :bd<CR>
+    nnoremap <M-d> :bp\|bd #<CR>
 
     "fzf Mappings
     "Fuzzy search lines
@@ -69,12 +69,10 @@
         return !col || getline('.')[col - 1]  =~# '\s'
     endfunction
 
-    " Use <c-space> for trigger completion.
-    inoremap <silent><expr> <c-space> coc#refresh()
-
-    " Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
-    " Coc only does snippet and additional edit on confirm.
+    " Enter to complete
     inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+    autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
     " Use `[c` and `]c` for navigate diagnostics
     nmap <silent> [c <Plug>(coc-diagnostic-prev)
@@ -100,6 +98,7 @@
 "Vim general
 set nocompatible
 let g:gruvbox_italic=1
+let vimtex_compiler_progname='nvr'
 set mouse=a
 set encoding=utf-8 "windows specific rendering option
 set undofile "persistent undo
@@ -142,7 +141,7 @@ filetype plugin indent on
     Plug 'mhinz/vim-startify'
     Plug 'ryanoasis/vim-devicons'
     Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}} "intellisense engine
-    Plug 'tpope/vim-endwise' "pair matcher
+    "Plug 'tpope/vim-endwise' "pair matcher
     Plug 'easymotion/vim-easymotion' "move easier
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     Plug 'junegunn/fzf.vim'
@@ -152,7 +151,7 @@ filetype plugin indent on
     Plug 'tpope/vim-surround'
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
-    Plug 'jiangmiao/auto-pairs'
+    "Plug 'jiangmiao/auto-pairs'
     Plug 'scrooloose/nerdcommenter'
     call plug#end()
 
@@ -176,26 +175,8 @@ filetype plugin indent on
             \ 'options': '-m ' . l:fzf_files_options,
             \ 'down':    '40%' })
     endfunction
-     function! Fzf_git_diff_files_with_dev_icons()
-      let l:fzf_files_options = '--ansi --preview "sh -c \"(git diff --color=always -- {3..} | sed 1,4d; bat --color always --style numbers {3..}) | head -'.&lines.'\""'
-       function! s:edit_devicon_prepended_file_diff(item)
-        echom a:item
-        let l:file_path = a:item[7:-1]
-        echom l:file_path
-        let l:first_diff_line_number = system("git diff -U0 ".l:file_path." | rg '^@@.*\+' -o | rg '[0-9]+' -o | head -1")
-         execute 'silent e' l:file_path
-        execute l:first_diff_line_number
-      endfunction
-       call fzf#run({
-            \ 'source': 'git -c color.status=always status --short --untracked-files=all | devicon-lookup',
-            \ 'sink':   function('s:edit_devicon_prepended_file_diff'),
-            \ 'options': '-m ' . l:fzf_files_options,
-            \ 'down':    '40%' })
-    endfunction
      " Open fzf Files
     map <C-p> :call Fzf_files_with_dev_icons($FZF_DEFAULT_COMMAND)<CR>
-    "map <C-d> :call Fzf_git_diff_files_with_dev_icons()<CR>
-    "map <C-g> :call Fzf_files_with_dev_icons("git ls-files \| uniq")<CR>
 
 "Theming
     set termguicolors "sets to true colors
