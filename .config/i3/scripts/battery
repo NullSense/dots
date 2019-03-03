@@ -4,6 +4,9 @@ percentage=$(< /sys/class/power_supply/BAT0/capacity)
 charging_status=$(< /sys/class/power_supply/BAT0/status)
 
 case $charging_status in
+    Full)
+        icon=""
+        ;;
     Charging)
         if (( percentage >= 99)); then
             icon=""

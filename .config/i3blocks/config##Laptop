@@ -29,12 +29,12 @@ signal=10
 
 [disk-root]
 label=/:
-command=df -h / | awk '/\/.*/ {print $3; exit 0}'
+command=df -h / | tail -1 | awk '{print $4}'
 interval=30
 
 [disk-home]
 label=~:
-command=df -h ~ | awk '/\/.*/ {print $3; exit 0}'
+command=df -h ~ | tail -1 | awk '{print $4}'
 interval=30
 
 [time]

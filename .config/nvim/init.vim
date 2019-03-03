@@ -25,7 +25,7 @@
 
     "fzf Mappings
     "Fuzzy search lines
-    nnoremap <C-l> :Lines<CR>
+    nnoremap <C-o> :Lines<CR>
     "Open file in subdirectories
     nnoremap <C-p> :Files<CR>
     "Open Buffers list

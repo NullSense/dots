@@ -25,7 +25,11 @@ alias hotspot='sudo systemctl restart create_ap.service'
 alias android='sudo jmtpfs -o allow_other,uid=1000 ~/.Android'
 alias rsync='rsync --info=progress2'
 alias vim='nvim'
+alias v='nvim'
 alias r='ranger'
+alias b='nvim ~/.bashrc'
+alias i='nvim ~/.config/i3/config'
+alias ib='nvim ~/.config/i3blocks/config'
 
 #-----------------------------------------------------------------------
 #
