@@ -5,7 +5,6 @@ exec --no-startup-id lollypop
 exec --no-startup-id redshift
 exec --no-startup-id caffeine
 exec --no-startup-id unclutter
-exec --no-startup-id "killall -q compton; compton --config ~/.config/compton.conf"
 
 #Locking
 exec --no-startup-id xset s 60 60
