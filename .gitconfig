@@ -1,0 +1,5 @@
+[user]
+	email = MrCappuccino@users.noreply.github.com
+	name = MrCappuccino
+[credential]
+	helper = cache --timeout=3600
