@@ -1,10 +1,21 @@
+# #---Basic Definitions---# #
+font pango:Hack 8 # for window titles
+set $mod Mod4
+set $term kitty
+focus_follows_mouse no
+for_window [class="^.*"] border pixel 1
+smart_borders on
+
 # STARTUP EXECUTIONS
 exec xset -b # Turns off annoying loud beep
+exec --no-startup-id alttab -d 3
 exec --no-startup-id nm-applet
 exec --no-startup-id lollypop
 exec --no-startup-id redshift
 exec --no-startup-id caffeine
 exec --no-startup-id unclutter
+exec --no-startup-id $term --name dropdown_term
+exec --no-startup-id qutebrowser --temp-basedir --qt-arg name dropdown_qute
 
 #Locking
 exec --no-startup-id xset s 60 60
@@ -12,25 +23,53 @@ exec --no-startup-id xset dpms 180
 #Start XSS for lock on lid shutdown
 exec --no-startup-id xss-lock -n ~/bin/dim-screen.sh -- ~/bin/lock1.sh
 
-# Font for window titles
-font pango:Hack 8
+for_window [instance="dropdown_*"] floating enable
+for_window [instance="dropdown_*"] move scratchpad
+for_window [instance="dropdown_*"] sticky enable
+for_window [instance="dropdown_term"] border pixel 3
+for_window [instance="dropdown_term"] resize set 1325 650
+for_window [instance="dropdown_qute"] border pixel 3
+for_window [instance="dropdown_qute"] resize set 1325 950
 
-# #---Basic Definitions---# #
-set $mod Mod4
-focus_follows_mouse no
-for_window [class="^.*"] border pixel 1
-smart_borders on
+for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.py -r 30 -p top right
+
+for_window [class="Pavucontrol"] floating enable
+for_window [class="Signal"] move container to workspace $ws2
+for_window [window_role="GtkFileChooserDialog"] resize set 1780 920
+for_window [window_role="GtkFileChooserDialog"] move position center
+for_window [class="Mtpaint"] floating enable # Screenshot editor
+for_window [class="Lollypop"] move scratchpad, sticky enable, fullscreen enable
 
 ## Custom binds
+# Move focused workspace between monitors
+bindsym $mod+Ctrl+greater move workspace to output right
+bindsym $mod+Ctrl+less move workspace to output left
+
 # Screenshots
 bindsym Print exec "capture.sh -l"
 bindsym control+Print exec "capture.sh"
-for_window [class="Mtpaint"] floating enable # Screenshot editor
+
+# Show clipboard contents
+bindsym $mod+Insert exec --no-startup-id showclip
+# Upload clipboard contents
+bindsym $mod+Shift+Insert exec xclip -o -selection clipboard | ptpb
 
 # Music player
 bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
-for_window [class="Lollypop"] move scratchpad, sticky enable, fullscreen enable 
 bindsym control+space [class="Lollypop"] scratchpad show, fullscreen enable
+
+# Mpv pause
+bindsym $mod+m exec xdotool key --window "$(xdotool search --class mpv)" p
+
+# Dropdown terminal
+bindsym $mod+u [instance="dropdown_term"] scratchpad show; move position center
+
+# Dropdown qutebrowser
+bindsym $mod+backslash [instance="dropdown_qute"] scratchpad show; move position center
+
+# Open windows bottom left/right as sticky floating
+bindsym $mod+Shift+b floating enable; sticky enable; exec --no-startup-id $HOME/bin/resize.py -r 30 -p top right
+bindsym $mod+Shift+n floating enable; sticky enable; exec --no-startup-id $HOME/bin/resize.py -r 30 -p bottom right
 
 # Volume
 # Increase volume
@@ -46,9 +85,6 @@ bindsym XF86AudioMute exec "pactl set-sink-mute @DEFAULT_SINK@ toggle && pkill -
 bindsym XF86MonBrightnessUp exec "xbacklight -inc 5 && pkill -RTMIN+5 i3blocks"
 # Decrease backlight
 bindsym XF86MonBrightnessDown exec "xbacklight -dec 5 && pkill -RTMIN+5 i3blocks"
-
-# i3Lock
-#bindsym control+Shift+Escape exec lock.sh
 
 # Shutdown, reboot, lock screen
 set $Locker exec lock.sh && sleep 1
@@ -73,7 +109,7 @@ bindsym control+Delete mode "$mode_system"
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec kitty 
+bindsym $mod+Return exec kitty
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -136,7 +172,7 @@ set $ws6 "06 "
 set $ws7 "07 "
 set $ws8 "08 "
 set $ws9 "09 "
-set $wsX "10 "
+set $ws10 "10 "
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -162,19 +198,13 @@ bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 
-for_window [class="Pavucontrol"] floating enable
-for_window [class="Signal"] move container to workspace $ws2
 
-# reload the configuration file
-bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
-# exit i3 (logs you out of your X session)
-#bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-    bindsym h resize shrink width 5 px or 5 ppt
+        bindsym h resize shrink width 5 px or 5 ppt
         bindsym j resize grow height 5 px or 5 ppt
         bindsym k resize shrink height 5 px or 5 ppt
         bindsym l resize grow width 5 px or 5 ppt

@@ -1,5 +1,8 @@
-#
-export PATH=$PATH:~/bin
+bind 'set show-all-if-ambiguous on'
+bind 'TAB:menu-complete'
+set -o vi
+
+export PATH=$PATH:~/bin:~/.config/i3/scripts
 export PATH="$HOME/.cargo/bin:$PATH"
 export GOPATH=$HOME/go
 export EDITOR=nvim
@@ -9,6 +12,7 @@ export MANPAGER="nvim -c 'set ft=man' -"
 export HISTFILESIZE=
 export HISTSIZE=
 export WEECHAT_HOME=~/.config/weechat
+export TERMINAL=kitty
 
 source ~/bin/spectro
 source ~/bin/fuzzy
