@@ -1,89 +1,105 @@
-# #---Basic Definitions---# #
+######################################################
+# Basic Definitions ##################################
+######################################################
 font pango:Hack 8 # for window titles
 set $mod Mod4
 set $term kitty
 focus_follows_mouse no
 for_window [class="^.*"] border pixel 1
-smart_borders on
+smart_borders on # Only show borders when more than 1 window open
 
-# STARTUP EXECUTIONS
+######################################################
+# STARTUP EXECUTIONS ################################
+######################################################
 exec xset -b # Turns off annoying loud beep
 exec --no-startup-id alttab -d 3
 exec --no-startup-id nm-applet
-exec --no-startup-id lollypop
+exec --no-startup-id keynav daemonize
 exec --no-startup-id redshift
 exec --no-startup-id caffeine
 exec --no-startup-id unclutter
-exec --no-startup-id $term --name dropdown_term
-exec --no-startup-id qutebrowser --temp-basedir --qt-arg name dropdown_qute
+## Scratchpads
+#exec --no-startup-id $term --name dropdown_term
 
-#Locking
+## Locking
 exec --no-startup-id xset s 60 60
 exec --no-startup-id xset dpms 180
-#Start XSS for lock on lid shutdown
-exec --no-startup-id xss-lock -n ~/bin/dim-screen.sh -- ~/bin/lock1.sh
+## Start XSS for lock on lid shutdown
+exec --no-startup-id xss-lock -n ~/bin/dim-screen.sh -- ~/bin/lock.sh
 
-for_window [instance="dropdown_*"] floating enable
-for_window [instance="dropdown_*"] move scratchpad
-for_window [instance="dropdown_*"] sticky enable
+######################################################
+# Windows ############################################
+######################################################
+## Dropdown
+for_window [instance="dropdown_*"] floating enable, move position center, sticky enable, resize set 1325 950
 for_window [instance="dropdown_term"] border pixel 3
 for_window [instance="dropdown_term"] resize set 1325 650
-for_window [instance="dropdown_qute"] border pixel 3
-for_window [instance="dropdown_qute"] resize set 1325 950
 
+## Dropdown specific
 for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.py -r 30 -p top right
 
+## Problematic windows
 for_window [class="Pavucontrol"] floating enable
 for_window [class="Signal"] move container to workspace $ws2
 for_window [window_role="GtkFileChooserDialog"] resize set 1780 920
 for_window [window_role="GtkFileChooserDialog"] move position center
 for_window [class="Mtpaint"] floating enable # Screenshot editor
-for_window [class="Lollypop"] move scratchpad, sticky enable, fullscreen enable
 
-## Custom binds
-# Move focused workspace between monitors
+######################################################
+# Bindings ###########################################
+######################################################
+# Dropdown
+## Dropdown qutebrowser
+bindsym $mod+backslash exec python ~/.config/i3/scripts/scratchy.py -a 'qutebrowser --qt-arg name dropdown_qute' -c dropdown_qute
+
+## Dropdown Lollypop
+bindsym control+space exec python ~/.config/i3/scripts/scratchy.py -t Lollypop -a lollypop; [class="Lollypop"] fullscreen enable
+
+## Dropdown terminal
+bindsym $mod+u exec python ~/.config/i3/scripts/scratchy.py -c dropdown_term -a 'kitty --name dropdown_term'
+
+## Move focused workspace between monitors
 bindsym $mod+Ctrl+greater move workspace to output right
 bindsym $mod+Ctrl+less move workspace to output left
 
-# Screenshots
-bindsym Print exec "capture.sh -l"
-bindsym control+Print exec "capture.sh"
+# Open link in mpv
+bindsym $mod+y exec mpv $(xclip -o)
 
-# Show clipboard contents
+## Screenshots
+bindsym Print exec "capture.sh -l" # clipboard
+bindsym control+Print exec "capture.sh" # upload to ptpb
+
+## Show clipboard contents
 bindsym $mod+Insert exec --no-startup-id showclip
-# Upload clipboard contents
+## Upload clipboard contents
 bindsym $mod+Shift+Insert exec xclip -o -selection clipboard | ptpb
 
-# Music player
+## Music player
 bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
-bindsym control+space [class="Lollypop"] scratchpad show, fullscreen enable
 
-# Mpv pause
+## Mpv pause
 bindsym $mod+m exec xdotool key --window "$(xdotool search --class mpv)" p
 
-# Dropdown terminal
-bindsym $mod+u [instance="dropdown_term"] scratchpad show; move position center
 
-# Dropdown qutebrowser
-bindsym $mod+backslash [instance="dropdown_qute"] scratchpad show; move position center
-
-# Open windows bottom left/right as sticky floating
+## Open windows bottom left/right as sticky floating
 bindsym $mod+Shift+b floating enable; sticky enable; exec --no-startup-id $HOME/bin/resize.py -r 30 -p top right
 bindsym $mod+Shift+n floating enable; sticky enable; exec --no-startup-id $HOME/bin/resize.py -r 30 -p bottom right
 
+##############################
+# SYSTEM BINDS################
+##############################
 # Volume
-# Increase volume
+## Increase volume
 bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume @DEFAULT_SINK@ +1000 && pkill -RTMIN+10 i3blocks"
-# Decrease volume
+## Decrease volume
 bindsym XF86AudioLowerVolume exec "pactl set-sink-volume @DEFAULT_SINK@ -1000 && pkill -RTMIN+10 i3blocks"
-# Mute volume
+## Mute volume
 bindsym XF86AudioMute exec "pactl set-sink-mute @DEFAULT_SINK@ toggle && pkill -RTMIN+10 i3blocks"
 
-
 # Backlight
-# Increase backlight
+## Increase backlight
 bindsym XF86MonBrightnessUp exec "xbacklight -inc 5 && pkill -RTMIN+5 i3blocks"
-# Decrease backlight
+## Decrease backlight
 bindsym XF86MonBrightnessDown exec "xbacklight -dec 5 && pkill -RTMIN+5 i3blocks"
 
 # Shutdown, reboot, lock screen

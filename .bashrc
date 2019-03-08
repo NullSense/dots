@@ -6,7 +6,7 @@ export PATH=$PATH:~/bin:~/.config/i3/scripts
 export PATH="$HOME/.cargo/bin:$PATH"
 export GOPATH=$HOME/go
 export EDITOR=nvim
-export BROWSER=firefox
+#export BROWSER=firefox
 export MANPAGER="nvim -c 'set ft=man' -"
 #Infinite history
 export HISTFILESIZE=

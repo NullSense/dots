@@ -1,6 +1,7 @@
 "Mappings
     let mapleader="\<Space>"
     noremap <leader>y "+y
+    nnoremap <leader>b :buffer *
 
     " Double esc to disable hlsearch
     nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
