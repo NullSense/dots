@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# Resizes a window and makes it a floating scratchpad for i3
+
 import subprocess
 import argparse
 import i3ipc

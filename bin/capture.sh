@@ -6,7 +6,7 @@ icon="clipboard"
 # Defaults
 mode="screenshot"
 hide_cursor="Yes"
-service="pbpst"
+service="0x0"
 
 while getopts ":lm:cs:" opt; do
     case $opt in
@@ -34,6 +34,9 @@ upload() {
     case "$service" in
         "pbpst" )
             pbpst -Sf "$file" -x 1d
+            ;;
+        "0x0" )
+            0x0 "$file"
             ;;
         * )
             exit

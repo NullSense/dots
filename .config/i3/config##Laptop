@@ -66,8 +66,8 @@ bindsym $mod+Ctrl+less move workspace to output left
 bindsym $mod+y exec mpv $(xclip -o)
 
 ## Screenshots
-bindsym Print exec "capture.sh -l" # clipboard
-bindsym control+Print exec "capture.sh" # upload to ptpb
+bindsym Print exec "capture.sh -l"
+bindsym control+Print exec "capture.sh"
 
 ## Show clipboard contents
 bindsym $mod+Insert exec --no-startup-id showclip

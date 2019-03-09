@@ -7,9 +7,9 @@
 
 clip=$(xclip -o -selection clipboard)
 
-prim=$(xclip -o -selection primary)
+#prim=$(xclip -o -selection primary)
 
 [ "$clip" != "" ] && notify-send "<b>Clipboard:</b>
 $clip"
-[ "$prim" != "" ] && notify-send "<b>Primary:</b>
-$prim"
+#[ "$prim" != "" ] && notify-send "<b>Primary:</b>
+#$prim"

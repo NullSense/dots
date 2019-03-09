@@ -1,41 +1,75 @@
-# STARTUP EXECUTIONS
+######################################################
+# Basic Definitions ##################################
+######################################################
+font pango:Hack 8 # for window titles
+set $mod Mod4
+set $term kitty
+focus_follows_mouse no
+for_window [class="^.*"] border pixel 1
+smart_borders on # Only show borders when more than 1 window open
+
+######################################################
+# STARTUP EXECUTIONS ################################
+######################################################
 exec xset -b # Turns off annoying loud beep
+exec --no-startup-id keynav daemonize
+exec --no-startup-id redshift
+exec --no-startup-id caffeine
+exec --no-startup-id unclutter
+exec --no-startup-id xss-lock -n -- ~/bin/lock.sh
 
 # Autostart applications in specific workspaces
 exec --no-startup-id i3-msg 'workspace $ws1; exec firefox'
 exec --no-startup-id i3-msg 'workspace $ws2; exec signal-desktop'
 exec --no-startup-id i3-msg 'workspace $ws2; exec kitty -e weechat'
-exec --no-startup-id i3-msg 'workspace $ws9; exec transmission-gtk'
+exec --no-startup-id i3-msg 'workspace $ws10; exec transmission-gtk'
 
-# Autostart background applications
-exec --no-startup-id redshift
-exec --no-startup-id unclutter
-exec --no-startup-id caffeine
-exec --no-startup-id lollypop
-exec --no-startup-id "compton --config ~/.config/compton.conf"
-exec --no-startup-id xss-lock -n -- ~/bin/lock.sh
 
-# Font for window titles
-font pango:Hack Nerd Font 7
+######################################################
+# Windows ############################################
+######################################################
+## Dropdown
+for_window [instance="dropdown_*"] floating enable, move position center, sticky enable, resize set 1325 950
+for_window [instance="dropdown_term"] border pixel 3
+for_window [instance="dropdown_term"] resize set 1325 650
 
-# #---Basic Definitions---# #
-# Needed for i3-gaps
-set $mod Mod4
-set $alt Alt_L
-focus_follows_mouse no
-for_window [class="^.*"] border pixel 1
-smart_borders on
+## Dropdown specific
+for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.py -r 30 -p top right
 
-## Custom binds
-# Screenshots
-bindsym Print exec "capture.sh -l"
-bindsym control+Print exec "capture.sh"
+## Problematic windows
+for_window [class="Pavucontrol"] floating enable
+for_window [class="Signal"] move container to workspace $ws2
+for_window [window_role="GtkFileChooserDialog"] resize set 1780 920
+for_window [window_role="GtkFileChooserDialog"] move position center
 for_window [class="Mtpaint"] floating enable # Screenshot editor
 
-# Music player
-bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
-for_window [class="Lollypop"] move scratchpad, sticky enable, fullscreen enable 
-bindsym $mod+m [class="Lollypop"] scratchpad show, fullscreen enable
+######################################################
+# Bindings ###########################################
+######################################################
+# Dropdown
+## Dropdown qutebrowser
+bindsym $mod+backslash exec python ~/.config/i3/scripts/scratchy.py -a 'qutebrowser --qt-arg name dropdown_qute' -c dropdown_qute
+
+## Dropdown Lollypop
+bindsym control+space exec python ~/.config/i3/scripts/scratchy.py -t Lollypop -a lollypop; [class="Lollypop"] fullscreen enable
+
+## Dropdown terminal
+bindsym $mod+u exec python ~/.config/i3/scripts/scratchy.py -c dropdown_term -a 'kitty --name dropdown_term'
+
+## Show clipboard contents
+bindsym $mod+Insert exec --no-startup-id showclip
+## Upload clipboard contents
+bindsym $mod+Shift+Insert exec xclip -o -selection clipboard | ptpb
+
+## Open link in mpv
+bindsym $mod+y exec mpv $(xclip -o)
+
+## Screenshots
+bindsym Print exec "capture.sh -l"
+bindsym control+Print exec "capture.sh"
+
+## Mpv pause
+bindsym $mod+m exec xdotool key --window "$(xdotool search --class mpv)" p
 
 ## Volume
 # Increase volume
@@ -71,7 +105,7 @@ floating_modifier $mod
 floating_maximum_size 1920 x 1080
 
 # start a terminal
-bindsym $mod+Return exec kitty 
+bindsym $mod+Return exec kitty
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -85,9 +119,6 @@ bindsym $mod+d exec --no-startup-id rofi -show drun -show-icons
 
 # Rofi calculator
 bindsym $mod+c exec --no-startup-id rofi -show calc -modi calc -no-show-match -no-sort
-
-# rofi for open applications
-bindsym $mod+x exec --no-startup-id "rofi -show window -show-icons" 
 
 # change focus
 bindsym $mod+h focus left
@@ -150,7 +181,7 @@ set $ws6 "06 "
 set $ws7 "07 "
 set $ws8 "08 "
 set $ws9 "09 "
-set $wsX "10 "
+set $ws10 "10 "
 
 # Set workspace outputs (monitors)
 workspace $ws1 output DisplayPort-0
@@ -166,8 +197,8 @@ bindsym $mod+4 workspace $ws4
 bindsym $mod+5 workspace $ws5
 bindsym $mod+6 workspace $ws6
 bindsym $mod+7 workspace $ws7
-bindsym $mod+8 workspace $ws8; exec soulseekqt # autostart soulseek when 8 is active
-bindsym $mod+9 workspace $ws9
+bindsym $mod+8 workspace $ws8;
+bindsym $mod+9 workspace $ws9; exec soulseekqt # autostart soulseek when 8 is active
 bindsym $mod+0 workspace $ws10
 
 # move focused container to workspace
@@ -182,11 +213,6 @@ bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 
-for_window [class="Pavucontrol"] floating enable
-for_window [class="Signal"] move container to workspace $ws2
-
-# reload the configuration file
-bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 
