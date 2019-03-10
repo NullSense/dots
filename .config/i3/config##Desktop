@@ -34,7 +34,7 @@ for_window [instance="dropdown_term"] border pixel 3
 for_window [instance="dropdown_term"] resize set 1325 650
 
 ## Dropdown specific
-for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.py -r 30 -p top right
+for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.py -r 35 -p top right
 
 ## Problematic windows
 for_window [class="Pavucontrol"] floating enable
@@ -48,13 +48,14 @@ for_window [class="Mtpaint"] floating enable # Screenshot editor
 ######################################################
 # Dropdown
 ## Dropdown qutebrowser
-bindsym $mod+backslash exec python ~/.config/i3/scripts/scratchy.py -a 'qutebrowser --qt-arg name dropdown_qute' -c dropdown_qute
+bindsym $mod+backslash exec python ~/.config/i3/scripts/scratchy.py -a 'qutebrowser --qt-arg name dropdown_qute' -c dropdown_qute; [class="dropdown_qute"] move position center
 
 ## Dropdown Lollypop
 bindsym control+space exec python ~/.config/i3/scripts/scratchy.py -t Lollypop -a lollypop; [class="Lollypop"] fullscreen enable
+bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
 
 ## Dropdown terminal
-bindsym $mod+u exec python ~/.config/i3/scripts/scratchy.py -c dropdown_term -a 'kitty --name dropdown_term'
+bindsym $mod+u exec python ~/.config/i3/scripts/scratchy.py -c dropdown_term -a 'kitty --name dropdown_term'; [class="dropdown_term"] move position center
 
 ## Show clipboard contents
 bindsym $mod+Insert exec --no-startup-id showclip
@@ -70,6 +71,10 @@ bindsym control+Print exec "capture.sh"
 
 ## Mpv pause
 bindsym $mod+m exec xdotool key --window "$(xdotool search --class mpv)" p
+
+## Open windows bottom left/right as sticky floating
+bindsym $mod+Shift+b floating enable; sticky enable; exec --no-startup-id $HOME/bin/resize.py -r 35 -p top right
+bindsym $mod+Shift+n floating enable; sticky enable; exec --no-startup-id $HOME/bin/resize.py -r 35 -p bottom right
 
 ## Volume
 # Increase volume
@@ -116,9 +121,6 @@ bindsym $mod+Ctrl+less move workspace to output left
 
 # Start rofi
 bindsym $mod+d exec --no-startup-id rofi -show drun -show-icons
-
-# Rofi calculator
-bindsym $mod+c exec --no-startup-id rofi -show calc -modi calc -no-show-match -no-sort
 
 # change focus
 bindsym $mod+h focus left
@@ -188,6 +190,7 @@ workspace $ws1 output DisplayPort-0
 workspace $ws2 output DVI-1
 workspace $ws8 output DisplayPort-0
 workspace $ws9 output DisplayPort-0
+workspace $ws10 output DisplayPort-0
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
