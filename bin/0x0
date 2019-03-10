@@ -1,8 +1,5 @@
 #!/bin/bash
 # 0x0 - client for 0x0.st
-#
-# Copyright 2016-2018 Kylie McClain <kylie@somas.is>
-# Distributed under the terms of the 0BSD license
 
 me=${0##*/}
 host=https://0x0.st
@@ -23,8 +20,9 @@ EOF
 }
 
 clip() {
-    if command -v xsel >/dev/null 2>&1;then
-        printf '%s' "$@" | xsel -b
+    if command -v xclip >/dev/null 2>&1;then
+        echo "$@" | xclip -selection c
+        notify-send "0x0" "Successfully uploaded.\nURL: $@"
     fi
 }
 

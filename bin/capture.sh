@@ -36,7 +36,7 @@ upload() {
             pbpst -Sf "$file" -x 1d
             ;;
         "0x0" )
-            0x0 "$file"
+            curl -s -F "file=@$file" https://0x0.st
             ;;
         * )
             exit
@@ -61,7 +61,13 @@ error() {
     cleanup
 }
 
-dunstify -r 2500 "$title" "$(printf "Select window or area to capture.\nPress RIGHT-CLICK to cancel.")"
+video_capture() {
+    # Make temporary file to record to
+	file=$(mktemp /tmp/video-XXXXXXXXXX.mp4)
+    # Use slop for selecting are to record with ffmpeg
+    ( . <(slop -f 'x=%x;y=%y;w=%w;h=%h') ; w=$((w/2*2)) ; h=$((h/2*2)) ; ffmpeg -loglevel quiet -y -f x11grab -video_size ${w}x${h} -i :0.0+$x,$y -pix_fmt yuv420p "$file" )
+}
+
 
 case "$mode" in
     "screenshot" )
@@ -139,13 +145,13 @@ case "$mode" in
 	trap -- '' SIGINT SIGTERM
 
 	if [ "$local" = true ]; then
-	    file="$(recap rec)"
+        video_capture
 	    echo "$file" | xclip -sel c;
 		dunstify -r 2500 -i "$icon"		\
 			 "$title"			\
 			 "$(printf "Video successfully stored locally.\nPATH: %s" "$file")"
 	else
-	    file="$(recap rec)"
+        video_capture
 	    echo "Ended"
 	    output=$(upload)
 	    url="$(echo "${output##*$'\n'}")"
