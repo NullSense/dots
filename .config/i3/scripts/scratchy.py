@@ -54,18 +54,19 @@ def main():
     else:
         import sys
         sys.exit('Must either provide a -t/--tittle or a -c/--class')
-
+    # if window is not found, open it
     if len(results) == 0:
         cmd_open = f'i3-msg exec "{app}"'
-        cmd_scratchpad = 'i3-msg move scratchpad'
         run(cmd_open)
         if title:
             while not title_exists(connection, title):
                 time.sleep(0.01)
+            window = title_exists(connection, title)
         elif window_class:
             while not class_exists(connection, window_class):
                 time.sleep(0.01)
-        run(cmd_scratchpad)
+            window = class_exists(connection, window_class)
+        window.command('move scratchpad')
     else:
         if title:
             command = f'i3-msg \\[title="{title}"\\] scratchpad show'

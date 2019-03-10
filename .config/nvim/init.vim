@@ -1,7 +1,7 @@
 "Mappings
     let mapleader="\<Space>"
     noremap <leader>y "+y
-    nnoremap <leader>b :buffer *
+    nnoremap <leader>p VPY
 
     " Double esc to disable hlsearch
     nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
@@ -107,6 +107,8 @@ filetype plugin indent on
     endif
 
     call plug#begin()
+    "Linting
+    Plug 'w0rp/ale'
     "Nerdtree
     Plug 'scrooloose/nerdtree'
     Plug 'Xuyuanp/nerdtree-git-plugin'
