@@ -1,4 +1,4 @@
-#!/bash/bin
+#!/usr/bin/env bash
 #
 # Open file in vim through fzf
 fe() {
