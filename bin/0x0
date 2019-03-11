@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # 0x0 - client for 0x0.st
 
 me=${0##*/}

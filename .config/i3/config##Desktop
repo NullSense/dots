@@ -60,7 +60,7 @@ bindsym $mod+u exec python ~/.config/i3/scripts/scratchy.py -c dropdown_term -a 
 ## Show clipboard contents
 bindsym $mod+Insert exec --no-startup-id showclip
 ## Upload clipboard contents
-bindsym $mod+Shift+Insert exec xclip -o -selection clipboard | ptpb
+bindsym $mod+Shift+Insert exec xclip -selection clipboard -o | 0x0
 
 ## Open link in mpv
 bindsym $mod+y exec mpv $(xclip -o)
