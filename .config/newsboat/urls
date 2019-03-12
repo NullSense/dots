@@ -8,8 +8,9 @@ https://www.comicsrss.com/rss/dilbert-classics.rss "comics"
 
 http://feeds.feedburner.com/codinghorror/ "articles "blog"
 https://lukesmith.xyz/rss.xml "articles" "blog"
+http://syndication.thedailywtf.com/TheDailyWtf "articles" "blog"
+http://lambda-the-ultimate.org/rss.xml "articles" "blog"
 
-https://news.ycombinator.com/rss "articles"
 http://www.daemonology.net/hn-daily/index.rss "articles"
 
 ======================================================================================
@@ -22,12 +23,12 @@ https://github.com/Zaeph.atom "git"
 ======================================================================================
 ========================================REDDIT=======================================
 ======================================================================================
-https://www.reddit.com/r/OpenSignups/.rss "reddit" "~/r/OpenSignups"
-https://www.reddit.com/r/trackers/.rss "reddit" "~/r/trackers"
-https://www.reddit.com/r/hardware/.rss "reddit" "~/r/hardware"
-https://www.reddit.com/r/programming/.rss "reddit" "~/r/programming"
-https://www.reddit.com/r/android/.rss "reddit" "~/r/android"
-https://www.reddit.com/r/bestof/.rss "reddit" "~/r/bestof"
+https://www.reddit.com/r/trackers/top.rss?t=day "reddit"
+https://www.reddit.com/r/opensignups/top.rss?t=day "reddit" "~top scoring links : OpenSignups"
+https://www.reddit.com/r/hardware/top.rss?t=day "reddit"
+https://www.reddit.com/r/programming/top.rss?t=day "reddit"
+https://www.reddit.com/r/bestof/top.rss?t=week "reddit"
+https://www.reddit.com/r/android/top.rss?t=week "reddit"
 
 ======================================================================================
 =====================================SUBSCRIPTIONS====================================

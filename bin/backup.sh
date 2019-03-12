@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-date=$(date +%d-%m-%y/%H:%M:%S)
+date=$(date +%y-%m-%d/%H:%M:%S)
 
 echo -e "==========================================="
 echo -e "===Backup started at '$date'==="
@@ -15,7 +15,7 @@ rsync -aHx --stats --numeric-ids --exclude="lost+found" --exclude='*.mkv' --excl
 echo -e "==========================================="
 echo -e "========Starting torrent file backup======="
 echo -e "==========================================="
-# Backup music to HDD
+# Backup torrent files to HDD
 rsync -aHx --stats --numeric-ids --exclude="lost+found" --exclude='*.mkv' --exclude='*.rar' --exclude='*.nfo' --exclude='*.idx' "/home/ongo/Downloads/torrent files/" "/mnt/windows/Downloads/torrent files"
 
 echo -e "==========================================="
