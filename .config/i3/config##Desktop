@@ -47,15 +47,12 @@ for_window [class="Mtpaint"] floating enable # Screenshot editor
 # Bindings ###########################################
 ######################################################
 # Dropdown
-## Dropdown qutebrowser
-bindsym $mod+backslash exec python ~/.config/i3/scripts/scratchy.py -a 'qutebrowser --qt-arg name dropdown_qute' -c dropdown_qute; [class="dropdown_qute"] move position center
-
 ## Dropdown Lollypop
-bindsym control+space exec python ~/.config/i3/scripts/scratchy.py -t Lollypop -a lollypop; [class="Lollypop"] fullscreen enable
+bindsym $mod+m exec python ~/.config/i3/scripts/scratchy.py -t Lollypop -a lollypop; [class="Lollypop"] fullscreen enable
 bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
 
 ## Dropdown terminal
-bindsym $mod+u exec python ~/.config/i3/scripts/scratchy.py -c dropdown_term -a 'kitty --name dropdown_term'; [class="dropdown_term"] move position center
+bindsym $mod+u exec python ~/.config/i3/scripts/scratchy.py -c dropdown_term -a 'kitty --name dropdown_term'
 
 ## Show clipboard contents
 bindsym $mod+Insert exec --no-startup-id showclip
@@ -70,7 +67,7 @@ bindsym Print exec "capture.sh -l"
 bindsym control+Print exec "capture.sh"
 
 ## Mpv pause
-bindsym $mod+m exec xdotool key --window "$(xdotool search --class mpv)" p
+bindsym $mod+o exec xdotool key --window "$(xdotool search --class mpv)" p
 
 ## Open windows bottom left/right as sticky floating
 bindsym $mod+Shift+b floating enable; sticky enable; exec --no-startup-id $HOME/bin/resize.py -r 35 -p top right
@@ -201,7 +198,7 @@ bindsym $mod+5 workspace $ws5
 bindsym $mod+6 workspace $ws6
 bindsym $mod+7 workspace $ws7
 bindsym $mod+8 workspace $ws8;
-bindsym $mod+9 workspace $ws9; exec soulseekqt # autostart soulseek when 8 is active
+bindsym $mod+9 workspace $ws9;
 bindsym $mod+0 workspace $ws10
 
 # move focused container to workspace
