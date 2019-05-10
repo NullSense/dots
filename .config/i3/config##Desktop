@@ -52,7 +52,7 @@ bindsym $mod+m exec python ~/.config/i3/scripts/scratchy.py -t Lollypop -a lolly
 bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
 
 ## Dropdown terminal
-bindsym $mod+u exec python ~/.config/i3/scripts/scratchy.py -c dropdown_term -a 'kitty --name dropdown_term'
+bindsym $mod+u exec python ~/.config/i3/scripts/scratchy.py -c dropdown_term -a 'kitty --name dropdown_term'; [class="dropdown_term"] move position center
 
 ## Show clipboard contents
 bindsym $mod+Insert exec --no-startup-id showclip

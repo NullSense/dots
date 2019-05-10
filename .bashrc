@@ -30,7 +30,7 @@ alias android='sudo jmtpfs -o allow_other,uid=1000 ~/.Android'
 alias rsync='rsync --info=progress2'
 alias vim='nvim'
 alias v='nvim'
-alias r='ranger'
+alias r='. ranger'
 alias nb='newsboat'
 alias b='nvim ~/.bashrc'
 alias i='nvim ~/.config/i3/config'
@@ -92,3 +92,4 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 bind -x '"\C-p": fe;'
 bind -x '"\C-k": fkill'
+bind -x $'"\C-l": clear;'
