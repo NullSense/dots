@@ -70,6 +70,7 @@
 set nocompatible
 let g:gruvbox_italic=1
 let vimtex_compiler_progname='nvr'
+set autoread "reload file on change on disk
 set mouse=a
 set encoding=utf-8 "windows specific rendering option
 set undofile "persistent undo
@@ -98,6 +99,9 @@ set expandtab
 set shiftwidth=4
 set smarttab
 filetype plugin indent on
+
+"remove whitespaces at end of lines on save
+autocmd BufWritePre * %s/\s\+$//e
 
 "Install plug
     if empty(glob('~/.vim/autoload/plug.vim'))
