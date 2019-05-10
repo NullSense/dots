@@ -31,12 +31,10 @@ exec --no-startup-id xss-lock -n ~/bin/dim-screen.sh -- ~/bin/lock.sh
 # Windows ############################################
 ######################################################
 ## Dropdown
-for_window [instance="dropdown_*"] floating enable, move position center, sticky enable, resize set 1325 950
-for_window [instance="dropdown_term"] border pixel 3
-for_window [instance="dropdown_term"] resize set 1325 650
+for_window [instance="dropdown_term"] floating enable, move position center, sticky enable, resize set 1325 650, border pixel 3
 
 ## Dropdown specific
-for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.py -r 30 -p top right
+#for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.py -r 30 -p top right
 
 ## Problematic windows
 for_window [class="Pavucontrol"] floating enable
@@ -49,14 +47,11 @@ for_window [class="Mtpaint"] floating enable # Screenshot editor
 # Bindings ###########################################
 ######################################################
 # Dropdown
-## Dropdown qutebrowser
-bindsym $mod+backslash exec python ~/.config/i3/scripts/scratchy.py -a 'qutebrowser --qt-arg name dropdown_qute' -c dropdown_qute
-
 ## Dropdown Lollypop
-bindsym control+space exec python ~/.config/i3/scripts/scratchy.py -t Lollypop -a lollypop; [class="Lollypop"] fullscreen enable
+bindsym $mod+m exec python ~/.config/i3/scripts/scratchy.py -t Lollypop -a lollypop; [class="Lollypop"] fullscreen enable
 
 ## Dropdown terminal
-bindsym $mod+u exec python ~/.config/i3/scripts/scratchy.py -c dropdown_term -a 'kitty --name dropdown_term'
+bindsym $mod+u exec python ~/.config/i3/scripts/scratchy.py -c dropdown_term -a 'kitty --name dropdown_term' ; [class="dropdown_term"] move position center
 
 ## Move focused workspace between monitors
 bindsym $mod+Ctrl+greater move workspace to output right
@@ -72,13 +67,13 @@ bindsym control+Print exec "capture.sh"
 ## Show clipboard contents
 bindsym $mod+Insert exec --no-startup-id showclip
 ## Upload clipboard contents
-bindsym $mod+Shift+Insert exec xclip -o -selection clipboard | ptpb
+bindsym $mod+Shift+Insert exec xclip -o -selection clipboard | 0x0
 
 ## Music player
 bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
 
 ## Mpv pause
-bindsym $mod+m exec xdotool key --window "$(xdotool search --class mpv)" p
+#bindsym $mod+m exec xdotool key --window "$(xdotool search --class mpv)" p
 
 
 ## Open windows bottom left/right as sticky floating
@@ -262,7 +257,7 @@ bar {
         colors {
                 # text color used for blocks that do not have a color specified.
                 statusline $yellow
-                # workspaces section            
+                # workspaces section
                 #                    border  backgr. text
                 focused_workspace    $blue $blue $darkgray
                 inactive_workspace #282a2e #282a2e #969896
