@@ -13,7 +13,7 @@ echo -e "==========================================="
 echo -e "==========================================="
 echo -e "=========Starting music file backup========"
 echo -e "==========================================="
-# Backup music to 250GB SSD 
+# Backup music to 250GB SSD
 rsync -aHx --stats --numeric-ids --exclude="lost+found" --exclude='*.mkv' --exclude='*.rar' --exclude='*.nfo' --exclude='*.idx' "/home/ongo/Music/" "/mnt/Music_bak/Music/"
 
 echo -e "----------------------------------------------------------------------------------------------------"
@@ -40,7 +40,7 @@ echo -e "==========================================="
 echo -e "=======Starting home directory backup======"
 echo -e "==========================================="
 # Backup home to 1TB HDD
-rsync -aHx --stats --delete --numeric-ids --exclude="Videos" --exclude="Music" --exclude="Downloads" --exclude="lost+found" "/home/ongo/" "/mnt/Backup_Home_Music/home/"
+rsync -aHx --stats --delete --numeric-ids --exclude="Videos" --exclude=".cache" --exclude="Music" --exclude="Downloads" --exclude="lost+found" "/home/ongo/" "/mnt/Backup_Home_Music/home/"
 
 
 
