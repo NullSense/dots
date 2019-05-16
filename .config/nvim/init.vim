@@ -1,3 +1,9 @@
+"Load file to last position of cursor
+autocmd BufReadPost *
+      \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+      \ |   exe "normal! g`\""
+      \ | endif
+
 "Mappings
 let mapleader="\<Space>"
 noremap <leader>y "+y
@@ -91,7 +97,7 @@ syntax on "Syntax highlighting
 
 
 "remove whitespaces at end of lines on save
-autocmd BufWritePre * %s/\s\+$//e
+"autocmd BufWritePre * %s/\s\+$//e
 
 "Install plug
 if empty(glob('~/.vim/autoload/plug.vim'))

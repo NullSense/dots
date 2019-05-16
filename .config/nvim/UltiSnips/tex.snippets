@@ -55,3 +55,18 @@ while True:
 snip.rv = stripped[0:i] + "\\frac{" + stripped[i+1:-1] + "}"
 `{$1}$0
 endsnippet
+
+# Expands to limit to infinity
+snippet lim "lim"
+\displaystyle{\lim_{${1:x} \to ${2:+\infty}}}} ${3}
+endsnippet
+
+# Expands <= to "\leq "
+snippet <= "leq" iA
+\leq 
+endsnippet
+
+# Expands >= to "\geq "
+snippet >= "geq" iA
+\geq 
+endsnippet
