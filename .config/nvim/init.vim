@@ -68,7 +68,7 @@ filetype plugin indent on
 "Vim general
 set nocompatible
 let g:gruvbox_italic=1
-let vimtex_compiler_progname='nvr'
+let g:gruvbox_bold=1
 set autoread "reload file on change on disk
 set mouse=a
 set encoding=utf-8 "windows specific rendering option
@@ -141,9 +141,15 @@ Plug 'plasticboy/vim-markdown'
 Plug 'shime/vim-livedown'
 "Latex
 Plug 'lervag/vimtex', { 'for': 'tex' }
+let vimtex_compiler_progname='nvr'
+let g:tex_flavor='latex'
+let g:vimtex_view_method='zathura'
 let g:vimtex_quickfix_mode=0
 set conceallevel=1
 let g:tex_conceal='abdmg'
+"autocmd FileType plaintex,tex,latex setlocal spell "spell check for latex
+"set spelllang=en_gb "spell check language
+inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
 call plug#end()
 
 

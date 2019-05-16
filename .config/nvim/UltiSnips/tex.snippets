@@ -1,0 +1,57 @@
+# inline math when mk is entered
+snippet mk "Math" wA
+$${1}$`!p
+if t[2] and t[2][0] not in [',', '.', '?', '-', ' ']:
+    snip.rv = ' '
+else:
+    snip.rv = ''
+`$2
+endsnippet
+
+# displayed math when "dm" is entered
+snippet dm "Math" wA
+\[
+$1
+.\] $0
+endsnippet
+
+# add subscript when a number is appended to a letter
+snippet '([A-Za-z])(\d)' "auto subscript" wrA
+`!p snip.rv = match.group(1)`_`!p snip.rv = match.group(2)`
+endsnippet
+
+# turn a subscript a_x into a_{xy} when another number y is entered
+snippet '([A-Za-z])_(\d\d)' "auto subscript2" wrA
+`!p snip.rv = match.group(1)`_{`!p snip.rv = match.group(2)`}
+endsnippet
+
+# add superscript when "td" is entered
+snippet td "superscript" iA
+^{$1}$0
+endsnippet
+
+# write a fraction \frac{}{} when "//" is entered
+snippet // "Fraction" iA
+\\frac{$1}{$2}$0
+endsnippet
+
+# puts a single value (can be powers or symbols like pi) into parentheses
+snippet '((\d+)|(\d*)(\\)?([A-Za-z]+)((\^|_)(\{\d+\}|\d))*)/' "Fraction" wrA
+\\frac{`!p snip.rv = match.group(1)`}{$1}$0
+endsnippet
+
+# puts stuff in parentheses into a \frac{}{} (e.g. (2+3) -> \frac{2+3}{})
+priority 1000
+snippet '^.*\)/' "() Fraction" wrA
+`!p
+stripped = match.string[:-1]
+depth = 0
+i = len(stripped) - 1
+while True:
+	if stripped[i] == ')': depth += 1
+	if stripped[i] == '(': depth -= 1
+	if depth == 0: break;
+	i -= 1
+snip.rv = stripped[0:i] + "\\frac{" + stripped[i+1:-1] + "}"
+`{$1}$0
+endsnippet
