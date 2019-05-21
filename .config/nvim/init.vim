@@ -4,6 +4,13 @@ autocmd BufReadPost *
       \ |   exe "normal! g`\""
       \ | endif
 
+"Custom linting
+autocmd FileType python setlocal makeprg=pylint\ --output-format=parseable
+"autocmd FileType latex setlocal makeprg=chktex\ --output-format=parseable
+autocmd BufWritePost *.py silent make! <afile> | silent redraw!
+"autocmd BufWritePost *.tex silent make! <afile> | silent redraw!
+autocmd QuickFixCmdPost [^l]* cwindow
+
 "Mappings
 let mapleader="\<Space>"
 noremap <leader>y "+y
@@ -95,7 +102,6 @@ set list "Shows invisible characters
 set hidden "Show hidden buffers
 syntax on "Syntax highlighting
 
-
 "remove whitespaces at end of lines on save
 "autocmd BufWritePre * %s/\s\+$//e
 
@@ -107,15 +113,17 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin()
-"Linting
+"Completion
 if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
 endif
 let g:deoplete#enable_at_startup = 1
+"Linting
+"Plug 'w0rp/ale'
 "Snippets
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips', 'UltiSnips']
@@ -153,8 +161,8 @@ let g:vimtex_view_method='zathura'
 let g:vimtex_quickfix_mode=0
 set conceallevel=1
 let g:tex_conceal='abdmg'
-"autocmd FileType plaintex,tex,latex setlocal spell "spell check for latex
-"set spelllang=en_gb "spell check language
+autocmd FileType plaintex,tex,latex setlocal spell "spell check for latex
+set spelllang=en_gb "spell check language
 inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
 call plug#end()
 

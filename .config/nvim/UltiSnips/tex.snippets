@@ -12,7 +12,7 @@ endsnippet
 snippet dm "Math" wA
 \[
 $1
-.\] $0
+\]$0
 endsnippet
 
 # add subscript when a number is appended to a letter
@@ -59,6 +59,12 @@ endsnippet
 # Expands to limit to infinity
 snippet lim "lim"
 \displaystyle{\lim_{${1:x} \to ${2:+\infty}}}} ${3}
+endsnippet
+
+# Expands to integral
+snippet int "\int_{a}^{b} x^2 dx"
+\\int_{${1:-\infty}}^{${2:+\infty}} ${3:dx} ${0}
+
 endsnippet
 
 # Expands <= to "\leq "
