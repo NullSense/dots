@@ -62,8 +62,13 @@ nnoremap <leader>r :%s/\V<c-r>=escape(expand('<cword>'), '\/')<cr>//g<left><left
 " Auto expand braces
 inoremap {<CR> {<C-o>o}<C-o>O
 
-" Nerdtree toggle
-map <C-n> :NERDTreeToggle<CR>
+" File manager
+map <C-n> :Lexplore<CR>
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 4
+let g:netrw_altv = 1
+let g:netrw_winsize = 15
 " Tagbar toggle
 nmap <C-m> :TagbarToggle<CR>
 
