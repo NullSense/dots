@@ -117,7 +117,7 @@ bindsym $mod+Ctrl+greater move workspace to output right
 bindsym $mod+Ctrl+less move workspace to output left
 
 # Start rofi
-bindsym $mod+d exec --no-startup-id rofi -show drun -show-icons
+bindsym $mod+d exec --no-startup-id dmenu_run_history -l 10 -i -fn hack -nb '#282828' -nf '#ebdbb2' -sb '#458588' -sf '#282828'
 
 # change focus
 bindsym $mod+h focus left
