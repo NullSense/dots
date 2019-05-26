@@ -73,10 +73,10 @@ case "$mode" in
     "screenshot" )
 	file=$(mktemp /tmp/screenshot-XXXXXXXXXX.png)
 	if [ -z "$hide_cursor" ]; then
-	    hide_cursor="$(printf "Yes\nNo" | rofi -dmenu -lines 2 -p "Hide cursor?")"
+	    hide_cursor="$(printf "Yes\nNo" | dmenu -lines 2 -p "Hide cursor?")"
 	    case $? in
 		1)
-		    body="Error: rofi"
+		    body="Error: dmenu"
 		    error
 		    exit 1
 		    ;;
@@ -101,8 +101,8 @@ case "$mode" in
 	esac
 
 	if [[ -f $file ]]; then
-	    rofi_exit=$(echo -e "Yes\nNo\nCancel" | rofi -dmenu -p "Do you need to obscure anything?")
-	    case $rofi_exit in
+	    dmenu_exit=$(echo -e "Yes\nNo\nCancel" | dmenu -p "Do you need to obscure anything?")
+	    case $dmenu_exit in
 		"Yes" )
 		    mtpaint "$file"
 		    gimp_exit=$?
@@ -120,7 +120,7 @@ case "$mode" in
 		    exit 0
 		    ;;
 		* )
-		    body="Error: rofi"
+		    body="Error: dmenu"
 		    error
 		    exit 1
 		    ;;
