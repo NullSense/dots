@@ -31,9 +31,7 @@ if [ -f "$usermodmap" ]; then
     xmodmap "$usermodmap"
 fi
 
-setxkbmap -option 'caps:ctrl_modifier' # makes Caps another Ctrl
-setxkbmap -option 'shift:both_capslock_cancel' # when both Shift buttons are pressed simultaneously, they turn Caps Lock on. it can be switched off by pressing Shift
-xcape -e 'Caps_Lock=Escape' # Caps is Esc when pressed by itself
+setxkbmap -option 'caps:ctrl_modifier' && xcape -e 'Caps_Lock=Escape' &
 
 # start some nice programs
 
