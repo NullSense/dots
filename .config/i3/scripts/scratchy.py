@@ -6,10 +6,9 @@ Place: irc@freenote#i3
 """
 import subprocess
 import argparse
-import i3ipc
 import shlex
 import time
-
+import i3ipc
 
 def class_exists(connection, window_class):
     tree = connection.get_tree()
@@ -55,7 +54,7 @@ def main():
         import sys
         sys.exit('Must either provide a -t/--tittle or a -c/--class')
     # if window is not found, open it
-    if len(results) == 0:
+    if not results:
         cmd_open = f'i3-msg exec "{app}"'
         run(cmd_open)
         if title:
@@ -66,12 +65,12 @@ def main():
             while not class_exists(connection, window_class):
                 time.sleep(0.01)
             window = class_exists(connection, window_class)
-        window.command('move scratchpad')
+        window.command('move scratchpad, move position center')
     else:
         if title:
-            command = f'i3-msg \\[title="{title}"\\] scratchpad show'
+            command = f'i3-msg \\[title="{title}"\\] scratchpad show, move position center'
         elif window_class:
-            command = f'i3-msg \\[instance="{window_class}"\\] scratchpad show'
+            command = f'i3-msg \\[instance="{window_class}"\\] scratchpad show, move position center'
         run(command)
 
 

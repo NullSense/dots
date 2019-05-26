@@ -16,12 +16,13 @@ exec --no-startup-id keynav daemonize
 exec --no-startup-id redshift
 exec --no-startup-id caffeine
 exec --no-startup-id unclutter
+exec --no-startup-id kitty --title dropdown_term
 exec --no-startup-id xss-lock -n -- ~/bin/lock.sh
 
 # Autostart applications in specific workspaces
 exec --no-startup-id i3-msg 'workspace $ws1; exec firefox'
-exec --no-startup-id i3-msg 'workspace $ws2; exec signal-desktop'
-exec --no-startup-id i3-msg 'workspace $ws2; exec kitty -e weechat'
+exec --no-startup-id i3-msg 'workspace $ws2; exec kitty tmux new -A weechat'
+exec --no-startup-id i3-msg 'workspace $ws3; exec signal-desktop'
 exec --no-startup-id i3-msg 'workspace $ws10; exec transmission-gtk'
 
 
@@ -29,18 +30,14 @@ exec --no-startup-id i3-msg 'workspace $ws10; exec transmission-gtk'
 # Windows ############################################
 ######################################################
 ## Dropdown
-for_window [instance="dropdown_*"] floating enable, move position center, sticky enable, resize set 1325 950
-for_window [instance="dropdown_term"] border pixel 3
-for_window [instance="dropdown_term"] resize set 1325 650
+for_window [title="dropdown_term"] move scratchpad, border pixel 3, resize set 1325 500
 
 ## Dropdown specific
 for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.py -r 35 -p top right
 
 ## Problematic windows
 for_window [class="Pavucontrol"] floating enable
-for_window [class="Signal"] move container to workspace $ws2
-for_window [window_role="GtkFileChooserDialog"] resize set 1780 920
-for_window [window_role="GtkFileChooserDialog"] move position center
+for_window [class="Signal"] move container to workspace $ws3
 for_window [class="Mtpaint"] floating enable # Screenshot editor
 
 ######################################################
@@ -52,7 +49,7 @@ bindsym $mod+m exec python ~/.config/i3/scripts/scratchy.py -t Lollypop -a lolly
 bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
 
 ## Dropdown terminal
-bindsym $mod+u exec python ~/.config/i3/scripts/scratchy.py -c dropdown_term -a 'kitty --name dropdown_term'; [class="dropdown_term"] move position center
+bindsym $mod+u [title="dropdown_term"] scratchpad show, move position center
 
 ## Show clipboard contents
 bindsym $mod+Insert exec --no-startup-id showclip
@@ -185,6 +182,7 @@ set $ws10 "10 "
 # Set workspace outputs (monitors)
 workspace $ws1 output DisplayPort-0
 workspace $ws2 output DVI-1
+workspace $ws3 output DVI-1
 workspace $ws8 output DisplayPort-0
 workspace $ws9 output DisplayPort-0
 workspace $ws10 output DisplayPort-0
