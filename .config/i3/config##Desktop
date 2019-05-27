@@ -21,7 +21,7 @@ exec --no-startup-id xss-lock -n -- ~/bin/lock.sh
 
 # Autostart applications in specific workspaces
 exec --no-startup-id i3-msg 'workspace $ws1; exec firefox'
-exec --no-startup-id i3-msg 'workspace $ws2; exec kitty tmux new -A weechat'
+exec --no-startup-id i3-msg 'workspace $ws2; exec kitty ssh nonsensei@purgatory -t tmux attach-session'
 exec --no-startup-id i3-msg 'workspace $ws3; exec signal-desktop'
 exec --no-startup-id i3-msg 'workspace $ws10; exec transmission-gtk'
 
@@ -30,7 +30,7 @@ exec --no-startup-id i3-msg 'workspace $ws10; exec transmission-gtk'
 # Windows ############################################
 ######################################################
 ## Dropdown
-for_window [title="dropdown_term"] move scratchpad, border pixel 3, resize set 1325 500
+for_window [title="dropdown_term"] move scratchpad, border pixel 3, resize set 1325 600
 
 ## Dropdown specific
 for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.py -r 35 -p top right
