@@ -6,8 +6,10 @@ autocmd BufReadPost *
 
 "Custom linting
 autocmd FileType python setlocal makeprg=pylint\ --output-format=parseable
+autocmd FileType sh setlocal makeprg=shellcheck\ -f\ gcc\ %
 "autocmd FileType latex setlocal makeprg=chktex\ --output-format=parseable
 autocmd BufWritePost *.py silent make! <afile> | silent redraw!
+au BufWritePost *.sh :silent make | redraw!
 "autocmd BufWritePost *.tex silent make! <afile> | silent redraw!
 autocmd QuickFixCmdPost [^l]* cwindow
 
