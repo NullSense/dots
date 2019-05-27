@@ -1,14 +1,20 @@
-#!/bin/bash
+#!/bin/sh
 # source: http://www.stackednotion.com/blog/2019/05/07/automatically-dimming-your-monitor-at-night/
 
 # Sets the brightness to 0 - 100
-set () {
-	ddccontrol -r 0x10 -w "$1" -f dev:/dev/i2c-6 > /dev/null 2>&1
+set_brightness(){
+    benq_br=$(($1 - 30)) # BenQ is quite a bit brighter
+
+    echo "Benq: $benq_br"
+    echo "LG: $1"
+
+	ddccontrol -r 0x10 -w "$benq_br" -f dev:/dev/i2c-6 > /dev/null 2>&1 # BenQ 1080p
+	ddccontrol -r 0x10 -w "$1" -f dev:/dev/i2c-9 > /dev/null 2>&1 # LG UW-1080p
 }
 
 # Returns the brightness 0 - 100
 get_brightness () {
-	ddccontrol -r 0x10 dev:/dev/i2c-6 2>&1| grep "Control 0x10" | awk -F "/" ' { print $2 } '
+	ddccontrol -r 0x10 dev:/dev/i2c-9 2>&1| grep "Control 0x10" | awk -F "/" ' { print $2 } '
     sleep 1
 }
 
@@ -18,12 +24,12 @@ case $1 in
 
 		case $3 in
 			night)
-				target=30
+				target=35
 				;;
 			transition)
 				target=50
 				;;
-			daytime)
+			day)
 				target=100
 				;;
 			*)
@@ -37,18 +43,18 @@ case $1 in
 		case $2 in
 			none)
 				(>&2 echo "Change from $current to $target")
-				set $target
+				set_brightness $target
 				;;
 			*)
 				(>&2 echo "Transition from $current to $target")
-				while [[ $current -ne $target ]]; do
-					if [[ $current -gt $target ]]; then
-						((current -= 1))
+				while [ $current != "$target" ]; do
+					if [ "$current" -gt "$target" ]; then
+                        current=$((current - 1))
 					else
-						((current += 1))
+                        current=$((current + 1))
 					fi
 
-					set $current
+					set_brightness "$current"
 				done
 				;;
 		esac

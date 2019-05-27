@@ -23,7 +23,7 @@ alias vim='nvim'
 alias nb='newsboat'
 alias clip='xclip -selection clipboard'
 
-PS1='\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h \[$(tput setaf 5)\]\W$(__git_ps1 "\[\e[0;33m\]@\[\e[0m\] \[\e[0;34m\]%s\[\e[0m\]")\[$(tput bold)\]\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$ \[$(tput sgr0)\]'
+PS1='\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h \[$(tput setaf 5)\]\W$(__git_ps1 "\[\e[0;33m\] @\[\e[0m\] \[\e[0;34m\]%s\[\e[0m\]")\[$(tput bold)\]\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$ \[$(tput sgr0)\]'
 
 # Fuzzy finder
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
