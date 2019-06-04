@@ -33,7 +33,8 @@ exec --no-startup-id i3-msg 'workspace $ws10; exec transmission-gtk'
 for_window [title="dropdown_term"] move scratchpad, border pixel 3, resize set 1325 600
 
 ## Dropdown specific
-for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.py -r 35 -p top right
+#for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.py -r 35 -p top right
+for_window [class="mpv"] floating enable, sticky enable
 
 ## Problematic windows
 for_window [class="Pavucontrol"] floating enable
@@ -57,18 +58,15 @@ bindsym $mod+Insert exec --no-startup-id showclip
 bindsym $mod+Shift+Insert exec xclip -selection clipboard -o | 0x0
 
 ## Open link in mpv
-bindsym $mod+y exec mpv $(xclip -o)
+bindsym $mod+y exec tsp mpv --ontop --no-border --force-window --autofit=600x380 --geometry=-12-10 $(xclip -o)
 
 ## Screenshots
 bindsym Print exec "capture.sh -l"
 bindsym control+Print exec "capture.sh"
 
-## Mpv pause
-bindsym $mod+o exec xdotool key --window "$(xdotool search --class mpv)" p
-
 ## Open windows bottom left/right as sticky floating
-bindsym $mod+Shift+b floating enable; sticky enable; exec --no-startup-id $HOME/bin/resize.py -r 35 -p top right
-bindsym $mod+Shift+n floating enable; sticky enable; exec --no-startup-id $HOME/bin/resize.py -r 35 -p bottom right
+bindsym $mod+Shift+b floating enable; sticky enable; exec --no-startup-id $HOME/bin/resize.py -r 30 -p top right
+bindsym $mod+Shift+n floating enable; sticky enable; exec --no-startup-id $HOME/bin/resize.py -r 30 -p bottom right
 
 ## Volume
 # Increase volume
