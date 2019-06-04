@@ -5,13 +5,13 @@ autocmd BufReadPost *
       \ | endif
 
 "Custom linting
-autocmd FileType python setlocal makeprg=pylint\ --output-format=parseable
-autocmd FileType sh setlocal makeprg=shellcheck\ -f\ gcc\ %
-"autocmd FileType latex setlocal makeprg=chktex\ --output-format=parseable
-autocmd BufWritePost *.py silent make! <afile> | silent redraw!
-au BufWritePost *.sh :silent make | redraw!
-"autocmd BufWritePost *.tex silent make! <afile> | silent redraw!
-autocmd QuickFixCmdPost [^l]* cwindow
+"autocmd FileType python setlocal makeprg=pylint\ --output-format=parseable
+"autocmd FileType sh setlocal makeprg=shellcheck\ -f\ gcc\ %
+""autocmd FileType latex setlocal makeprg=chktex\ --output-format=parseable
+"autocmd BufWritePost *.py silent make! <afile> | silent redraw!
+"au BufWritePost *.sh :silent make | redraw!
+""autocmd BufWritePost *.tex silent make! <afile> | silent redraw!
+"autocmd QuickFixCmdPost [^l]* cwindow
 
 "Mappings
 let mapleader="\<Space>"
@@ -129,8 +129,15 @@ else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 let g:deoplete#enable_at_startup = 1
+"python doeplete
+Plug 'deoplete-plugins/deoplete-jedi'
+Plug 'neovim/pynvim'
+Plug 'davidhalter/jedi'
+let g:python3_host_prog = '/usr/bin/python3'
+let g:python2_host_prog = '/usr/bin/python2'
 "Linting
-"Plug 'w0rp/ale'
+Plug 'w0rp/ale'
+Plug 'sheerun/vim-polyglot'
 "Snippets
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips', 'UltiSnips']
@@ -142,9 +149,6 @@ Plug 'honza/vim-snippets'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'majutsushi/tagbar'
-"Fzf
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
 "Formatting
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
