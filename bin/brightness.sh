@@ -47,7 +47,7 @@ case $1 in
 				;;
 			*)
 				(>&2 echo "Transition from $current to $target")
-				while [ $current != "$target" ]; do
+				while [ "$current" != "$target" ]; do
 					if [ "$current" -gt "$target" ]; then
                         current=$((current - 1))
 					else
