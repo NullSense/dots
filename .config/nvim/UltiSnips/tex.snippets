@@ -57,12 +57,12 @@ snip.rv = stripped[0:i] + "\\frac{" + stripped[i+1:-1] + "}"
 endsnippet
 
 # Expands to limit to infinity
-snippet lim "lim"
-\displaystyle{\lim_{${1:x} \to ${2:+\infty}}}} ${3}
+snippet lim "lim" w
+\displaystyle{\lim_{${1:x} \to ${2:\infty}}} ${3}
 endsnippet
 
 # Expands to integral
-snippet int "\int_{a}^{b} x^2 dx"
+snippet int "\int_{a}^{b} x^2 dx" w
 \\int_{${1:-\infty}}^{${2:+\infty}} ${3:x} ${4:dx} ${0}
 
 endsnippet

@@ -4,19 +4,9 @@ autocmd BufReadPost *
       \ |   exe "normal! g`\""
       \ | endif
 
-"Custom linting
-"autocmd FileType python setlocal makeprg=pylint\ --output-format=parseable
-"autocmd FileType sh setlocal makeprg=shellcheck\ -f\ gcc\ %
-""autocmd FileType latex setlocal makeprg=chktex\ --output-format=parseable
-"autocmd BufWritePost *.py silent make! <afile> | silent redraw!
-"au BufWritePost *.sh :silent make | redraw!
-""autocmd BufWritePost *.tex silent make! <afile> | silent redraw!
-"autocmd QuickFixCmdPost [^l]* cwindow
-
 "Mappings
 let mapleader="\<Space>"
 noremap <leader>y "+y
-nnoremap <leader>p VPY
 
 " Double esc to disable hlsearch
 nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
@@ -39,24 +29,9 @@ nnoremap <M-h> :bprev<CR>
 " Close buffer
 nnoremap <M-d> :bp\|bd #<CR>
 
-"fzf Mappings
-"Fuzzy search lines
-nnoremap <C-o> :Lines<CR>
-"Open file in subdirectories
-nnoremap <C-p> :Files<CR>
-"Open Buffers list
-nnoremap <C-b> :Buffers<CR>
-
-" Increment numbers
-noremap + <c-a>
-noremap - <c-x>
-
 " Move line up/down
 nnoremap <Leader>j ddp
 nnoremap <Leader>k ddkP
-" Easy indentation
-nnoremap <Leader>h <<
-nnoremap <Leader>l >>
 
 " Search and replace occurences of word under cursor
 nnoremap <leader>r :%s/\V<c-r>=escape(expand('<cword>'), '\/')<cr>//g<left><left>
@@ -71,22 +46,18 @@ let g:netrw_liststyle = 3
 let g:netrw_browse_split = 4
 let g:netrw_altv = 1
 let g:netrw_winsize = 15
-" Tagbar toggle
-nmap <C-m> :TagbarToggle<CR>
-
 
 "Indentation
 set autoindent
 set smartindent
-set tabstop=4
-set softtabstop=0
-set expandtab
+set tabstop=8
+set softtabstop=4
 set shiftwidth=4
+set expandtab
 set smarttab
 filetype plugin indent on
 
 "Vim general
-set nocompatible
 let g:gruvbox_italic=1
 let g:gruvbox_bold=1
 set autoread "reload file on change on disk
@@ -120,6 +91,8 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin()
+"Editorconfig
+Plug 'editorconfig/editorconfig-vim'
 "Completion
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -137,6 +110,9 @@ let g:python3_host_prog = '/usr/bin/python3'
 let g:python2_host_prog = '/usr/bin/python2'
 "Linting
 Plug 'w0rp/ale'
+" ALE binds to go to next and prev errors
+nnoremap <leader>an :ALENextWrap<cr>
+nnoremap <leader>ap :ALEPreviousWrap<cr>
 Plug 'sheerun/vim-polyglot'
 "Snippets
 Plug 'SirVer/ultisnips'
@@ -145,10 +121,6 @@ let g:UltiSnipsExpandTrigger = '<tab>'
 let g:UltiSnipsJumpForwardTrigger = '<tab>'
 let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
 Plug 'honza/vim-snippets'
-"Nerdtree
-Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'majutsushi/tagbar'
 "Formatting
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
@@ -160,7 +132,6 @@ Plug 'airblade/vim-gitgutter'
 "Airline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'ryanoasis/vim-devicons'
 "Markdown
 Plug 'plasticboy/vim-markdown'
 Plug 'shime/vim-livedown'
@@ -175,6 +146,19 @@ let g:tex_conceal='abdmg'
 autocmd FileType plaintex,tex,latex setlocal spell "spell check for latex
 set spelllang=en_gb "spell check language
 inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
+" Web dev
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plug 'pangloss/vim-javascript'
+Plug 'wokalski/autocomplete-flow'
+Plug 'mxw/vim-jsx'
+" Tabularize
+Plug 'godlygeek/tabular'
+if exists(":Tabularize")
+      nmap <Leader>t= :Tabularize /=<CR>
+      vmap <Leader>t= :Tabularize /=<CR>
+      nmap <Leader>t: :Tabularize /:\zs<CR>
+      vmap <Leader>t: :Tabularize /:\zs<CR>
+    endif
 call plug#end()
 
 
@@ -184,25 +168,8 @@ set updatetime=100 " gitgutter
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 
-" Files + devicons
-function! Fzf_files_with_dev_icons(command)
-    let l:fzf_files_options = '--preview "bat --color always --style numbers {2..} | head -'.&lines.'"'
-    function! s:edit_devicon_prepended_file(item)
-        let l:file_path = a:item[4:-1]
-        execute 'silent e' l:file_path
-    endfunction
-    call fzf#run({
-                \ 'source': a:command.' | devicon-lookup',
-                \ 'sink':   function('s:edit_devicon_prepended_file'),
-                \ 'options': '-m ' . l:fzf_files_options,
-                \ 'down':    '40%' })
-endfunction
-" Open fzf Files
-map <C-p> :call Fzf_files_with_dev_icons($FZF_DEFAULT_COMMAND)<CR>
-
 "Theming
 set termguicolors "sets to true colors
 let &t_ut=''
-set background=dark
 let g:gruvbox_contrast_dark='soft'
 colorscheme gruvbox
