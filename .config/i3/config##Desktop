@@ -33,7 +33,6 @@ exec --no-startup-id i3-msg 'workspace $ws10; exec transmission-gtk'
 for_window [title="dropdown_term"] move scratchpad, border pixel 3, resize set 1325 600
 
 ## Dropdown specific
-#for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.py -r 35 -p top right
 for_window [class="mpv"] floating enable, sticky enable
 
 ## Problematic windows

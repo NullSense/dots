@@ -1,4 +1,4 @@
-export PATH=$PATH:$HOME/bin/
+export PATH=$PATH:$HOME/bin/:$HOME/.npm-global/bin
 export EDITOR=nvim
 export MANPAGER="nvim -c 'set ft=man' -"
 #Infinite history
@@ -7,7 +7,6 @@ export HISTSIZE=
 export WEECHAT_HOME=~/.config/weechat
 export TERMINAL=kitty
 export OPENER=rifle
-export BROWSER=firefox
 
 source /usr/share/git/completion/git-prompt.sh
 source /usr/share/git/completion/git-completion.bash
