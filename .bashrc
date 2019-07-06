@@ -36,6 +36,7 @@ fe() {
 }
 
 #setxkbmap -option 'caps:ctrl_modifier' && xcape -e 'Caps_Lock=Escape' &
+xmodmap -e 'keycode 66=minus'
 
 bind -x '"\C-p": fe;'
 bind -x $'"\C-l": clear;'

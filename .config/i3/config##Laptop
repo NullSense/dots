@@ -12,9 +12,7 @@ smart_borders on # Only show borders when more than 1 window open
 # STARTUP EXECUTIONS ################################
 ######################################################
 exec xset -b # Turns off annoying loud beep
-exec --no-startup-id alttab -d 3
 exec --no-startup-id nm-applet
-exec --no-startup-id keynav daemonize
 exec --no-startup-id redshift
 exec --no-startup-id caffeine
 exec --no-startup-id unclutter
@@ -126,7 +124,7 @@ bindsym $mod+Return exec kitty
 bindsym $mod+Shift+q kill
 
 # Start rofi
-bindsym $mod+d exec rofi -show drun -show-icons
+bindsym $mod+d exec dmenu_run_history
 
 # change focus
 bindsym $mod+h focus left

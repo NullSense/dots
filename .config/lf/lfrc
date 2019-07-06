@@ -17,6 +17,8 @@ set shellopts '-eu'
 # commands accordingly.
 set ifs "\n"
 
+set icons
+
 # auto change panel amount based on terminal size
 %{{
     w=$(tput cols)
