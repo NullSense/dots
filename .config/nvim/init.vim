@@ -106,11 +106,31 @@ let g:deoplete#enable_at_startup = 1
 Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'neovim/pynvim'
 Plug 'davidhalter/jedi'
+"let g:deoplete#omni#functions = {}
+"let g:deoplete#omni#functions.javascript = [
+  "\ 'tern#Complete',
+  "\ 'jspc#omni'
+"\]
+"set completeopt=longest,menuone,preview
+set completeopt=menuone,preview
+"let g:deoplete#sources = {}
+"let g:deoplete#sources['javascript.jsx'] = ['file', 'ultisnips', 'ternjs']
+
+let g:ale_python_pylint_options = '--load-plugins pylint_django'
 let g:python3_host_prog = '/usr/bin/python3'
 let g:python2_host_prog = '/usr/bin/python2'
+let g:deoplete#sources#jedi#show_docstring = 1
 "Linting
 Plug 'w0rp/ale'
-" ALE binds to go to next and prev errors
+let g:ale_sign_error = '❌'
+let g:ale_sign_warning = '⚠️'
+let g:ale_fixers = {
+ \ 'javascript': ['eslint'],
+ \ 'python': ['isort', 'yapf', 'autopep8']
+ \ }
+let g:ale_linters = {
+ \ 'javascript': ['eslint']
+ \ }
 nnoremap <leader>an :ALENextWrap<cr>
 nnoremap <leader>ap :ALEPreviousWrap<cr>
 Plug 'sheerun/vim-polyglot'
@@ -149,8 +169,19 @@ inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
 " Web dev
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 Plug 'pangloss/vim-javascript'
-Plug 'wokalski/autocomplete-flow'
 Plug 'mxw/vim-jsx'
+Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+let g:deoplete#sources#ternjs#types = 1
+let g:deoplete#sources#ternjs#docs = 1
+let g:deoplete#sources#ternjs#filetypes = [
+                \ 'jsx',
+                \ 'javascript.jsx',
+                \ 'vue',
+                \ '...'
+                \ ]
+let g:tern#command = ['tern']
+let g:tern#arguments = ['--persistent']
+Plug 'othree/jspc.vim'
 " Tabularize
 Plug 'godlygeek/tabular'
 if exists(":Tabularize")
