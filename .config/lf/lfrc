@@ -90,18 +90,37 @@ map Up $0x0 -f "$f"
 map Ex extract "$fs"
 
 # open stuff with rifle
-map o &rifle $f
+map o !rifle $f
 
 # define a custom 'open' command
 # This command is called when current file is not a directory. You may want to
 # use either file extensions and/or mime types here. Below uses an editor for
 # text files and a file opener for the rest.
+#cmd open ${{
+    #case $(file --mime-type $f -b) in
+        #text/*) $EDITOR $fx;;
+        #*) for f in $fx; do $OPENER $f > /dev/null 2> /dev/null & done;;
+    #esac
+#}}
 cmd open ${{
-    case $(file --mime-type $f -b) in
-        text/*) $EDITOR $fx;;
-        *) for f in $fx; do $OPENER $f > /dev/null 2> /dev/null & done;;
+  bgopen(){ setsid $@>/dev/null 2>&1 & }
+  open()
+  {
+    case $(file --mime-type -Lb "$@") in
+      video/*                  ) bgopen mpv "$fx";;
+      audio/*                  ) mpv "$fx";;
+      text/*|application/json  ) $EDITOR "$fx";;
+      image/gif                ) bgopen sxiv -ba "$fx";;
+      image/*                  ) bgopen sxiv -b "$fx";;
+      application/pdf|application/epub+zip ) bgopen zathura "$fx";;
+      application/pgp-signature) $EDITOR "$fx";;
+      inode/symlink            ) open "$(readlink -f $fx)";;
+      *) for f in $fx; do $OPENER $f>/dev/null 2>&1 & done;;
     esac
+  }
+  open "$f"
 }}
+
 
 # rename current file without overwrite
 cmd rename %[ -e $1 ] && printf "file exists" || mv $f $1
