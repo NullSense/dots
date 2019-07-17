@@ -106,15 +106,8 @@ let g:deoplete#enable_at_startup = 1
 Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'neovim/pynvim'
 Plug 'davidhalter/jedi'
-"let g:deoplete#omni#functions = {}
-"let g:deoplete#omni#functions.javascript = [
-  "\ 'tern#Complete',
-  "\ 'jspc#omni'
-"\]
-"set completeopt=longest,menuone,preview
-set completeopt=menuone,preview
-"let g:deoplete#sources = {}
-"let g:deoplete#sources['javascript.jsx'] = ['file', 'ultisnips', 'ternjs']
+
+set completeopt=menuone,preview,longest
 
 let g:ale_python_pylint_options = '--load-plugins pylint_django'
 let g:python3_host_prog = '/usr/bin/python3'
