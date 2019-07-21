@@ -12,6 +12,8 @@ smart_borders on # Only show borders when more than 1 window open
 # STARTUP EXECUTIONS ################################
 ######################################################
 exec xset -b # Turns off annoying loud beep
+exec xset s off -dpms # turn off audio delay
+exec xset s off
 exec --no-startup-id keynav daemonize
 exec --no-startup-id redshift
 exec --no-startup-id caffeine
@@ -21,7 +23,8 @@ exec --no-startup-id xss-lock -n -- ~/bin/lock.sh
 
 # Autostart applications in specific workspaces
 exec --no-startup-id i3-msg 'workspace $ws1; exec firefox'
-exec --no-startup-id i3-msg 'workspace $ws2; exec kitty ssh nonsensei@purgatory -t tmux attach-session'
+exec --no-startup-id i3-msg 'workspace $ws3; exec kitty ssh nonsensei@purgatory -t tmux attach-session'
+for_window [workspace=$ws3] layout tabbed
 exec --no-startup-id i3-msg 'workspace $ws3; exec signal-desktop'
 exec --no-startup-id i3-msg 'workspace $ws10; exec transmission-gtk'
 
