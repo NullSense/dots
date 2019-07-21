@@ -45,7 +45,11 @@ let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 let g:netrw_browse_split = 4
 let g:netrw_altv = 1
-let g:netrw_winsize = 15
+let g:netrw_winsize = 20
+augroup ProjectDrawer
+  autocmd!
+  autocmd VimEnter * :Vexplore
+augroup END
 
 "Indentation
 set autoindent
@@ -113,6 +117,7 @@ let g:ale_python_pylint_options = '--load-plugins pylint_django'
 let g:python3_host_prog = '/usr/bin/python3'
 let g:python2_host_prog = '/usr/bin/python2'
 let g:deoplete#sources#jedi#show_docstring = 1
+Plug 'tpope/vim-repeat'
 "Linting
 Plug 'w0rp/ale'
 let g:ale_sign_error = '❌'
