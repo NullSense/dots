@@ -39,18 +39,6 @@ nnoremap <leader>r :%s/\V<c-r>=escape(expand('<cword>'), '\/')<cr>//g<left><left
 " Auto expand braces
 inoremap {<CR> {<C-o>o}<C-o>O
 
-" File manager
-map <C-n> :Lexplore<CR>
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
-let g:netrw_winsize = 20
-augroup ProjectDrawer
-  autocmd!
-  autocmd VimEnter * :Vexplore
-augroup END
-
 "Indentation
 set autoindent
 set smartindent
@@ -180,6 +168,7 @@ let g:deoplete#sources#ternjs#filetypes = [
 let g:tern#command = ['tern']
 let g:tern#arguments = ['--persistent']
 Plug 'othree/jspc.vim'
+Plug 'scrooloose/nerdtree'
 " Tabularize
 Plug 'godlygeek/tabular'
 if exists(":Tabularize")
@@ -190,6 +179,7 @@ if exists(":Tabularize")
     endif
 call plug#end()
 
+map <C-n> :NERDTreeToggle<CR>
 
 "Plugin settings
 set updatetime=100 " gitgutter
