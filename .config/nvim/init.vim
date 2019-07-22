@@ -4,6 +4,9 @@ autocmd BufReadPost *
       \ |   exe "normal! g`\""
       \ | endif
 
+"Show vim file open name in tmux
+autocmd BufReadPost,FileReadPost,BufNewFile * call system("tmux rename-window " . expand("%"))
+
 "Mappings
 let mapleader="\<Space>"
 noremap <leader>y "+y
