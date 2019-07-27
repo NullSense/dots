@@ -123,7 +123,19 @@ let g:ale_linters = {
 nnoremap <leader>an :ALENextWrap<cr>
 nnoremap <leader>ap :ALEPreviousWrap<cr>
 Plug 'sheerun/vim-polyglot'
+Plug 'junegunn/fzf.vim'
 "Snippets
+let g:fzf_action = {
+      \ 'ctrl-h': 'split',
+      \ 'ctrl-v': 'vsplit'
+      \ }
+nnoremap <c-p> :FZF<cr>
+augroup fzf
+  autocmd!
+  autocmd! FileType fzf
+  autocmd  FileType fzf set laststatus=0 noshowmode noruler
+    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+augroup END
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips', 'UltiSnips']
 let g:UltiSnipsExpandTrigger = '<tab>'
