@@ -17,9 +17,11 @@ tmux # open tmux so it runs tpm
 
 # some aliases
 echo "alias vim='nvim'
-echo alias dc='docker-compose'
-echo alias dcu='docker-compose up'
-echo alias dcd='docker-compose down'
-echo alias dcr='docker-compose down && docker-compose up'" > ~/.bash_aliases
+alias dc='docker-compose'
+alias dcu='docker-compose up'
+alias dcd='docker-compose down'
+alias dcr='docker-compose down && docker-compose up'" > ~/.bash_aliases
+
+echo "export SERVER=1" > ~/.bashrc
 
 source ~/.bashrc # source to initialize aliases
