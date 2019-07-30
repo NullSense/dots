@@ -20,4 +20,4 @@ echo "alias vim='nvim'
 echo alias dc='docker-compose'
 echo alias dcu='docker-compose up'
 echo alias dcd='docker-compose down'
-echo alias dcr='docker-compose down && docker-compose up'" > ~/.bash_aliases >/dev/null
+echo alias dcr='docker-compose down && docker-compose up'" > ~/.bash_aliases
