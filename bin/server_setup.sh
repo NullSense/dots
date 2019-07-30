@@ -21,3 +21,5 @@ echo alias dc='docker-compose'
 echo alias dcu='docker-compose up'
 echo alias dcd='docker-compose down'
 echo alias dcr='docker-compose down && docker-compose up'" > ~/.bash_aliases
+
+source ~/.bashrc # source to initialize aliases
