@@ -75,13 +75,10 @@ set list "Shows invisible characters
 set hidden "Show hidden buffers
 syntax on "Syntax highlighting
 
-"remove whitespaces at end of lines on save
-"autocmd BufWritePre * %s/\s\+$//e
-
 "Install plug
 if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
@@ -184,15 +181,6 @@ let g:tern#command = ['tern']
 let g:tern#arguments = ['--persistent']
 Plug 'othree/jspc.vim'
 Plug 'scrooloose/nerdtree'
-" Tabularize
-Plug 'godlygeek/tabular'
-if exists(":Tabularize")
-      nmap <Leader>t= :Tabularize /=<CR>
-      vmap <Leader>t= :Tabularize /=<CR>
-      nmap <Leader>t: :Tabularize /:\zs<CR>
-      vmap <Leader>t: :Tabularize /:\zs<CR>
-    endif
-call plug#end()
 
 map <C-n> :NERDTreeToggle<CR>
 
