@@ -82,104 +82,107 @@ if empty(glob('~/.vim/autoload/plug.vim'))
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+
 call plug#begin()
-"Editorconfig
-Plug 'editorconfig/editorconfig-vim'
-"Completion
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-let g:deoplete#enable_at_startup = 1
-"python doeplete
-Plug 'deoplete-plugins/deoplete-jedi'
-Plug 'neovim/pynvim'
-Plug 'davidhalter/jedi'
+if empty($SERVER) " Install these if not on a server
+    "Editorconfig
+    Plug 'editorconfig/editorconfig-vim'
+    "Completion
+    if has('nvim')
+        Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    else
+        Plug 'Shougo/deoplete.nvim'
+        Plug 'roxma/nvim-yarp'
+        Plug 'roxma/vim-hug-neovim-rpc'
+    endif
+    let g:deoplete#enable_at_startup = 1
+    "python doeplete
+    Plug 'deoplete-plugins/deoplete-jedi'
+    Plug 'neovim/pynvim'
+    Plug 'davidhalter/jedi'
 
-set completeopt=menuone,preview,longest
+    set completeopt=menuone,preview,longest
 
-let g:ale_python_pylint_options = '--load-plugins pylint_django'
-let g:python3_host_prog = '/usr/bin/python3'
-let g:python2_host_prog = '/usr/bin/python2'
-let g:deoplete#sources#jedi#show_docstring = 1
-Plug 'tpope/vim-repeat'
-"Linting
-Plug 'w0rp/ale'
-let g:ale_sign_error = '❌'
-let g:ale_sign_warning = '⚠️'
-let g:ale_fixers = {
- \ 'javascript': ['eslint'],
- \ 'python': ['isort', 'yapf', 'autopep8']
- \ }
-let g:ale_linters = {
- \ 'javascript': ['eslint']
- \ }
-nnoremap <leader>an :ALENextWrap<cr>
-nnoremap <leader>ap :ALEPreviousWrap<cr>
-Plug 'sheerun/vim-polyglot'
-Plug 'junegunn/fzf.vim'
-"Snippets
-let g:fzf_action = {
-      \ 'ctrl-h': 'split',
-      \ 'ctrl-v': 'vsplit'
-      \ }
-nnoremap <c-p> :FZF<cr>
-augroup fzf
-  autocmd!
-  autocmd! FileType fzf
-  autocmd  FileType fzf set laststatus=0 noshowmode noruler
-    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-augroup END
-Plug 'SirVer/ultisnips'
-let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips', 'UltiSnips']
-let g:UltiSnipsExpandTrigger = '<tab>'
-let g:UltiSnipsJumpForwardTrigger = '<tab>'
-let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
-Plug 'honza/vim-snippets'
-"Formatting
-Plug 'scrooloose/nerdcommenter'
-Plug 'tpope/vim-surround'
-"Looks
-Plug 'morhetz/gruvbox'
-Plug 'lilydjwg/colorizer' "colorize hexcodes
-"Git
-Plug 'airblade/vim-gitgutter'
-"Airline
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-"Markdown
-Plug 'plasticboy/vim-markdown'
-Plug 'shime/vim-livedown'
-"Latex
-Plug 'lervag/vimtex', { 'for': 'tex' }
-let vimtex_compiler_progname='nvr'
-let g:tex_flavor='latex'
-let g:vimtex_view_method='zathura'
-let g:vimtex_quickfix_mode=0
-set conceallevel=1
-let g:tex_conceal='abdmg'
-autocmd FileType plaintex,tex,latex setlocal spell "spell check for latex
-set spelllang=en_gb "spell check language
-inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
-" Web dev
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
-let g:deoplete#sources#ternjs#types = 1
-let g:deoplete#sources#ternjs#docs = 1
-let g:deoplete#sources#ternjs#filetypes = [
+    let g:ale_python_pylint_options = '--load-plugins pylint_django'
+    let g:python3_host_prog = '/usr/bin/python3'
+    let g:python2_host_prog = '/usr/bin/python2'
+    let g:deoplete#sources#jedi#show_docstring = 1
+    Plug 'tpope/vim-repeat'
+    "Linting
+    Plug 'w0rp/ale'
+    let g:ale_sign_error = '❌'
+    let g:ale_sign_warning = '⚠️'
+    let g:ale_fixers = {
+                \ 'javascript': ['eslint'],
+                \ 'python': ['isort', 'yapf', 'autopep8']
+                \ }
+    let g:ale_linters = {
+                \ 'javascript': ['eslint']
+                \ }
+    nnoremap <leader>an :ALENextWrap<cr>
+    nnoremap <leader>ap :ALEPreviousWrap<cr>
+    Plug 'sheerun/vim-polyglot'
+    Plug 'junegunn/fzf.vim'
+    "Snippets
+    let g:fzf_action = {
+                \ 'ctrl-h': 'split',
+                \ 'ctrl-v': 'vsplit'
+                \ }
+    nnoremap <c-p> :FZF<cr>
+    augroup fzf
+        autocmd!
+        autocmd! FileType fzf
+        autocmd  FileType fzf set laststatus=0 noshowmode noruler
+                    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+    augroup END
+    Plug 'SirVer/ultisnips'
+    let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips', 'UltiSnips']
+    let g:UltiSnipsExpandTrigger = '<tab>'
+    let g:UltiSnipsJumpForwardTrigger = '<tab>'
+    let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
+    Plug 'honza/vim-snippets'
+    Plug 'lilydjwg/colorizer' "colorize hexcodes
+    Plug 'airblade/vim-gitgutter'
+    "Markdown
+    Plug 'plasticboy/vim-markdown'
+    Plug 'shime/vim-livedown'
+    "Latex
+    Plug 'lervag/vimtex', { 'for': 'tex' }
+    let vimtex_compiler_progname='nvr'
+    let g:tex_flavor='latex'
+    let g:vimtex_view_method='zathura'
+    let g:vimtex_quickfix_mode=0
+    set conceallevel=1
+    let g:tex_conceal='abdmg'
+    autocmd FileType plaintex,tex,latex setlocal spell "spell check for latex
+    set spelllang=en_gb "spell check language
+    inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
+    " Web dev
+    Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+    Plug 'pangloss/vim-javascript'
+    Plug 'mxw/vim-jsx'
+    Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+    let g:deoplete#sources#ternjs#types = 1
+    let g:deoplete#sources#ternjs#docs = 1
+    let g:deoplete#sources#ternjs#filetypes = [
                 \ 'jsx',
                 \ 'javascript.jsx',
                 \ 'vue',
                 \ '...'
                 \ ]
-let g:tern#command = ['tern']
-let g:tern#arguments = ['--persistent']
-Plug 'othree/jspc.vim'
+    let g:tern#command = ['tern']
+    let g:tern#arguments = ['--persistent']
+    Plug 'othree/jspc.vim'
+endif
+"Formatting
+Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-surround'
+"Looks
+Plug 'morhetz/gruvbox'
+"Git
+"Airline
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 call plug#end()
 
