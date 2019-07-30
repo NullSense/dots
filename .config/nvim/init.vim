@@ -181,6 +181,7 @@ let g:tern#command = ['tern']
 let g:tern#arguments = ['--persistent']
 Plug 'othree/jspc.vim'
 Plug 'scrooloose/nerdtree'
+call plug#end()
 
 map <C-n> :NERDTreeToggle<CR>
 
