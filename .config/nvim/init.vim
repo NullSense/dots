@@ -7,6 +7,10 @@ autocmd BufReadPost *
 "Show vim file open name in tmux
 autocmd BufReadPost,FileReadPost,BufNewFile * call system("tmux rename-window " . expand("%"))
 
+"make preview window dissapear after selection
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
 "Mappings
 let mapleader="\<Space>"
 noremap <leader>y "+y
@@ -86,6 +90,7 @@ call plug#begin()
 if empty($SERVER) " Install these if not on a server
     "Editorconfig
     Plug 'editorconfig/editorconfig-vim'
+    Plug 'chaoren/vim-wordmotion'
     "Completion
     if has('nvim')
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -99,6 +104,12 @@ if empty($SERVER) " Install these if not on a server
     Plug 'deoplete-plugins/deoplete-jedi'
     Plug 'neovim/pynvim'
     Plug 'davidhalter/jedi'
+    Plug 'prabirshrestha/async.vim'
+    Plug 'sebastianmarkow/deoplete-rust'
+    Plug 'rust-lang/rust.vim'
+    let g:rustfmt_autosave = 1
+    let g:deoplete#sources#rust#racer_binary = systemlist('which racer')[0]
+    let g:deoplete#sources#rust#rust_source_path = '/home/ongo/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src/'
 
     set completeopt=menuone,preview,longest
 
@@ -106,20 +117,23 @@ if empty($SERVER) " Install these if not on a server
     let g:python3_host_prog = '/usr/bin/python3'
     let g:python2_host_prog = '/usr/bin/python2'
     let g:deoplete#sources#jedi#show_docstring = 1
+    let g:deoplete#sources#jedi#statement_length = 255
     Plug 'tpope/vim-repeat'
     "Linting
     Plug 'w0rp/ale'
-    let g:ale_sign_error = '❌'
-    let g:ale_sign_warning = '⚠️'
     let g:ale_fixers = {
                 \ 'javascript': ['eslint'],
-                \ 'python': ['isort', 'yapf', 'autopep8']
+                \ 'python': ['isort', 'black', 'autopep8'],
+                \ 'rust': ['rustfmt'],
                 \ }
     let g:ale_linters = {
-                \ 'javascript': ['eslint']
+                \ 'javascript': ['eslint', 'flake8'],
+                \ 'rust': ['rls'],
                 \ }
+    "let g:ale_python_flake8_options = '-m flake8 --max-line-length=119'
     nnoremap <leader>an :ALENextWrap<cr>
     nnoremap <leader>ap :ALEPreviousWrap<cr>
+    nnoremap <leader>af :ALEFix<cr>
     Plug 'sheerun/vim-polyglot'
     Plug 'junegunn/fzf.vim'
     "Snippets
@@ -127,7 +141,9 @@ if empty($SERVER) " Install these if not on a server
                 \ 'ctrl-h': 'split',
                 \ 'ctrl-v': 'vsplit'
                 \ }
+    "nnoremap <c-p> :FZF<cr>
     nnoremap <c-p> :FZF<cr>
+    nnoremap <leader>l :Rg<cr>
     augroup fzf
         autocmd!
         autocmd! FileType fzf
