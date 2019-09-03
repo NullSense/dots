@@ -75,7 +75,7 @@ map i $~/.config/lf/pv.sh $f | less -R
 # use enter for shell commands
 map <enter> shell
 
-map <c-p> $lf -remote "send $id select '$(fzf)'"
+map <c-o> $lf -remote "send $id select '$(fzf)'"
 
 # mkdir command
 cmd mkdir %mkdir "$(echo $* | tr ' ' '\ ')"

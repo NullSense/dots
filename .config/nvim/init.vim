@@ -141,8 +141,7 @@ if empty($SERVER) " Install these if not on a server
                 \ 'ctrl-h': 'split',
                 \ 'ctrl-v': 'vsplit'
                 \ }
-    "nnoremap <c-p> :FZF<cr>
-    nnoremap <c-p> :FZF<cr>
+    nnoremap <c-o> :FZF<cr>
     nnoremap <leader>l :Rg<cr>
     augroup fzf
         autocmd!
