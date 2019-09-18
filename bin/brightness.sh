@@ -5,8 +5,8 @@
 set_brightness(){
     benq_br=$(($1 - 30)) # BenQ is quite a bit brighter
 
-    echo "Benq: $benq_br"
-    echo "LG: $1"
+    #echo "Benq: $benq_br"
+    #echo "LG: $1"
 
 	ddccontrol -r 0x10 -w "$benq_br" -f dev:/dev/i2c-6 > /dev/null 2>&1 # BenQ 1080p
 	ddccontrol -r 0x10 -w "$1" -f dev:/dev/i2c-9 > /dev/null 2>&1 # LG UW-1080p
@@ -29,7 +29,7 @@ case $1 in
 			transition)
 				target=50
 				;;
-			day)
+			daytime)
 				target=100
 				;;
 			*)

@@ -143,12 +143,12 @@ if empty($SERVER) " Install these if not on a server
                 \ }
     nnoremap <c-o> :FZF<cr>
     nnoremap <leader>l :Rg<cr>
-    augroup fzf
-        autocmd!
-        autocmd! FileType fzf
-        autocmd  FileType fzf set laststatus=0 noshowmode noruler
-                    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-    augroup END
+    "augroup fzf
+        "autocmd!
+        "autocmd! FileType fzf
+        "autocmd  FileType fzf set laststatus=0 noshowmode noruler
+                    "\| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+    "augroup END
     Plug 'SirVer/ultisnips'
     let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips', 'UltiSnips']
     let g:UltiSnipsExpandTrigger = '<tab>'

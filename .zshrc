@@ -1,4 +1,5 @@
 export PATH=$PATH:$HOME/bin/:$HOME/.npm-global/bin
+export EDITOR=nvim
 
 HISTSIZE=10000
 SAVEHIST=10000
@@ -24,15 +25,8 @@ zplug 'zdharma/fast-syntax-highlighting', \
 zplug "b4b4r07/zsh-vimode-visual", defer:3
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-completions"
-zplug 'plugins/sudo', \
-      from:oh-my-zsh, \
-      ignore:oh-my-zsh.sh, \
-      if:"(($+commands[sudo]))"
 zplug "plugins/rust", from:oh-my-zsh
 zplug "plugins/cargo", from:oh-my-zsh
-#zplug "plugins/vi-mode", from:oh-my-zsh
-zplug "plugins/command-not-found", from:oh-my-zsh
-zplug "arzzen/calc.plugin.zsh"
 zplug "plugins/fzf", from:oh-my-zsh
 zplug "MichaelAquilina/zsh-you-should-use"
 zplug "wfxr/forgit"
@@ -91,7 +85,7 @@ if [ -f "$LFCD" ]; then
 fi
 # Open lf
 source ~/.config/lf/lfcd.sh
-bindkey -s '=' 'lfcd\n'
+bindkey -s "^\\" 'lfcd\n'
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -g "!{.mozilla,*cache*,*Cache*,.node*,.electron*,.local,.steam,.cache,.git,Steam,Music,Videos}" 2> /dev/null'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
