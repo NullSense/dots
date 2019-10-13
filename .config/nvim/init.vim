@@ -1,3 +1,10 @@
+"move through wrapped text easier
+nmap j gj
+nmap k gk
+
+"so I don't need to source every time
+autocmd BufWritePost .vimrc source %
+
 "Load file to last position of cursor
 autocmd BufReadPost *
       \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
@@ -44,7 +51,7 @@ nnoremap <Leader>k ddkP
 nnoremap <leader>r :%s/\V<c-r>=escape(expand('<cword>'), '\/')<cr>//g<left><left>
 
 " Auto expand braces
-inoremap {<CR> {<C-o>o}<C-o>O
+"inoremap {<CR> {<C-o>o}<C-o>O
 
 "Indentation
 set autoindent
@@ -91,6 +98,8 @@ if empty($SERVER) " Install these if not on a server
     "Editorconfig
     Plug 'editorconfig/editorconfig-vim'
     Plug 'chaoren/vim-wordmotion'
+    "Plug 'jiangmiao/auto-pairs'
+
     "Completion
     if has('nvim')
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -99,9 +108,13 @@ if empty($SERVER) " Install these if not on a server
         Plug 'roxma/nvim-yarp'
         Plug 'roxma/vim-hug-neovim-rpc'
     endif
+    let g:neopairs#enable = 1
     let g:deoplete#enable_at_startup = 1
     "python doeplete
+    let g:deoplete#max_list = 35
+    Plug 'ap/vim-buftabline'
     Plug 'deoplete-plugins/deoplete-jedi'
+    Plug 'Shougo/neopairs.vim'
     Plug 'neovim/pynvim'
     Plug 'davidhalter/jedi'
     Plug 'prabirshrestha/async.vim'
@@ -111,7 +124,18 @@ if empty($SERVER) " Install these if not on a server
     let g:deoplete#sources#rust#racer_binary = systemlist('which racer')[0]
     let g:deoplete#sources#rust#rust_source_path = '/home/ongo/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src/'
 
-    set completeopt=menuone,preview,longest
+
+    Plug 'ncm2/float-preview.nvim'
+    let g:float_preview#max_width = 180
+    function! DisableExtras()
+        call nvim_win_set_option(g:float_preview#win, 'number', v:false)
+        call nvim_win_set_option(g:float_preview#win, 'relativenumber', v:false)
+        call nvim_win_set_option(g:float_preview#win, 'cursorline', v:false)
+    endfunction
+
+    autocmd User FloatPreviewWinOpen call DisableExtras()
+    "set completeopt=menuone,preview,longest
+    set completeopt-=preview
 
     let g:ale_python_pylint_options = '--load-plugins pylint_django'
     let g:python3_host_prog = '/usr/bin/python3'
@@ -143,12 +167,6 @@ if empty($SERVER) " Install these if not on a server
                 \ }
     nnoremap <c-o> :FZF<cr>
     nnoremap <leader>l :Rg<cr>
-    "augroup fzf
-        "autocmd!
-        "autocmd! FileType fzf
-        "autocmd  FileType fzf set laststatus=0 noshowmode noruler
-                    "\| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-    "augroup END
     Plug 'SirVer/ultisnips'
     let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips', 'UltiSnips']
     let g:UltiSnipsExpandTrigger = '<tab>'
@@ -168,25 +186,25 @@ if empty($SERVER) " Install these if not on a server
     let g:vimtex_quickfix_mode=0
     set conceallevel=1
     let g:tex_conceal='abdmg'
-    autocmd FileType plaintex,tex,latex setlocal spell "spell check for latex
+    autocmd FileType plaintex,md,markdown,tex,latex setlocal spell "spell check for latex
     set spelllang=en_gb "spell check language
     inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
-    " Web dev
-    Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
-    Plug 'pangloss/vim-javascript'
-    Plug 'mxw/vim-jsx'
-    Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
-    let g:deoplete#sources#ternjs#types = 1
-    let g:deoplete#sources#ternjs#docs = 1
-    let g:deoplete#sources#ternjs#filetypes = [
-                \ 'jsx',
-                \ 'javascript.jsx',
-                \ 'vue',
-                \ '...'
-                \ ]
-    let g:tern#command = ['tern']
-    let g:tern#arguments = ['--persistent']
-    Plug 'othree/jspc.vim'
+    "" Web dev
+    "Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+    "Plug 'pangloss/vim-javascript'
+    "Plug 'mxw/vim-jsx'
+    "Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+    "let g:deoplete#sources#ternjs#types = 1
+    "let g:deoplete#sources#ternjs#docs = 1
+    "let g:deoplete#sources#ternjs#filetypes = [
+                "\ 'jsx',
+                "\ 'javascript.jsx',
+                "\ 'vue',
+                "\ '...'
+                "\ ]
+    "let g:tern#command = ['tern']
+    "let g:tern#arguments = ['--persistent']
+    "Plug 'othree/jspc.vim'
 endif
 "Formatting
 Plug 'scrooloose/nerdcommenter'
@@ -195,8 +213,8 @@ Plug 'tpope/vim-surround'
 Plug 'morhetz/gruvbox'
 "Git
 "Airline
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+"Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 call plug#end()
 
@@ -205,11 +223,12 @@ map <C-n> :NERDTreeToggle<CR>
 "Plugin settings
 set updatetime=100 " gitgutter
 
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
+"let g:airline_powerline_fonts = 1
+"let g:airline#extensions#tabline#enabled = 1
 
 "Theming
 set termguicolors "sets to true colors
 let &t_ut=''
 let g:gruvbox_contrast_dark='soft'
 colorscheme gruvbox
+call deoplete#custom#source('_', 'converters', ['converter_auto_paren'])

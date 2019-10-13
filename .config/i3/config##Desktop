@@ -18,7 +18,7 @@ exec --no-startup-id keynav daemonize
 exec --no-startup-id redshift
 exec --no-startup-id caffeine
 exec --no-startup-id unclutter
-exec --no-startup-id kitty --title dropdown_term
+exec --no-startup-id kitty --title dropdown_term -o font_size=10
 exec --no-startup-id xss-lock -n -- ~/bin/lock.sh
 
 # Autostart applications in specific workspaces

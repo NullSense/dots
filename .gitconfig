@@ -2,4 +2,6 @@
 	email = matas234@gmail.com
 	name = Aerial
 [credential]
-	helper = cache --timeout=3600
+    helper = cache --timeout=3600
+[commit]
+    verbose = true

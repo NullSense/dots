@@ -2,19 +2,20 @@
 
 date=$(date +%y-%m-%d/%H:%M:%S)
 
-echo -e "----------------------------------------------------------------------------------------------------"
-echo -e "================1st Backup================="
-echo -e "=================250 SSD==================="
-echo -e "Backup TO: /dev/sdc1"
-echo -e "==========================================="
-echo -e "===Backup started at '$date'==="
-echo -e "==========================================="
+# FULL
+#echo -e "----------------------------------------------------------------------------------------------------"
+#echo -e "================1st Backup================="
+#echo -e "=================250 SSD==================="
+#echo -e "Backup TO: /dev/sdc1"
+#echo -e "==========================================="
+#echo -e "===Backup started at '$date'==="
+#echo -e "==========================================="
 
-echo -e "==========================================="
-echo -e "=========Starting music file backup========"
-echo -e "==========================================="
+#echo -e "==========================================="
+#echo -e "=========Starting music file backup========"
+#echo -e "==========================================="
 # Backup music to 250GB SSD
-rsync -aHx --stats --numeric-ids --exclude="lost+found" --exclude='*.mkv' --exclude='*.rar' --exclude='*.nfo' --exclude='*.idx' "/home/ongo/Music/" "/mnt/Music_bak/Music/"
+#rsync -aHx --stats --numeric-ids --exclude="lost+found" --exclude='*.mkv' --exclude='*.rar' --exclude='*.nfo' --exclude='*.idx' "/home/ongo/Music/" "/mnt/Music_bak/Music/"
 
 echo -e "----------------------------------------------------------------------------------------------------"
 echo -e "================2nd Backup================="

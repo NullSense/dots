@@ -1,4 +1,4 @@
-export PATH=$PATH:$HOME/bin/:$HOME/.npm-global/bin
+export PATH=$PATH:$HOME/bin/:$HOME/.npm-global/bin:$HOME/.cargo/bin
 export EDITOR=nvim
 
 HISTSIZE=10000
@@ -52,7 +52,8 @@ alias gs='git status'
 alias rsync='rsync --info=progress2'
 alias l='ls -CFhN --color=auto --group-directories-first'
 alias ll='ls -alF --color=auto --group-directories-first'
-alias dropdown='nohup kitty -T dropdown_term &'
+alias dropdown='kitty -T dropdown_term &'
+alias isso='ssh -p 2237 ongo@159.69.195.170 -NL 8082:localhost:8082'
 
 export EDITOR=nvim
 
