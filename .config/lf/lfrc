@@ -36,7 +36,7 @@ cmd pv-all-imgs &{{
     file --mime-type ./* | \
                          grep image/ | \
                          awk -F':' '{print $1}' | \
-                         sxiv -t -
+                         sxiv -a -t -
 }}
 
 map Oi pv-all-imgs
