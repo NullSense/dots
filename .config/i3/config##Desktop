@@ -19,6 +19,7 @@ exec --no-startup-id redshift
 exec --no-startup-id caffeine
 exec --no-startup-id unclutter
 exec --no-startup-id kitty --title dropdown_term -o font_size=10
+exec --no-startup-id lollypop
 exec --no-startup-id xss-lock -n -- ~/bin/lock.sh
 
 # Autostart applications in specific workspaces
@@ -34,6 +35,7 @@ exec --no-startup-id i3-msg 'workspace $ws10; exec transmission-gtk'
 ######################################################
 ## Dropdown
 for_window [title="dropdown_term"] move scratchpad, border pixel 3, resize set 1325 600
+for_window [class="Lollypop"] move scratchpad, fullscreen enable
 
 ## Dropdown specific
 for_window [class="mpv"] floating enable, sticky enable
@@ -47,9 +49,8 @@ for_window [class="Mtpaint"] floating enable # Screenshot editor
 # Bindings ###########################################
 ######################################################
 # Dropdown
-## Dropdown Lollypop
-bindsym $mod+m exec python ~/.config/i3/scripts/scratchy.py -t Lollypop -a lollypop; [class="Lollypop"] fullscreen enable
 bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
+bindsym $mod+m [class="Lollypop"] scratchpad show, fullscreen enable
 
 ## Dropdown terminal
 bindsym $mod+u [title="dropdown_term"] scratchpad show, move position center
@@ -60,7 +61,7 @@ bindsym $mod+Insert exec --no-startup-id showclip
 bindsym $mod+Shift+Insert exec xclip -selection clipboard -o | 0x0
 
 ## Open link in mpv
-bindsym $mod+y exec tsp mpv --ontop --no-border --force-window --autofit=600x380 --geometry=-12-10 $(xclip -o)
+bindsym $mod+y exec mpv --ontop --no-border --force-window --autofit=600x380 --geometry=-12-10 $(xclip -o)
 
 ## Screenshots
 bindsym Print exec "capture.sh -l"
