@@ -51,7 +51,7 @@ nnoremap <Leader>k ddkP
 nnoremap <leader>r :%s/\V<c-r>=escape(expand('<cword>'), '\/')<cr>//g<left><left>
 
 " Auto expand braces
-"inoremap {<CR> {<C-o>o}<C-o>O
+inoremap {<CR> {<C-o>o}<C-o>O
 
 "Indentation
 set autoindent
@@ -142,6 +142,7 @@ if empty($SERVER) " Install these if not on a server
     let g:python2_host_prog = '/usr/bin/python2'
     let g:deoplete#sources#jedi#show_docstring = 1
     let g:deoplete#sources#jedi#statement_length = 255
+    let g:jedi#documentation_command = "K"
     Plug 'tpope/vim-repeat'
     "Linting
     Plug 'w0rp/ale'
