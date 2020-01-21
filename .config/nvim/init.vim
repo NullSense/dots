@@ -48,7 +48,7 @@ nnoremap <Leader>j ddp
 nnoremap <Leader>k ddkP
 
 " Search and replace occurences of word under cursor
-nnoremap <leader>r :%s/\V<c-r>=escape(expand('<cword>'), '\/')<cr>//g<left><left>
+"nnoremap <leader>r :%s/\V<c-r>=escape(expand('<cword>'), '\/')<cr>//g<left><left>
 
 " Auto expand braces
 "inoremap {<CR> {<C-o>o}<C-o>O
@@ -66,6 +66,15 @@ filetype plugin indent on
 "Vim general
 let g:gruvbox_italic=1
 let g:gruvbox_bold=1
+set tags=tags
+" Better display for messages
+set cmdheight=2
+" You will have bad experience for diagnostic messages when it's default 4000.
+set updatetime=300
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+" always show signcolumns
+set signcolumn=yes
 set autoread "reload file on change on disk
 set mouse=a
 set encoding=utf-8 "windows specific rendering option
@@ -95,38 +104,8 @@ endif
 
 call plug#begin()
 if empty($SERVER) " Install these if not on a server
-    "Editorconfig
-    Plug 'editorconfig/editorconfig-vim'
-    Plug 'chaoren/vim-wordmotion'
-    "Plug 'jiangmiao/auto-pairs'
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-    "Completion
-    if has('nvim')
-        Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    else
-        Plug 'Shougo/deoplete.nvim'
-        Plug 'roxma/nvim-yarp'
-        Plug 'roxma/vim-hug-neovim-rpc'
-    endif
-    let g:neopairs#enable = 1
-    let g:deoplete#enable_at_startup = 1
-    "python doeplete
-    let g:deoplete#max_list = 35
-    Plug 'ap/vim-buftabline'
-    Plug 'deoplete-plugins/deoplete-jedi'
-    Plug 'Shougo/neopairs.vim'
-    Plug 'neovim/pynvim'
-    Plug 'davidhalter/jedi'
-    Plug 'prabirshrestha/async.vim'
-    Plug 'sebastianmarkow/deoplete-rust'
-    Plug 'rust-lang/rust.vim'
-    let g:rustfmt_autosave = 1
-    let g:deoplete#sources#rust#racer_binary = systemlist('which racer')[0]
-    let g:deoplete#sources#rust#rust_source_path = '/home/ongo/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src/'
-
-
-    Plug 'ncm2/float-preview.nvim'
-    let g:float_preview#max_width = 180
     function! DisableExtras()
         call nvim_win_set_option(g:float_preview#win, 'number', v:false)
         call nvim_win_set_option(g:float_preview#win, 'relativenumber', v:false)
@@ -137,27 +116,9 @@ if empty($SERVER) " Install these if not on a server
     "set completeopt=menuone,preview,longest
     set completeopt-=preview
 
-    let g:ale_python_pylint_options = '--load-plugins pylint_django'
     let g:python3_host_prog = '/usr/bin/python3'
     let g:python2_host_prog = '/usr/bin/python2'
-    let g:deoplete#sources#jedi#show_docstring = 1
-    let g:deoplete#sources#jedi#statement_length = 255
     Plug 'tpope/vim-repeat'
-    "Linting
-    Plug 'w0rp/ale'
-    let g:ale_fixers = {
-                \ 'javascript': ['eslint'],
-                \ 'python': ['isort', 'black', 'autopep8'],
-                \ 'rust': ['rustfmt'],
-                \ }
-    let g:ale_linters = {
-                \ 'javascript': ['eslint', 'flake8'],
-                \ 'rust': ['rls'],
-                \ }
-    "let g:ale_python_flake8_options = '-m flake8 --max-line-length=119'
-    nnoremap <leader>an :ALENextWrap<cr>
-    nnoremap <leader>ap :ALEPreviousWrap<cr>
-    nnoremap <leader>af :ALEFix<cr>
     Plug 'sheerun/vim-polyglot'
     Plug 'junegunn/fzf.vim'
     "Snippets
@@ -173,62 +134,80 @@ if empty($SERVER) " Install these if not on a server
     let g:UltiSnipsJumpForwardTrigger = '<tab>'
     let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
     Plug 'honza/vim-snippets'
-    Plug 'lilydjwg/colorizer' "colorize hexcodes
     Plug 'airblade/vim-gitgutter'
     "Markdown
     Plug 'plasticboy/vim-markdown'
     Plug 'shime/vim-livedown'
-    "Latex
-    Plug 'lervag/vimtex', { 'for': 'tex' }
-    let vimtex_compiler_progname='nvr'
-    let g:tex_flavor='latex'
-    let g:vimtex_view_method='zathura'
-    let g:vimtex_quickfix_mode=0
-    set conceallevel=1
-    let g:tex_conceal='abdmg'
-    autocmd FileType plaintex,md,markdown,tex,latex setlocal spell "spell check for latex
-    set spelllang=en_gb "spell check language
-    inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
-    "" Web dev
-    "Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
-    "Plug 'pangloss/vim-javascript'
-    "Plug 'mxw/vim-jsx'
-    "Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
-    "let g:deoplete#sources#ternjs#types = 1
-    "let g:deoplete#sources#ternjs#docs = 1
-    "let g:deoplete#sources#ternjs#filetypes = [
-                "\ 'jsx',
-                "\ 'javascript.jsx',
-                "\ 'vue',
-                "\ '...'
-                "\ ]
-    "let g:tern#command = ['tern']
-    "let g:tern#arguments = ['--persistent']
-    "Plug 'othree/jspc.vim'
 endif
+
+Plug 'prabirshrestha/async.vim'
+"Editorconfig
+Plug 'editorconfig/editorconfig-vim'
+Plug 'ap/vim-buftabline'
 "Formatting
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
 "Looks
 Plug 'morhetz/gruvbox'
-"Git
-"Airline
-"Plug 'vim-airline/vim-airline'
-"Plug 'vim-airline/vim-airline-themes'
-Plug 'scrooloose/nerdtree'
+Plug 'ludovicchabant/vim-gutentags'
 call plug#end()
 
-map <C-n> :NERDTreeToggle<CR>
 
 "Plugin settings
 set updatetime=100 " gitgutter
 
-"let g:airline_powerline_fonts = 1
-"let g:airline#extensions#tabline#enabled = 1
+"CoC
+autocmd CursorHold * silent call CocActionAsync('highlight')
+nmap <C-n> :CocCommand explorer<CR>
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Remap for rename current word
+nmap <leader>r <Plug>(coc-rename)
+
+" Use <TAB> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+nmap <silent> <TAB> <Plug>(coc-range-select)
+xmap <silent> <TAB> <Plug>(coc-range-select)
+
+"set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 "Theming
 set termguicolors "sets to true colors
 let &t_ut=''
 let g:gruvbox_contrast_dark='soft'
 colorscheme gruvbox
-call deoplete#custom#source('_', 'converters', ['converter_auto_paren'])

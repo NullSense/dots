@@ -16,8 +16,9 @@ exec --no-startup-id nm-applet
 exec --no-startup-id redshift
 exec --no-startup-id caffeine
 exec --no-startup-id unclutter
+exec --no-startup-id lollypop
 ## Scratchpads
-#exec --no-startup-id $term --name dropdown_term
+exec --no-startup-id kitty --title dropdown_term -o font_size=10
 
 ## Locking
 exec --no-startup-id xset s 60 60
@@ -29,10 +30,10 @@ exec --no-startup-id xss-lock -n ~/bin/dim-screen.sh -- ~/bin/lock.sh
 # Windows ############################################
 ######################################################
 ## Dropdown
-for_window [instance="dropdown_term"] floating enable, move position center, sticky enable, resize set 1325 650, border pixel 3
+for_window [title="dropdown_term"] move scratchpad, border pixel 3, resize set 1325 600
 
 ## Dropdown specific
-#for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.py -r 30 -p top right
+for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.py -r 30 -p top right
 
 ## Problematic windows
 for_window [class="Pavucontrol"] floating enable
@@ -46,17 +47,17 @@ for_window [class="Mtpaint"] floating enable # Screenshot editor
 ######################################################
 # Dropdown
 ## Dropdown Lollypop
-bindsym $mod+m exec python ~/.config/i3/scripts/scratchy.py -t Lollypop -a lollypop; [class="Lollypop"] fullscreen enable
+bindsym $mod+m exec [class="Lollypop"] scratchpad show, fullscreen enable
 
 ## Dropdown terminal
-bindsym $mod+u exec python ~/.config/i3/scripts/scratchy.py -c dropdown_term -a 'kitty --name dropdown_term' ; [class="dropdown_term"] move position center
+bindsym $mod+u [title="dropdown_term"] scratchpad show, move position center
 
 ## Move focused workspace between monitors
 bindsym $mod+Ctrl+greater move workspace to output right
 bindsym $mod+Ctrl+less move workspace to output left
 
 # Open link in mpv
-bindsym $mod+y exec mpv $(xclip -o)
+bindsym $mod+y exec mpv --ontop --no-border --force-window --autofit=600x380 --geometry=-12-10 $(xclip -o)
 
 ## Screenshots
 bindsym Print exec "capture.sh -l"
