@@ -2,8 +2,7 @@
 # 0x0 - client for 0x0.st
 
 me=${0##*/}
-host=https://hostmystuff.xyz
-keypath=$HOME/bin/hostmystuffkey
+host=https://0x0.st
 
 if [[ ! -t 1 ]];then
     quiet=true
@@ -23,7 +22,11 @@ EOF
 clip() {
     if command -v xclip >/dev/null 2>&1;then
         echo "$@" | xclip -selection c
-        notify-send "HostMyStuff" "Successfully uploaded.\nURL: $@"
+        notify-send "0x0" "Successfully uploaded.\nURL: $@"
+    fi
+    if command -v wl-copy >/dev/null 2>&1;then
+        echo "$@" | wl-copy
+        notify-send "0x0" "Successfully uploaded.\nURL: $@"
     fi
 }
 
@@ -33,7 +36,7 @@ file_upload() {
     [[ "${progress_quiet}" ]] || curl_opts="-#"
     [[ "${quiet}" ]] || printf "uploading \"%s\"...\n" "${file}" >&2
     [[ "$#" -gt 1 ]] && printf "%s ... " "${url}"
-    url=$(curl ${curl_opts} --header "key: $(cat $keypath)" -F "file=@${file}" "${host}")
+    url=$(curl ${curl_opts} -F "file=@${file}" "${host}")
     printf '%s' "${url}"
     [ -t 1 ] && printf '\n'
     clip "${url}"
@@ -44,7 +47,7 @@ shorten_url() {
     [[ "${progress_quiet}" ]] || curl_opts="-#"
     [[ "${quiet}" ]] || printf "shortening \"${url}\"...\n" >&2
     [[ "$#" -gt 1 ]] && printf "%s ... " "${url}"
-    shortened=$(curl ${curl_opts} --header "key: $(cat $keypath)" -F "shorten=${url}" "${host}")
+    shortened=$(curl ${curl_opts} -F "shorten=${url}" "${host}")
     printf '%s' "${shortened}"
     [ -t 1 ] && printf '\n'
     clip "${shortened}"
@@ -55,7 +58,7 @@ upload_url() {
     [[ "${progress_quiet}" ]] || curl_opts="-#"
     [[ "${quiet}" ]] || printf "uploading \"%s\"...\n" "${url}" >&2
     [[ "$#" -gt 1 ]] && printf "%s ... " "${url}"
-    uploaded=$(curl ${curl_opts} --header "key: $(cat $keypath)" -F "url=${url}" "${host}")
+    uploaded=$(curl ${curl_opts} -F "url=${url}" "${host}")
     printf '%s' "${uploaded}"
     [ -t 1 ] && printf '\n'
     clip "${uploaded}"

@@ -87,8 +87,8 @@ bindsym $mod+greater exec swaymsg -t get_outputs | jq '.[] | .name' | sed -n "1p
 bindsym $mod+y exec mpv --ontop --no-border --force-window --autofit=600x380 --geometry=-12-10 $(xclip -o)
 
 ## Screenshots
-bindsym Print exec "capture.sh -l"
-bindsym control+Print exec "capture.sh"
+bindsym Print exec "grim -g "$(slurp)" - | wl-copy -t image/png"
+bindsym control+Print exec "grim -g "$(slurp)" - | 0x0"
 
 ## Show clipboard contents
 bindsym $mod+Insert exec --no-startup-id showclip
@@ -184,6 +184,8 @@ bindsym $mod+a focus parent
 workspace $ws1 output DP-4
 workspace $ws2 output DP-3
 workspace $ws3 output eDP-1
+
+output eDP-1 scale 1.4
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
