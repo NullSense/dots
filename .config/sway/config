@@ -1,0 +1,261 @@
+######################################################
+# Basic Definitions ##################################
+######################################################
+font pango:Hack 8 # for window titles
+set $mod Mod4
+set $term kitty
+set $menu bemenu-run
+focus_follows_mouse no
+for_window [class="^.*"] border pixel 1
+default_border pixel 1
+
+######################################################
+# STARTUP EXECUTIONS ################################
+######################################################
+exec xset -b # Turns off annoying loud beep
+exec --no-startup-id nm-applet
+exec --no-startup-id caffeine
+exec --no-startup-id lollypop
+exec --no-startup-id mako
+exec --no-startup-id seat * hide_cursor 3
+
+exec --no-startup-id swaymsg 'workspace $ws1; exec firefox'
+exec --no-startup-id swaymsg 'workspace $ws3; exec kitty ssh nonsensei@purgatory -t tmux attach-session'
+for_window [workspace=$ws3] layout tabbed
+exec --no-startup-id swaymsg 'workspace $ws3; exec signal-desktop'
+## Scratchpads
+exec --no-startup-id kitty --title dropdown_term -o font_size=10
+
+### Idle configuration
+#
+exec swayidle -w \
+         timeout 300 'swaylock -f -c 000000' \
+         timeout 600 'swaymsg "output * dpms off"' \
+         resume 'swaymsg "output * dpms on"' \
+         before-sleep 'swaylock -f -c 000000'
+#
+# This will lock your screen after 300 seconds of inactivity, then turn off
+# your displays after another 300 seconds, and turn your screens back on when
+# resumed. It will also lock your screen before your computer goes to sleep.
+
+
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $ws1 "01 "
+set $ws2 "02 "
+set $ws3 "03 "
+set $ws4 "04 "
+set $ws5 "05 "
+set $ws6 "06 "
+set $ws7 "07 "
+set $ws8 "08 "
+set $ws9 "09 "
+set $ws10 "10 "
+
+######################################################
+# Windows ############################################
+######################################################
+## Dropdown
+for_window [title="dropdown_term"] move scratchpad, border pixel 3, resize set 600 600
+for_window [title="Lollypop"] move scratchpad, fullscreen enable
+
+## Dropdown specific
+for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.py -r 30 -p top right
+
+## Problematic windows
+for_window [class="Pavucontrol"] floating enable
+for_window [class="Signal"] move container to workspace $ws3
+for_window [window_role="GtkFileChooserDialog"] resize set 1780 920
+for_window [window_role="GtkFileChooserDialog"] move position center
+for_window [class="Mtpaint"] floating enable # Screenshot editor
+
+######################################################
+# Bindings ###########################################
+######################################################
+# Dropdown
+## Dropdown Lollypop
+bindsym $mod+m exec [title="Lollypop"] scratchpad show, fullscreen enable
+
+## Dropdown terminal
+bindsym $mod+u [title="dropdown_term"] scratchpad show, move position center, resize set 1280 720
+
+## Move focused workspace between monitors
+bindsym $mod+less exec swaymsg -t get_outputs | jq '.[] | .name' | sed -n "1p;/`swaymsg -t get_outputs | jq '.[] | select(.focused==true) | .name'`/{n;p;}" | tail -n1 | xargs swaymsg move workspace to
+bindsym $mod+greater exec swaymsg -t get_outputs | jq '.[] | .name' | sed -n "1p;/`swaymsg -t get_outputs | jq '.[] | select(.focused==true) | .name'`/{n;p;}" | tac | tail -n1 | xargs swaymsg move workspace to
+
+# Open link in mpv
+bindsym $mod+y exec mpv --ontop --no-border --force-window --autofit=600x380 --geometry=-12-10 $(xclip -o)
+
+## Screenshots
+bindsym Print exec "capture.sh -l"
+bindsym control+Print exec "capture.sh"
+
+## Show clipboard contents
+bindsym $mod+Insert exec --no-startup-id showclip
+## Upload clipboard contents
+bindsym $mod+Shift+Insert exec xclip -o -selection clipboard | 0x0
+
+## Music player
+bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
+
+## Mpv pause
+#bindsym $mod+m exec xdotool key --window "$(xdotool search --class mpv)" p
+
+##############################
+# SYSTEM BINDS################
+##############################
+# Volume
+## Increase volume
+bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume @DEFAULT_SINK@ +1000 && pkill -RTMIN+10 i3blocks"
+## Decrease volume
+bindsym XF86AudioLowerVolume exec "pactl set-sink-volume @DEFAULT_SINK@ -1000 && pkill -RTMIN+10 i3blocks"
+## Mute volume
+bindsym XF86AudioMute exec "pactl set-sink-mute @DEFAULT_SINK@ toggle && pkill -RTMIN+10 i3blocks"
+
+# Backlight
+## Increase backlight
+bindsym XF86MonBrightnessUp exec "sudo light -A 5"
+## Decrease backlight
+bindsym XF86MonBrightnessDown exec "sudo light -U 5"
+
+# Shutdown, reboot, lock screen
+set $Locker exec lock.sh && sleep 1
+
+set $mode_system System (l) lock, (e) logout, (s) suspend, (r) reboot, (Shift+s) shutdown
+mode "$mode_system" {
+    bindsym l exec --no-startup-id exec swaylock, mode "default"
+    bindsym e exec --no-startup-id swaymsg exit, mode "default"
+    bindsym s exec --no-startup-id sudo systemctl suspend, mode "default"
+    bindsym r exec --no-startup-id sudo systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id sudo systemctl poweroff -i, mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym control+Delete mode "$mode_system"
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec kitty
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# Start rofi
+bindsym $mod+d exec dmenu_path | $menu $menu_args | xargs swaymsg exec
+
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# split orientation toggle
+bindsym $mod+v split toggle
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+#bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# Set workspace outputs (monitors)
+workspace $ws1 output DP-4
+workspace $ws2 output DP-3
+workspace $ws3 output eDP-1
+
+# switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r reload
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        bindsym h resize shrink width 5 px or 5 ppt
+        bindsym j resize grow height 5 px or 5 ppt
+        bindsym k resize shrink height 5 px or 5 ppt
+        bindsym l resize grow width 5 px or 5 ppt
+
+# same bindings, but for the arrow keys
+        bindsym Left resize shrink width 5 px or 5 ppt
+        bindsym Down resize grow height 5 px or 5 ppt
+        bindsym Up resize shrink height 5 px or 5 ppt
+        bindsym Right resize grow width 5 px or 5 ppt
+
+# back to normal: Enter or Escape or $mod+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+# set primary gruvbox colorscheme colors
+set $bg #282828
+set $red #cc241d
+set $green #98971a
+set $yellow #d79921
+set $blue #458588
+set $purple #b16286
+set $aqua #689d68
+set $gray #a89984
+set $darkgray #1d2021
+set $orange #d65d0e
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+        swaybar_command waybar
+        font pango:Hack Nerd Font 6
+}
+
+# class border|backgr|text|indicator|child_border
+#client.focused $blue $blue #1d1f21 #282a2e
+#client.focused_inactive #373b41 #373b41 #969896 #282a2e
+#client.unfocused #282a2e #282a2e #969896 #282a2e
+#client.urgent #373b41 $red #ffffff $red
+#

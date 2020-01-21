@@ -1,5 +1,12 @@
-export PATH=$PATH:$HOME/bin/:$HOME/.npm-global/bin:$HOME/.cargo/bin
+export PATH=$PATH:$HOME/bin/:$HOME/.npm-global/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.7.0/bin
 export EDITOR=nvim
+export KITTY_ENABLE_WAYLAND=1
+export MOZ_ENABLE_WAYLAND=1
+export QT_QPA_PLATFORM=wayland-egl
+export QT_WAYLAND_FORCE_DPI=physical
+export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+export SDL_VIDEODRIVER=wayland
+export BEMENU_BACKEND=wayland
 
 HISTSIZE=10000
 SAVEHIST=10000

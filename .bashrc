@@ -11,7 +11,6 @@ export OPENER=rifle
 
 source /usr/share/git/completion/git-prompt.sh
 source /usr/share/git/completion/git-completion.bash
-source /usr/share/bash-completion/bash_completion
 source ~/bin/extract.sh
 source ~/.config/lf/lfcd.sh
 source <(kitty + complete setup bash)
@@ -27,8 +26,6 @@ alias nb='newsboat'
 alias clip='xclip -selection clipboard'
 alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gs='git status'
-
-source ~/bin/forgit.plugin.zsh
 
 PS1='\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h \[$(tput setaf 5)\]\W$(__git_ps1 "\[\e[0;33m\]@\[\e[0m\]\[\e[0;34m\]%s\[\e[0m\]")\[$(tput bold)\]\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$ \[$(tput sgr0)\]'
 
@@ -199,8 +196,6 @@ ex=:\
 *.xspf=:\
 *.pdf=:\
 "
-setxkbmap -option ctrl:nocaps
-xmodmap -e 'keycode 66=minus'
 
 bind -x '"\C-p": fe;'
 bind -x $'"\C-l": clear;'
