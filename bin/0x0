@@ -20,13 +20,13 @@ EOF
 }
 
 clip() {
-    if command -v xclip >/dev/null 2>&1;then
-        echo "$@" | xclip -selection c
-        notify-send "0x0" "Successfully uploaded.\nURL: $@"
-    fi
+    #if command -v xclip >/dev/null 2>&1;then
+        #echo "$@" | xclip -selection c
+        #notify-send "0x0" "Successfully uploaded.\nURL: $@"
+    #fi
     if command -v wl-copy >/dev/null 2>&1;then
         echo "$@" | wl-copy
-        notify-send "0x0" "Successfully uploaded.\nURL: $@"
+        notify-send -t 2000 "0x0" "Successfully uploaded.\nURL: $@"
     fi
 }
 

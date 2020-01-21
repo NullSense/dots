@@ -9,6 +9,8 @@ focus_follows_mouse no
 for_window [class="^.*"] border pixel 1
 default_border pixel 1
 
+output "*" bg ~/Pictures/falcon-9-wallpaper-4k.jpg fill
+
 ######################################################
 # STARTUP EXECUTIONS ################################
 ######################################################
@@ -16,7 +18,7 @@ exec xset -b # Turns off annoying loud beep
 exec --no-startup-id nm-applet
 exec --no-startup-id caffeine
 exec --no-startup-id lollypop
-exec --no-startup-id mako
+exec --no-startup-id mako --default-timeout 10000
 exec --no-startup-id seat * hide_cursor 3
 
 exec --no-startup-id swaymsg 'workspace $ws1; exec firefox'
@@ -91,9 +93,9 @@ bindsym Print exec "grim -g "$(slurp)" - | wl-copy -t image/png"
 bindsym control+Print exec "grim -g "$(slurp)" - | 0x0"
 
 ## Show clipboard contents
-bindsym $mod+Insert exec --no-startup-id showclip
+bindsym $mod+Insert exec --no-startup-id notify-send -t 2000 "$(wl-paste)"
 ## Upload clipboard contents
-bindsym $mod+Shift+Insert exec xclip -o -selection clipboard | 0x0
+bindsym $mod+Shift+Insert exec wl-paste | 0x0
 
 ## Music player
 bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
