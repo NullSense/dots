@@ -90,6 +90,9 @@ fe() {
 zle -N fe
 bindkey "^o" fe
 
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -g "!{.mozilla,*cache*,*Cache*,.node*,.electron*,.local,.steam,.cache,.git,Steam,Music,Videos}" 2> /dev/null'
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 LFCD="~/.config/lf/lfcd.sh"
 if [ -f "$LFCD" ]; then
  source "$LFCD"
@@ -97,9 +100,6 @@ fi
 # Open lf
 source ~/.config/lf/lfcd.sh
 bindkey -s "^\\" 'lfcd\n'
-
-export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -g "!{.mozilla,*cache*,*Cache*,.node*,.electron*,.local,.steam,.cache,.git,Steam,Music,Videos}" 2> /dev/null'
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export LF_ICONS="\
 di=:\

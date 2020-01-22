@@ -138,6 +138,7 @@ if empty($SERVER) " Install these if not on a server
     "Markdown
     Plug 'plasticboy/vim-markdown'
     Plug 'shime/vim-livedown'
+    let g:livedown_autorun = 1
 endif
 
 Plug 'prabirshrestha/async.vim'

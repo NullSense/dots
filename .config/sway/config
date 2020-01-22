@@ -15,7 +15,8 @@ output "*" bg ~/Pictures/falcon-9-wallpaper-4k.jpg fill
 # STARTUP EXECUTIONS ################################
 ######################################################
 exec xset -b # Turns off annoying loud beep
-exec --no-startup-id nm-applet
+exec --no-startup-id 'nm-applet --indicator'
+exec --no-startup-id blueman-applet
 exec --no-startup-id caffeine
 exec --no-startup-id lollypop
 exec --no-startup-id mako --default-timeout 10000
@@ -187,7 +188,7 @@ workspace $ws1 output DP-4
 workspace $ws2 output DP-3
 workspace $ws3 output eDP-1
 
-output eDP-1 scale 1.4
+output eDP-1 scale 2
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
