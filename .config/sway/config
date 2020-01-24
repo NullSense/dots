@@ -90,8 +90,8 @@ bindsym $mod+greater exec swaymsg -t get_outputs | jq '.[] | .name' | sed -n "1p
 bindsym $mod+y exec mpv --ontop --no-border --force-window --autofit=600x380 --geometry=-12-10 $(xclip -o)
 
 ## Screenshots
-bindsym Print exec "grim -g "$(slurp)" - | wl-copy -t image/png"
-bindsym control+Print exec "grim -g "$(slurp)" - | 0x0"
+bindsym Print exec grim -g "$(slurp -d)" - | wl-copy -t image/png && notify-send "Screenshot taken"
+bindsym control+Print exec grim -g "$(slurp -d)" - | 0x0
 
 ## Show clipboard contents
 bindsym $mod+Insert exec --no-startup-id notify-send -t 2000 "$(wl-paste)"
