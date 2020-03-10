@@ -1,12 +1,12 @@
-export PATH=$PATH:$HOME/bin/:$HOME/.npm-global/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.7.0/bin
+export PATH=$PATH:$HOME/bin/:$HOME/.npm-global/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.7.0/bin:$HOME/.pyenv/bin
 export EDITOR=nvim
 export KITTY_ENABLE_WAYLAND=1
-export MOZ_ENABLE_WAYLAND=1
 export QT_QPA_PLATFORM=wayland-egl
 export QT_WAYLAND_FORCE_DPI=physical
 export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
 export SDL_VIDEODRIVER=wayland
 export BEMENU_BACKEND=wayland
+export PYENV_ROOT=$HOME/.pyenv
 
 HISTSIZE=10000
 SAVEHIST=10000
@@ -54,8 +54,12 @@ fi
 zplug load
 
 # Aliases
+alias mysql-mx-stage='mysql -u mpeciukonis -p -h dbc.stage.mx.local -D mxdb'
+alias mysql-mx-live='mysql -u mpeciukonis -p -h dbc.live.mx.local -D mxdb'
 alias vim="nvim"
-alias gs='git status'
+alias gs='git st'
+alias gl="git log master..HEAD --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+alias gri='git rebase -i'
 alias rsync='rsync --info=progress2'
 alias l='ls -CFhN --color=auto --group-directories-first'
 alias ll='ls -alF --color=auto --group-directories-first'
@@ -64,6 +68,7 @@ alias isso='ssh -p 2237 ongo@159.69.195.170 -NL 8082:localhost:8082'
 alias ls="exa"
 alias cat="bat"
 alias find="fd"
+alias pytest="pytest --reuse-db --reruns 0 -n auto"
 
 export EDITOR=nvim
 
@@ -74,13 +79,11 @@ setopt extended_history
 setopt hist_expand
 setopt share_history
 setopt prompt_subst
+setopt correct
 
 zstyle ':completion:*' menu select
 bindkey '^ ' autosuggest-accept
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="bold,underline"
-
-ENABLE_CORRECTION="true"
-ENABLE_WAITING_DOTS="true"
 
 fe() {
     exec < /dev/tty
@@ -258,3 +261,8 @@ ex=:\
 *.xspf=:\
 *.pdf=:\
 "
+
+if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+fi
+source /usr/share/nvm/init-nvm.sh

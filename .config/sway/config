@@ -23,10 +23,10 @@ exec --no-startup-id seat * hide_cursor 3
 
 exec --no-startup-id swaymsg 'workspace $ws1; exec firefox -p Work'
 
-exec --no-startup-id swaymsg 'workspace $ws2; exec kitty'
+exec --no-startup-id swaymsg 'workspace $ws2; exec kitty -d work/mx-backend/src'
 
 exec --no-startup-id swaymsg 'workspace $ws3; exec slack'
-exec --no-startup-id swaymsg 'workspace $ws3; exec kitty ssh nonsensei@purgatory -t tmux attach-session'
+exec --no-startup-id swaymsg 'workspace $ws3; exec kitty ssh nonsensei@116.203.176.179 -t tmux attach-session'
 exec --no-startup-id swaymsg 'workspace $ws3; exec signal-desktop'
 
 exec --no-startup-id swaymsg 'workspace $ws10; exec firefox -p Home'
@@ -40,7 +40,7 @@ exec --no-startup-id spotify
 #
 exec swayidle -w \
          timeout 300 'swaylock -f -c 000000' \
-         timeout 600 'swaymsg "output * dpms off"' \
+         timeout 2600 'swaymsg "output * dpms off"' \
          resume 'swaymsg "output * dpms on"' \
          before-sleep 'swaylock -f -c 000000'
 #
@@ -85,7 +85,7 @@ for_window [class="Mtpaint"] floating enable # Screenshot editor
 ######################################################
 # Dropdown
 ## Dropdown Lollypop
-bindsym $mod+m [class="Spotify"] scratchpad show
+bindsym $mod+m [class="Spotify"] scratchpad show, fullscreen enable
 
 ## Dropdown terminal
 bindsym $mod+u [title="dropdown_term"] scratchpad show, move position center, resize set 1280 720
@@ -192,12 +192,12 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 
 # Set workspace outputs (monitors)
-workspace $ws1 output DP-4
-workspace $ws10 output DP-4
+workspace $ws1 output DP-5
+workspace $ws10 output DP-5
 workspace $ws2 output DP-3
-workspace $ws3 output eDP-1
+workspace $ws3 output DP-4
 
-output eDP-1 scale 1.3
+output eDP-1 scale 1
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
