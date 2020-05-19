@@ -45,7 +45,7 @@ upload() {
 }
 
 notify() {
-    dunstify -r 2500 -i "$icon" "$title" "$body"
+    notify-send -r 2500 -i "$icon" "$title" "$body"
 }
 
 cleanup() {
@@ -73,10 +73,10 @@ case "$mode" in
     "screenshot" )
 	file=$(mktemp /tmp/screenshot-XXXXXXXXXX.png)
 	if [ -z "$hide_cursor" ]; then
-	    hide_cursor="$(printf "Yes\nNo" | dmenu -lines 2 -p "Hide cursor?")"
+	    hide_cursor="$(printf "Yes\nNo" | bemenu -lines 2 -p "Hide cursor?")"
 	    case $? in
 		1)
-		    body="Error: dmenu"
+		    body="Error: bemenu"
 		    error
 		    exit 1
 		    ;;
@@ -101,8 +101,8 @@ case "$mode" in
 	esac
 
 	if [[ -f $file ]]; then
-	    dmenu_exit=$(echo -e "Yes\nNo\nCancel" | dmenu -p "Do you need to obscure anything?")
-	    case $dmenu_exit in
+	    bemenu_exit=$(echo -e "Yes\nNo\nCancel" | bemenu -p "Do you need to obscure anything?")
+	    case $bemenu_exit in
 		"Yes" )
 		    mtpaint "$file"
 		    gimp_exit=$?
@@ -120,21 +120,21 @@ case "$mode" in
 		    exit 0
 		    ;;
 		* )
-		    body="Error: dmenu"
+		    body="Error: bemenu"
 		    error
 		    exit 1
 		    ;;
 	    esac
 	    if [ "$local" = true ]; then
             echo "$file" | xclip -selection clipboard -t image/png -i "$file";
-                        dunstify -r 2500 -i "$icon"		\
+                        notify-send -r 2500 -i "$icon"		\
                  "$title"			\
                  "$(printf "Screenshot successfully stored locally.\nPATH: %s" "$file")"
 	    else
             output=$(upload)
             url=$(echo "${output##*$'\n'}")
             echo "$url" | xclip -sel c;
-            dunstify -r 2500 -i "$icon"		\
+            notify-send -r 2500 -i "$icon"		\
                  "$title"			\
                  "$(printf "Screenshot successfully uploaded.\nURL: %s" "$url")"
 	    fi
@@ -147,7 +147,7 @@ case "$mode" in
 	if [ "$local" = true ]; then
         video_capture
 	    echo "$file" | xclip -sel c;
-		dunstify -r 2500 -i "$icon"		\
+		notify-send -r 2500 -i "$icon"		\
 			 "$title"			\
 			 "$(printf "Video successfully stored locally.\nPATH: %s" "$file")"
 	else
@@ -156,7 +156,7 @@ case "$mode" in
 	    output=$(upload)
 	    url="$(echo "${output##*$'\n'}")"
 	    echo "$url" | xclip -sel c;
-		dunstify -r 2500 -i "$icon"		\
+		notify-send -r 2500 -i "$icon"		\
 			 "$title"			\
 			 "$(printf "Video successfully uploaded.\nURL: %s" "$url")"
 	fi

@@ -75,7 +75,16 @@ map i $~/.config/lf/pv.sh $f | less -R
 # use enter for shell commands
 map <enter> shell
 
-map <c-o> $lf -remote "send $id select '$(fzf)'"
+cmd fzf_jump ${{
+   res="$(fzf --header='Jump to location')"
+   if [ -f "$res" ]; then
+     cmd="select"
+   elif [ -d "$res" ]; then
+     cmd="cd"
+   fi
+lf -remote "send $id $cmd \"$res\""
+}}
+map <c-p> :fzf_jump
 
 # mkdir command
 cmd mkdir %mkdir "$(echo $* | tr ' ' '\ ')"

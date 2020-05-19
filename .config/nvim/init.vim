@@ -47,12 +47,6 @@ nnoremap <M-d> :bp\|bd #<CR>
 nnoremap <Leader>j ddp
 nnoremap <Leader>k ddkP
 
-" Search and replace occurences of word under cursor
-"nnoremap <leader>r :%s/\V<c-r>=escape(expand('<cword>'), '\/')<cr>//g<left><left>
-
-" Auto expand braces
-"inoremap {<CR> {<C-o>o}<C-o>O
-
 "Indentation
 set autoindent
 set smartindent
@@ -64,6 +58,7 @@ set smarttab
 filetype plugin indent on
 
 "Vim general
+highlight Comment cterm=italic
 let g:gruvbox_italic=1
 let g:gruvbox_bold=1
 set tags=tags
@@ -76,6 +71,7 @@ set shortmess+=c
 " always show signcolumns
 set signcolumn=yes
 set autoread "reload file on change on disk
+au CursorHold * checktime
 set mouse=a
 set encoding=utf-8 "windows specific rendering option
 set undofile "persistent undo
@@ -113,20 +109,35 @@ if empty($SERVER) " Install these if not on a server
     endfunction
 
     autocmd User FloatPreviewWinOpen call DisableExtras()
-    "set completeopt=menuone,preview,longest
     set completeopt-=preview
 
     let g:python3_host_prog = '/usr/bin/python3'
     let g:python2_host_prog = '/usr/bin/python2'
     Plug 'tpope/vim-repeat'
+    Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+    Plug 'pangloss/vim-javascript'
     Plug 'sheerun/vim-polyglot'
     Plug 'junegunn/fzf.vim'
-    "Snippets
+    Plug 'tpope/vim-fugitive'
+    let g:fzf_colors =
+                \ { 'fg':      ['fg', 'Normal'],
+                \ 'bg':      ['bg', 'Normal'],
+                \ 'hl':      ['fg', 'Comment'],
+                \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+                \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+                \ 'hl+':     ['fg', 'Keyword'],
+                \ 'info':    ['fg', 'PreProc'],
+                \ 'border':  ['fg', 'Ignore'],
+                \ 'prompt':  ['fg', 'Conditional'],
+                \ 'pointer': ['fg', 'Exception'],
+                \ 'marker':  ['fg', 'Keyword'],
+                \ 'spinner': ['fg', 'Label'],
+                \ 'header':  ['fg', 'Comment'] }
     let g:fzf_action = {
                 \ 'ctrl-h': 'split',
                 \ 'ctrl-v': 'vsplit'
                 \ }
-    nnoremap <c-o> :FZF<cr>
+    nnoremap <c-p> :FZF<cr>
     nnoremap <leader>l :Rg<cr>
     Plug 'SirVer/ultisnips'
     let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips', 'UltiSnips']
@@ -135,24 +146,35 @@ if empty($SERVER) " Install these if not on a server
     let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
     Plug 'honza/vim-snippets'
     Plug 'airblade/vim-gitgutter'
+    let g:gitgutter_git_args = '--git-dir="$HOME/.config/yadm/repo.git"'
+
     "Markdown
     Plug 'plasticboy/vim-markdown'
     Plug 'shime/vim-livedown'
     let g:livedown_autorun = 1
 endif
 
+Plug 'tmhedberg/SimpylFold'
 Plug 'prabirshrestha/async.vim'
-"Editorconfig
 Plug 'editorconfig/editorconfig-vim'
-Plug 'ap/vim-buftabline'
-"Formatting
 Plug 'scrooloose/nerdcommenter'
+Plug 'luochen1990/rainbow'
+let g:rainbow_active = 1
 Plug 'tpope/vim-surround'
-"Looks
 Plug 'morhetz/gruvbox'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'majutsushi/tagbar'
 Plug 'airblade/vim-rooter'
+Plug 'vim-airline/vim-airline'
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#hunks#non_zero_only = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+
+let g:airline_extensions = ['hunks', 'tabline', 'coc']
+
+let g:airline_section_x = ''
+let g:airline_section_y = ''
+set statusline^=%{coc#status()}
 call plug#end()
 
 nmap <C-m> :TagbarToggle<CR>
@@ -224,7 +246,11 @@ nmap <silent> <TAB> <Plug>(coc-range-select)
 xmap <silent> <TAB> <Plug>(coc-range-select)
 
 "Theming
-set termguicolors "sets to true colors
+if exists('+termguicolors')
+  let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
 let &t_ut=''
 let g:gruvbox_contrast_dark='soft'
 colorscheme gruvbox

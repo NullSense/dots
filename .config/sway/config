@@ -1,56 +1,57 @@
-######################################################
-# Basic Definitions ##################################
-######################################################
-font pango:Hack 8 # for window titles
+##########################################################################################################################################
+# Definitions ############################################################################################################################
+##########################################################################################################################################
+
+font pango:Hack Nerd Font 6 # for window titles
 set $mod Mod4
-set $term kitty
-set $menu bemenu-run
+set $term alacritty
 focus_follows_mouse no
 for_window [class="^.*"] border pixel 1
 default_border pixel 1
+default_floating_border normal
+hide_edge_borders smart
 
-output "*" bg ~/Pictures/falcon-9-wallpaper-4k.jpg fill
+# wallpaper
+output "*" bg ~/Nextcloud/Pictures/Wallpapers/falcon-9-wallpaper-4k.jpg fill
 
-######################################################
-# STARTUP EXECUTIONS ################################
-######################################################
+##########################################################################################################################################
+# Startup ################################################################################################################################
+##########################################################################################################################################
+
 exec xset -b # Turns off annoying loud beep
-exec --no-startup-id 'nm-applet --indicator'
-exec --no-startup-id blueman-applet
-exec --no-startup-id caffeine
-exec --no-startup-id mako --default-timeout 10000
-exec --no-startup-id seat * hide_cursor 3
+exec 'nm-applet --indicator'
+exec blueman-applet
+exec mako --margin 16 --padding 8 --border-color "#ebdbb2" --text-color "#ebdbb2" --background-color "#32302f" --border-size 4 --default-timeout 10000 # notification daemon
+exec seat * hide_cursor 3
+exec spotify
+exec $term --title 'dropdown_term'
 
-exec --no-startup-id swaymsg 'workspace $ws1; exec firefox -p Work'
+exec swaymsg 'workspace $ws1; exec firefox -p Work'
+exec swaymsg 'workspace $ws10; exec firefox -p Home'
 
-exec --no-startup-id swaymsg 'workspace $ws2; exec kitty -d work/mx-backend/src'
+exec swaymsg 'workspace $ws2; exec $term'
 
-exec --no-startup-id swaymsg 'workspace $ws3; exec slack'
-exec --no-startup-id swaymsg 'workspace $ws3; exec kitty ssh nonsensei@116.203.176.179 -t tmux attach-session'
-exec --no-startup-id swaymsg 'workspace $ws3; exec signal-desktop'
-
-exec --no-startup-id swaymsg 'workspace $ws10; exec firefox -p Home'
-
-for_window [workspace=$ws3] layout tabbed
-## Scratchpads
-exec --no-startup-id kitty --title dropdown_term -o font_size=10
-exec --no-startup-id spotify
+exec swaymsg 'workspace $ws3; exec slack'
+exec swaymsg 'workspace $ws3; exec $term -e ssh -D 1337 nonsensei@116.203.176.179 -t tmux attach-session'
+exec swaymsg 'workspace $ws3; exec signal-desktop'
+exec swaymsg 'workspace $ws3; exec firefox -p WhatsApp'
 
 ### Idle configuration
-#
 exec swayidle -w \
          timeout 300 'swaylock -f -c 000000' \
          timeout 2600 'swaymsg "output * dpms off"' \
          resume 'swaymsg "output * dpms on"' \
          before-sleep 'swaylock -f -c 000000'
-#
+
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
 
 
-# Define names for default workspaces for which we configure key bindings later on.
-# We use variables to avoid repeating the names in multiple places.
+##########################################################################################################################################
+# Workspaces #############################################################################################################################
+##########################################################################################################################################
+
 set $ws1 "01 "
 set $ws2 "02 "
 set $ws3 "03 "
@@ -62,43 +63,50 @@ set $ws8 "08 "
 set $ws9 "09 "
 set $ws10 "10 "
 
-######################################################
-# Windows ############################################
-######################################################
+##########################################################################################################################################
+# Windows ################################################################################################################################
+##########################################################################################################################################
+
 ## Dropdown
 for_window [title="dropdown_term"] move scratchpad, border pixel 3, resize set 400 400
 for_window [class="Spotify"] move scratchpad, fullscreen enable
-
-## Dropdown specific
-for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.py -r 30 -p top right
+for_window [class="mpv"] floating enable, sticky enable
+for_window [app_id="^sway-launcher-desktop$"] floating enable, border pixel 5, resize set width 30 ppt height 30 ppt
+#for_window [app_id="^screenshot-launcher$"] floating enable, border pixel 5, resize set width 10 ppt height 10 ppt
 
 ## Problematic windows
-for_window [app_id="pavucontrol"] floating enable
+for_window [app_id="pavucontrol"] floating enable, resize set 1280 720
 for_window [class="Signal"] move container to workspace $ws3
 for_window [class="Slack"] move container to workspace $ws3
-#for_window [window_role="GtkFileChooserDialog"] resize set 1780 920
-#for_window [window_role="GtkFileChooserDialog"] move position center
-for_window [class="Mtpaint"] floating enable # Screenshot editor
+for_window [class="Discord"] move container to workspace $ws3
+for_window [title="WhatsApp - Mozilla Firefox"] move container to workspace $ws3
+for_window [class="Navigator"] move position center, resize set 1080 720
 
-######################################################
-# Bindings ###########################################
-######################################################
-# Dropdown
-## Dropdown Lollypop
+##########################################################################################################################################
+# Bindings ###############################################################################################################################
+##########################################################################################################################################
+
+# start a terminal
+bindsym $mod+Return exec $term
+
+## Notifications
+bindsym Control+Shift+Space exec makoctl dismiss --all
+
+## Dropdown Spotify
 bindsym $mod+m [class="Spotify"] scratchpad show, fullscreen enable
 
 ## Dropdown terminal
 bindsym $mod+u [title="dropdown_term"] scratchpad show, move position center, resize set 1280 720
 
-## Move focused workspace between monitors
-bindsym $mod+less exec swaymsg -t get_outputs | jq '.[] | .name' | sed -n "1p;/`swaymsg -t get_outputs | jq '.[] | select(.focused==true) | .name'`/{n;p;}" | tail -n1 | xargs swaymsg move workspace to
-bindsym $mod+greater exec swaymsg -t get_outputs | jq '.[] | .name' | sed -n "1p;/`swaymsg -t get_outputs | jq '.[] | select(.focused==true) | .name'`/{n;p;}" | tac | tail -n1 | xargs swaymsg move workspace to
+# launcher
+bindsym $mod+d exec $term --class 'sway-launcher-desktop' -e bash -c '~/Programming/sway-launcher-desktop/sway-launcher-desktop.sh'
 
 # Open link in mpv
-bindsym $mod+y exec mpv --ontop --no-border --force-window --autofit=600x380 --geometry=-12-10 $(xclip -o)
+#bindsym $mod+y exec mpv --ontop --no-border --force-window --autofit=600x380 --geometry=-12-10 $(xclip -o)
 
 ## Screenshots
 bindsym Print exec grim -g "$(slurp -d)" - | wl-copy -t image/png && notify-send "Screenshot taken"
+#bindsym Print exec $term --class 'screenshot-launcher' -e bash -c '~/shot'
 bindsym control+Print exec grim -g "$(slurp -d)" - | 0x0
 
 ## Show clipboard contents
@@ -107,38 +115,33 @@ bindsym $mod+Insert exec --no-startup-id notify-send -t 2000 "$(wl-paste)"
 bindsym $mod+Shift+Insert exec wl-paste | 0x0
 
 ## Music player
-bindsym $mod+p exec "playerctl play-pause && pkill -RTMIN+8 i3blocks"
+bindsym $mod+p exec "playerctl play-pause"
 
-## Mpv pause
-#bindsym $mod+m exec xdotool key --window "$(xdotool search --class mpv)" p
+##########################################################################################################################################
+# SYSTEM BINDS############################################################################################################################
+##########################################################################################################################################
 
-##############################
-# SYSTEM BINDS################
-##############################
 # Volume
 ## Increase volume
-bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume @DEFAULT_SINK@ +1000 && pkill -RTMIN+10 i3blocks"
-## Decrease volume
-bindsym XF86AudioLowerVolume exec "pactl set-sink-volume @DEFAULT_SINK@ -1000 && pkill -RTMIN+10 i3blocks"
-## Mute volume
-bindsym XF86AudioMute exec "pactl set-sink-mute @DEFAULT_SINK@ toggle && pkill -RTMIN+10 i3blocks"
+bindsym XF86AudioRaiseVolume exec amixer -D pulse sset Master 5%+
+bindsym XF86AudioLowerVolume exec amixer -D pulse sset Master 5%-
+bindsym XF86AudioMute exec amixer -D pulse set Master 1+ toggle && amixer get Master | grep '\[off\]' && notify-send "Audio Muted" || notify-send "Audio On"
+bindsym XF86AudioMicMute exec amixer set Capture toggle && amixer get Capture | grep '\[off\]' && notify-send "Mic Muted" || notify-send "Mic On"
 
 # Backlight
-## Increase backlight
-bindsym XF86MonBrightnessUp exec "sudo light -A 5"
-## Decrease backlight
-bindsym XF86MonBrightnessDown exec "sudo light -U 5"
+bindsym XF86MonBrightnessUp exec sudo light -A 5
+bindsym XF86MonBrightnessDown exec sudo light -U 5
 
 # Shutdown, reboot, lock screen
 set $Locker exec lock.sh && sleep 1
 
 set $mode_system System (l) lock, (e) logout, (s) suspend, (r) reboot, (Shift+s) shutdown
 mode "$mode_system" {
-    bindsym l exec --no-startup-id exec swaylock, mode "default"
-    bindsym e exec --no-startup-id swaymsg exit, mode "default"
-    bindsym s exec --no-startup-id suspend, mode "default"
-    bindsym r exec --no-startup-id reboot, mode "default"
-    bindsym Shift+s exec --no-startup-id sudo systemctl poweroff -i, mode "default"
+    bindsym l exec exec swaylock, mode "default"
+    bindsym e exec swaymsg exit, mode "default"
+    bindsym s exec systemctl suspend, mode "default"
+    bindsym r exec reboot, mode "default"
+    bindsym Shift+s exec sudo systemctl poweroff -i, mode "default"
 
     # back to normal: Enter or Escape
     bindsym Return mode "default"
@@ -150,14 +153,8 @@ bindsym control+Delete mode "$mode_system"
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# start a terminal
-bindsym $mod+Return exec kitty
-
 # kill focused window
 bindsym $mod+Shift+q kill
-
-# Start rofi
-bindsym $mod+d exec dmenu_path | $menu $menu_args | xargs swaymsg exec
 
 # change focus
 bindsym $mod+h focus left
@@ -191,13 +188,23 @@ bindsym $mod+space focus mode_toggle
 # focus the parent container
 bindsym $mod+a focus parent
 
-# Set workspace outputs (monitors)
-workspace $ws1 output DP-5
-workspace $ws10 output DP-5
-workspace $ws2 output DP-3
-workspace $ws3 output DP-4
+##########################################################################################################################################
+# Workspaces & Monitors####################################################################################################################
+##########################################################################################################################################
 
-output eDP-1 scale 1
+## Move focused workspace between monitors
+bindsym $mod+less exec swaymsg move workspace to output left
+bindsym $mod+greater exec swaymsg move workspace to output right
+
+# Set workspace outputs (monitors)
+workspace $ws1 output DP-4
+workspace $ws10 output DP-4
+workspace $ws2 output DP-4
+workspace $ws3 output eDP-1
+
+output eDP-1 scale 1 pos 0 60
+output DP-4 pos 1920 0
+focus output DP-4
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -248,18 +255,32 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# set primary gruvbox colorscheme colors
-set $bg #282828
-set $red #cc241d
-set $green #98971a
-set $yellow #d79921
-set $blue #458588
-set $purple #b16286
-set $aqua #689d68
-set $gray #a89984
-set $darkgray #1d2021
-set $orange #d65d0e
+##########################################################################################################################################
+# Bar & Colors ###########################################################################################################################
+##########################################################################################################################################
 
+
+# bg
+set $bgd        #282828
+set $bgs        #32302f
+set $bg1        #3c3836
+set $bg2        #504945
+set $bg3        #665c54
+# fg
+set $fg3        #bdae93
+set $fg2        #d5c4a1
+set $fg1        #ebdbb2
+set $fg0        #fbf1c7
+# colors
+set $red        #cc241d
+set $green      #b8bb26
+set $yellow     #fabd2f
+set $blue       #83a598
+set $purple     #d3869b
+set $aqua       #83c07c
+set $orange     #d65d0e
+
+# set primary gruvbox colorscheme colors
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
@@ -267,9 +288,8 @@ bar {
         font pango:Hack Nerd Font 6
 }
 
-# class border|backgr|text|indicator|child_border
-#client.focused $blue $blue #1d1f21 #282a2e
-#client.focused_inactive #373b41 #373b41 #969896 #282a2e
-#client.unfocused #282a2e #282a2e #969896 #282a2e
-#client.urgent #373b41 $red #ffffff $red
-#
+# class border          |border |backgr |text   |indicator  |child_border
+client.focused          $blue   $blue   $bgs    $orange     $blue
+client.focused_inactive $bg2    $bg2    $fg3    $fg3        $bg2
+client.unfocused        $bg2    $bgd    $fg3    $bg3        $bg2
+client.urgent           $red    $red    $bgs    $red        $red
