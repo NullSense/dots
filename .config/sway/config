@@ -32,7 +32,6 @@ exec swaymsg 'workspace $ws10; exec firefox -p Home'
 exec swaymsg 'workspace $ws2; exec $term'
 
 exec swaymsg 'workspace $ws3; exec slack'
-exec swaymsg 'workspace $ws3; exec $term -e ssh -D 1337 nonsensei@116.203.176.179 -t tmux attach-session'
 exec swaymsg 'workspace $ws3; exec signal-desktop'
 exec swaymsg 'workspace $ws3; exec firefox -p WhatsApp'
 
@@ -105,9 +104,9 @@ bindsym $mod+d exec $term --class 'sway-launcher-desktop' -e bash -c '~/Programm
 #bindsym $mod+y exec mpv --ontop --no-border --force-window --autofit=600x380 --geometry=-12-10 $(xclip -o)
 
 ## Screenshots
-bindsym Print exec grim -g "$(slurp -d)" - | wl-copy -t image/png && notify-send "Screenshot taken"
+bindsym Print exec grimshot --notify copy window
 #bindsym Print exec $term --class 'screenshot-launcher' -e bash -c '~/shot'
-bindsym control+Print exec grim -g "$(slurp -d)" - | 0x0
+bindsym control+Print exec grimshot --notify copy window && wl-paste | 0x0
 
 ## Show clipboard contents
 bindsym $mod+Insert exec --no-startup-id notify-send -t 2000 "$(wl-paste)"

@@ -70,7 +70,7 @@ alias rsync='rsync --info=progress2'
 alias l='ls -Fh --color=auto --group-directories-first'
 alias ll='ls -alF --color=auto --group-directories-first'
 alias dropdown='kitty -T dropdown_term &'
-alias isso='ssh -p 2237 ongo@159.69.195.170 -NL 8082:localhost:8082'
+alias isso='ssh irc -NL 8080:localhost:808'
 alias ls="exa"
 alias cat="bat"
 alias find="fd"
