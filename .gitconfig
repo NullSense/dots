@@ -1,12 +1,12 @@
 [user]
-    email = matas.peciukonis@momox.biz
-    name = Matas Peciukonis
+    email = matas234@gmail.com
+    name = NullSense
 [credential]
     helper = cache --timeout=3600
-[commit]
-    verbose = true
 [core]
     excludesfile = /home/ongo/.gitignore
     pager = delta --dark
 [rebase]
     autosquash = true
+[commit]
+    verbose = true

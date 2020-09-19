@@ -1,6 +1,6 @@
 "move through wrapped text easier
-nmap j gj
-nmap k gk
+"nmap j gj
+"nmap k gk
 
 "so I don't need to source every time
 autocmd BufWritePost .vimrc source %
@@ -101,6 +101,48 @@ endif
 call plug#begin()
 if empty($SERVER) " Install these if not on a server
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+    Plug 'liuchengxu/vista.vim'
+
+    "let g:semshi#simplify_markup = v:true
+
+    function MyCustomHighlights()
+        "hi semshiLocal           ctermfg=209 guifg=#ff875f
+        hi semshiLocal           ctermfg=209 guifg=#fe8019
+
+        "hi semshiGlobal          ctermfg=214 guifg=#ffaf00
+        "hi semshiImported        ctermfg=214 guifg=#ffaf00 cterm=bold gui=bold
+        hi semshiGlobal          ctermfg=214 guifg=#fabd2f
+        hi semshiImported        ctermfg=214 guifg=#d79921 cterm=bold gui=bold
+         " This one? ^
+
+        "hi semshiParameter       ctermfg=75  guifg=#5fafff
+        hi semshiParameter       ctermfg=75  guifg=#458588
+
+        "hi semshiParameterUnused ctermfg=117 guifg=#87d7ff cterm=underline gui=underline
+        hi semshiParameterUnused ctermfg=117 guifg=#83a598 cterm=underline gui=underline
+
+        "hi semshiFree            ctermfg=218 guifg=#ffafd7
+        hi semshiFree            ctermfg=218 guifg=#b16286
+
+        "i semshiBuiltin         ctermfg=207 guifg=#ff5fff
+        hi semshiBuiltin         ctermfg=207 guifg=#d3869b
+
+        "hi semshiAttribute       ctermfg=49  guifg=#00ffaf
+        hi semshiAttribute       ctermfg=49  guifg=#689d6a
+
+        hi semshiSelf            ctermfg=249 guifg=#b2b2b2
+        "hi semshiUnresolved      ctermfg=226 guifg=#ffff00 cterm=underline gui=underline
+        hi semshiUnresolved      ctermfg=226 guifg=#fabd2f cterm=underline gui=underline
+
+        "hi semshiSelected        ctermfg=231 guifg=#ffffff ctermbg=161 guibg=#d7005f
+        hi semshiSelected        ctermfg=231 guifg=#ebdbb2 ctermbg=161 guibg=#d3869b
+
+        hi semshiErrorSign       ctermfg=231 guifg=#ebdbb2 ctermbg=160 guibg=#cc241d
+        hi semshiErrorChar       ctermfg=231 guifg=#ebdbb2 ctermbg=160 guibg=#cc241d
+        sign define semshiError text=E> texthl=semshiErrorSign
+    endfunction
+    autocmd FileType python call MyCustomHighlights()
 
     function! DisableExtras()
         call nvim_win_set_option(g:float_preview#win, 'number', v:false)
@@ -146,11 +188,11 @@ if empty($SERVER) " Install these if not on a server
     let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
     Plug 'honza/vim-snippets'
     Plug 'airblade/vim-gitgutter'
-    let g:gitgutter_git_args = '--git-dir="$HOME/.config/yadm/repo.git"'
+    "let g:gitgutter_git_args = '--git-dir="$HOME/.config/.yadm/repo.git"'
 
     "Markdown
     Plug 'plasticboy/vim-markdown'
-    Plug 'shime/vim-livedown'
+    Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
     let g:livedown_autorun = 1
 endif
 
@@ -169,23 +211,27 @@ Plug 'vim-airline/vim-airline'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#hunks#non_zero_only = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#vista#enabled = 1
+let g:airline#extensions#coc#enabled = 0
+let g:airline#extensions#branch#format = 1
+ let g:airline#extensions#branch#displayed_head_limit = 8
+let g:airline_extensions = ['hunks', 'branch', 'tabline', 'coc']
 
-let g:airline_extensions = ['hunks', 'tabline', 'coc']
-
-let g:airline_section_x = ''
+"let g:airline_section_x = ''
 let g:airline_section_y = ''
+
 set statusline^=%{coc#status()}
 call plug#end()
 
-nmap <C-m> :TagbarToggle<CR>
-
+"nmap <C-m> :TagbarToggle<CR>
+nmap <C-m> :Vista!!<CR>
 
 "Plugin settings
 set updatetime=100 " gitgutter
 
 "CoC
 autocmd CursorHold * silent call CocActionAsync('highlight')
-nmap <C-n> :CocCommand explorer<CR>
+nmap <C-n> :CocCommand explorer --toggle --position=floating --floating-position=left-center --floating-width=60<CR>
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
