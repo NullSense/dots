@@ -1,0 +1,28 @@
+[Desktop Entry]
+Name=Firefox
+GenericName=Web Browser
+Comment=Firefox Web Browser
+Exec=/usr/bin/firefox %u
+StartupNotify=true
+Terminal=false
+Icon=firefox
+Type=Application
+Categories=Network;WebBrowser;
+MimeType=application/pdf;application/rdf+xml;application/rss+xml;application/xhtml+xml;application/xhtml_xml;application/xml;image/gif;image/jpeg;image/png;image/webp;text/html;text/xml;x-scheme-handler/ftp;x-scheme-handler/http;x-scheme-handler/https;
+Actions=home;work;whatsapp
+
+[Desktop Action home]
+Name=Firefox Home
+Exec=firefox -P Home --no-remote %u
+Icon=firefox
+
+
+[Desktop Action work]
+Name=Firefox Work
+Exec=firefox -P Work --no-remote %u
+Icon=firefox
+
+[Desktop Action whatsapp]
+Name=Firefox WhatsApp
+Exec=firefox -P WhatsApp --no-remote %u
+Icon=firefox
