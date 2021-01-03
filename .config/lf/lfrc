@@ -1,5 +1,5 @@
 # interpreter for shell commands (needs to be POSIX compatible)
-set shell sh
+set shell zsh
 
 # set '-eu' options for shell commands
 # These options are used to have safer shell commands. Option '-e' is used to
@@ -8,7 +8,8 @@ set shell sh
 # $fx variables contain names with '*' or '?' characters. However, this option
 # is used selectively within individual commands as it can be limiting at
 # times.
-set shellopts '-eu'
+#set shellopts '-eu'
+set shellopts '-e:--shwordsplit'
 
 # set internal field separator (IFS) to "\n" for shell commands
 # This is useful to automatically split file names in $fs and $fx properly
@@ -72,6 +73,9 @@ set incsearch on
 set previewer ~/.config/lf/pv.sh
 map i $~/.config/lf/pv.sh $f | less -R
 
+# Image preview
+#map - $~/.config/lf/draw_img.sh $f
+
 # use enter for shell commands
 map <enter> shell
 
@@ -131,9 +135,18 @@ cmd open ${{
 }}
 
 
+map r ${{
+# get 'basename' of the selection
+filename="${f##*/}"
+# quote it so we won't deal with quotes in the lf -remote command
+  filename="$(printf '%q' "$filename")"
+    filename="${filename// /<space>}"
+    lf -remote "send $id push :rename<space>$filename<a-b><c-b>"
+}}
+
 # rename current file without overwrite
-cmd rename %[ -e $1 ] && printf "file exists" || mv $f $1
-map r push :rename<space>
+#cmd rename %[ -e $1 ] && printf "file exists" || mv $f $1
+
 
 # make sure trash folder exists
 %mkdir -p ~/.trash

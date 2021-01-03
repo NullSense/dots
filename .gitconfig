@@ -1,12 +1,10 @@
-[user]
-    email = matas234@gmail.com
-    name = NullSense
 [credential]
-    helper = cache --timeout=3600
+	helper = cache --timeout=3600
 [core]
-    excludesfile = /home/ongo/.gitignore
-    pager = delta --dark
+	excludesfile = /home/ongo/.gitignore
+	pager = delta --dark
 [rebase]
-    autosquash = true
+	autosquash = true
 [commit]
-    verbose = true
+	verbose = true
+	gpgsign = true

@@ -1,11 +1,11 @@
-export PATH=$PATH:$HOME/bin/:$HOME/.npm-global/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.7.0/bin:$HOME/.pyenv/bin
-export XDG_CURRENT_DESKTOP=Unity
+export PATH=$PATH:$HOME/bin/:$HOME/.npm-global/bin:$HOME/.cargo/bin:$HOME/.gem/ruby/2.7.0/bin:$HOME/.pyenv/bin:$HOME/.poetry/bin
+export XDG_CURRENT_DESKTOP=sway
+export XDG_SESSION_TYPE=wayland
 export EDITOR=nvim
 export MOZ_ENABLE_WAYLAND=1
 export QT_QPA_PLATFORM=wayland-egl
 export QT_WAYLAND_FORCE_DPI=physical
 export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-export BEMENU_BACKEND=wayland
 #export SDL_VIDEODRIVER=x11
 export PYENV_ROOT=$HOME/.pyenv
 export QT_DEBUG_PLUGINS=1
@@ -34,7 +34,6 @@ zplug 'zdharma/fast-syntax-highlighting', \
 zplug "b4b4r07/zsh-vimode-visual", defer:3
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-completions"
-zplug "plugins/cargo", from:oh-my-zsh
 zplug "plugins/fzf", from:oh-my-zsh
 zplug "MichaelAquilina/zsh-you-should-use"
 zplug "wfxr/forgit"
@@ -55,22 +54,33 @@ fi
 zplug load
 
 # Aliases
-alias mysql-mx-stage='mysql -u mpeciukonis -p -h dbc.stage.mx.local -D mxdb'
-alias mysql-mx-live='mysql -u mpeciukonis -p -h dbc.live.mx.local -D mxdb'
+# Pacman
+# search through all available packages, install selected
+alias pss="pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
+# List all your installed packages, and then remove selected packages:
+alias pqs="pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
+
 alias vim="nvim"
+# Docker
+alias dcu="docker-compose up"
+alias dcd="docker-compose down"
+alias dcr="docker-compose restart"
 
 # git aliases
 alias gs='git st'
 alias gcp='git cherry-pick'
-alias gl="git log master..HEAD --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
-alias gll="git log master --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+alias gl="git log master..HEAD --graph --pretty=format:'%Cred%h%Creset %Cgreen(%<(10,trunc)%cr) %C(bold blue)%<(16,trunc)<%an>%Creset %s %C(yellow)%d%Creset' --abbrev-commit --date=relative"
+alias gll="git log master --graph --pretty=format:'%Cred%h%Creset %Cgreen(%<(10,trunc)%cr) %C(bold blue)%<(16,trunc)<%an>%Creset %s %C(yellow)%d%Creset' --abbrev-commit --date=relative"
 alias gri='git rebase -i'
+alias grc='git rebase --continue'
+alias grm="git rebase master"
+alias gc="git checkout"
 
 alias rsync='rsync --info=progress2'
 alias l='ls -Fh --color=auto --group-directories-first'
 alias ll='ls -alF --color=auto --group-directories-first'
-alias dropdown='kitty -T dropdown_term &'
-alias isso='ssh irc -NL 8080:localhost:808'
+alias dropdown='nohup alacritty -t dropdown_term > /dev/null 2>&1 &|'
+alias isso='ssh irc -NLvv 8080:localhost:8080'
 alias ls="exa"
 alias cat="bat"
 alias find="fd"
@@ -91,21 +101,38 @@ zstyle ':completion:*' menu select
 bindkey '^ ' autosuggest-accept
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="bold,underline"
 
+# fkill - kill processes - list only the ones you can kill. Modified the earlier script.
+fkill() {
+  local pid
+  if [ "$UID" != "0" ]; then
+    pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
+  else
+    pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+  fi
+
+  if [ "x$pid" != "x" ]
+  then
+    echo $pid | xargs kill -${1:-9}
+  fi
+}
+
+# open file in vim with preview
 fe() (
   exec < /dev/tty
-  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  IFS=$'\n' files=($(fzf --preview 'bat --style=numbers --color=always --line-range :30 {}' --query="$1" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && ${EDITOR:-nvim} "${files[@]}"
 )
 zle -N fe
 bindkey "^p" fe
 
-export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -g "!{.mozilla,*cache*,*Cache*,.node*,.electron*,.local,.steam,.cache,.git,Steam,Music,Videos}" 2> /dev/null'
+export FZF_DEFAULT_COMMAND='rg --column --line-number --no-heading --smart-case --files --hidden --follow -g "!{.mozilla,.wine,*cache*,*Cache*,.node*,.electron*,.local,.steam,.cache,.git,Steam,Music,Videos,.vscode*,.gradle,.nvm,.zplug,.forgit,.cargo,.m2,.pyenv}" 2> /dev/null'
 # fzf colors
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
- --color=fg:#ebdbb2,bg:#32302f,hl:#928374
- --color=fg+:#ebdbb2,bg+:#3c3836,hl+:#fb4934
- --color=info:#8ec07c,prompt:#fb4934,pointer:#fb4934
- --color=marker:#fb4934,spinner:#fb4934,header:#928374'
+--border
+--color='fg:#ebdbb2,bg:#32302f,hl:#928374'
+--color='fg+:#ebdbb2,bg+:#3c3836,hl+:#fb4934'
+--color='info:#8ec07c,prompt:#fb4934,pointer:#fb4934'
+--color='marker:#fb4934,spinner:#fb4934,header:#928374''
 
 export FZF_ALT_C_OPTS="--header='Jump to directory' --preview 'tree -C {} | head -200'"
 export FZF_CTRL_R_OPTS="--header='Run command from history' --sort --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
@@ -113,11 +140,22 @@ export FZF_CTRL_R_OPTS="--header='Run command from history' --sort --preview 'ec
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 gcb() {
-  local branches branch
-  branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
-  branch=$(echo "$branches" |
-           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
-  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+  local tags branches target
+  branches=$(
+    git --no-pager branch --all \
+      --format="%(if)%(HEAD)%(then)%(else)%(if:equals=HEAD)%(refname:strip=3)%(then)%(else)%1B[0;34;1mbranch%09%1B[m%(refname:short)%(end)%(end)" \
+    | sed '/^$/d') || return
+  tags=$(
+    git --no-pager tag | awk '{print "\x1b[35;1mtag\x1b[m\t" $1}') || return
+  target=$(
+    (echo "$branches"; echo "$tags") |
+    fzf --no-hscroll --no-multi -n 2 \
+        --ansi --preview="git --no-pager log -150 --pretty=format:%s '..{2}'") || return
+  git checkout $(awk '{print $2}' <<<"$target" )
+}
+
+w() {
+    notify-send "$(curl wttr.in/Berlin 2>/dev/null 3>/dev/null | head -n 7| sed -r "s:\x1B\[[0-9;]*[mK]::g")"
 }
 
 LFCD="~/.config/lf/lfcd.sh"
