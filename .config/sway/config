@@ -12,7 +12,7 @@ default_floating_border normal
 hide_edge_borders smart
 
 # wallpaper
-output "*" bg ~/Nextcloud/Pictures/Wallpapers/falcon-9-wallpaper-4k.jpg fill
+output "*" bg ~/Sync/Pictures/Wallpapers/falcon-9-wallpaper-4k.jpg fill
 
 ##########################################################################################################################################
 # Startup ################################################################################################################################
@@ -26,14 +26,12 @@ exec seat * hide_cursor 3
 exec spotify
 exec $term --title 'dropdown_term'
 
-exec swaymsg 'workspace $ws1; exec firefox -p Work'
-exec swaymsg 'workspace $ws10; exec firefox -p Home'
+exec swaymsg 'workspace $ws10; exec brave-browser-nightly'
 
 exec swaymsg 'workspace $ws2; exec $term'
 
 exec swaymsg 'workspace $ws3; exec slack'
 exec swaymsg 'workspace $ws3; exec signal-desktop'
-exec swaymsg 'workspace $ws3; exec firefox -p WhatsApp'
 
 ### Idle configuration
 exec swayidle -w \
@@ -71,14 +69,13 @@ for_window [title="dropdown_term"] move scratchpad, border pixel 3, resize set 4
 for_window [class="Spotify"] move scratchpad, fullscreen enable
 for_window [class="mpv"] floating enable, sticky enable
 for_window [app_id="^sway-launcher-desktop$"] floating enable, border pixel 5, resize set width 30 ppt height 30 ppt
-#for_window [app_id="^screenshot-launcher$"] floating enable, border pixel 5, resize set width 10 ppt height 10 ppt
 
 ## Problematic windows
+for_window [app_id="electrum"] floating enable, resize set 1280 720
 for_window [app_id="pavucontrol"] floating enable, resize set 1280 720
 for_window [class="Signal"] move container to workspace $ws3
 for_window [class="Slack"] move container to workspace $ws3
 for_window [class="Discord"] move container to workspace $ws3
-for_window [title="WhatsApp - Mozilla Firefox"] move container to workspace $ws3
 for_window [class="Navigator"] move position center, resize set 1080 720
 
 ##########################################################################################################################################
@@ -89,7 +86,7 @@ for_window [class="Navigator"] move position center, resize set 1080 720
 bindsym $mod+Return exec $term
 
 ## Notifications
-bindsym Control+Shift+Space exec makoctl dismiss --all
+#bindsym Control+Shift+Space exec makoctl dismiss --all
 
 ## Dropdown Spotify
 bindsym $mod+m [class="Spotify"] scratchpad show, fullscreen enable
@@ -101,11 +98,10 @@ bindsym $mod+u [title="dropdown_term"] scratchpad show, move position center, re
 bindsym $mod+d exec $term --class 'sway-launcher-desktop' -e bash -c '~/Programming/sway-launcher-desktop/sway-launcher-desktop.sh'
 
 # Open link in mpv
-#bindsym $mod+y exec mpv --ontop --no-border --force-window --autofit=600x380 --geometry=-12-10 $(xclip -o)
+bindsym $mod+y exec mpv --ontop --no-border --force-window --autofit=600x380 --geometry=-12-10 $(wl-paste)
 
 ## Screenshots
 bindsym Print exec grimshot --notify copy window
-#bindsym Print exec $term --class 'screenshot-launcher' -e bash -c '~/shot'
 bindsym control+Print exec grimshot --notify copy window && wl-paste | 0x0
 
 ## Show clipboard contents
@@ -202,8 +198,8 @@ workspace $ws2 output DP-4
 workspace $ws3 output eDP-1
 
 output eDP-1 scale 1 pos 0 60
-output DP-4 pos 1920 0
-focus output DP-4
+output DP-3 pos 1920 0
+focus output DP-3
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -292,3 +288,14 @@ client.focused          $blue   $blue   $bgs    $orange     $blue
 client.focused_inactive $bg2    $bg2    $fg3    $fg3        $bg2
 client.unfocused        $bg2    $bgd    $fg3    $bg3        $bg2
 client.urgent           $red    $red    $bgs    $red        $red
+
+
+
+##########
+# Inputs #
+##########
+
+input 1739:52620:SYNA8005:00_06CB:CD8C_Touchpad {
+    tap enabled
+    natural_scroll enabled
+}

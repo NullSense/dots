@@ -3,7 +3,7 @@
     "height": 20, // Waybar height (to be removed for auto height)
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode"],
-    "modules-center": ["custom/media"],
+    "modules-center": ["custom/media", "custom/crypto"],
     "modules-right": ["disk#home", "disk#root", "idle_inhibitor", "pulseaudio", "temperature", "backlight", "battery", "clock", "tray"],
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>"
@@ -85,5 +85,12 @@
         "escape": true,
         "on-click-middle": "playerctl play-pause",
         "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-    }
+    },
+    "custom/crypto": {
+        "format": "{}",
+        "interval": 400,
+        "return-type": "json",
+        "exec": "~/.config/waybar/crypto/crypto.py",
+        "exec-if": "ping pro-api.coinmarketcap.com -c1"
+    },
 }
