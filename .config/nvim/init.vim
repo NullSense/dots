@@ -161,34 +161,22 @@ if empty($SERVER) " Install these if not on a server
     Plug 'sheerun/vim-polyglot'
     Plug 'junegunn/fzf.vim'
     Plug 'tpope/vim-fugitive'
-    let g:fzf_colors =
-                \ { 'fg':      ['fg', 'Normal'],
-                \ 'bg':      ['bg', 'Normal'],
-                \ 'hl':      ['fg', 'Comment'],
-                \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-                \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-                \ 'hl+':     ['fg', 'Keyword'],
-                \ 'info':    ['fg', 'PreProc'],
-                \ 'border':  ['fg', 'Ignore'],
-                \ 'prompt':  ['fg', 'Conditional'],
-                \ 'pointer': ['fg', 'Exception'],
-                \ 'marker':  ['fg', 'Keyword'],
-                \ 'spinner': ['fg', 'Label'],
-                \ 'header':  ['fg', 'Comment'] }
     let g:fzf_action = {
                 \ 'ctrl-h': 'split',
                 \ 'ctrl-v': 'vsplit'
                 \ }
-    nnoremap <c-p> :FZF<cr>
-    nnoremap <leader>l :Rg<cr>
-    Plug 'SirVer/ultisnips'
-    let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips', 'UltiSnips']
-    let g:UltiSnipsExpandTrigger = '<tab>'
-    let g:UltiSnipsJumpForwardTrigger = '<tab>'
-    let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
-    Plug 'honza/vim-snippets'
+    nnoremap <c-p> :Files!<cr>
+    nnoremap <leader>l :Rg!<cr>
+    function! RipgrepFzf(query, fullscreen)
+        let command_fmt = 'rg --column --hidden --line-number --no-heading --color=always --smart-case -- %s || true'
+        let initial_command = printf(command_fmt, shellescape(a:query))
+        let reload_command = printf(command_fmt, '{q}')
+        let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+        call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+    endfunction
+
+    command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
     Plug 'airblade/vim-gitgutter'
-    "let g:gitgutter_git_args = '--git-dir="$HOME/.config/.yadm/repo.git"'
 
     "Markdown
     Plug 'plasticboy/vim-markdown'
@@ -283,7 +271,8 @@ endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Remap for rename current word
-nmap <leader>r <Plug>(coc-rename)
+nmap <silent> <leader>r <Plug>(coc-rename)
+nmap <silent> <leader>a <plug>(coc-codeaction)
 
 " Use <TAB> for selections ranges.
 " NOTE: Requires 'textDocument/selectionRange' support from the language server.

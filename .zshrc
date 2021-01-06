@@ -56,9 +56,12 @@ zplug load
 # Aliases
 # Pacman
 # search through all available packages, install selected
-alias pss="pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
+alias pss="pacman -Slq | fzf --multi --preview 'pacman --color=always -Si {1}' | xargs -ro sudo pacman -S"
 # List all your installed packages, and then remove selected packages:
 alias pqs="pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
+# Trizen
+# search through all available packages, install selected
+alias tss="trizen -SQqs | fzf --bind 'change:reload:(trizen -SQaqs {q})' --multi --preview 'trizen -Sai --forcecolors {1}' | xargs -ro sudo trizen -S"
 
 alias vim="nvim"
 # Docker
@@ -101,6 +104,77 @@ zstyle ':completion:*' menu select
 bindkey '^ ' autosuggest-accept
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="bold,underline"
 
+# ls after cd
+function cd {
+    if [ -z "$1" ]; then
+        builtin cd
+    else
+        builtin cd "$1"
+    fi
+    if [ $? -eq 0 ]; then
+        ls
+    fi
+}
+
+# fedit - edit systemd unit
+fedit() {
+  unit=$(systemctl list-unit-files --type=service |
+    awk '{print $1}' | grep service | fzf --ansi --preview="SYSTEMD_COLORS=1 systemctl cat {}")
+  [ -n "$unit" ] && sudo systemctl edit --full $unit &&
+    journalctl -feu $unit --since "10 sec ago" --no-pager
+}
+
+# fenable - enable and start systemd unit
+fenable() {
+  unit=$(systemctl list-unit-files --type=service --state=disabled |
+    awk '{print $1}' | grep service | fzf --ansi --preview="SYSTEMD_COLORS=1 systemctl status --no-pager {}")
+  [ -n "$unit" ] && sudo systemctl enable --now $unit &&
+    journalctl -feu $unit --since "10 sec ago" --no-pager
+}
+
+# fdisable - disable and stop systemd unit
+fdisable() {
+  unit=$(systemctl list-unit-files --type=service --state=enabled |
+    awk '{print $1}' | grep service | fzf --ansi --preview="SYSTEMD_COLORS=1 systemctl status --no-pager {}")
+  [ -n "$unit" ] && sudo systemctl disable --now $unit &&
+    journalctl -feu $unit --since "10 sec ago" --no-pager
+}
+
+# fstart - start systemd unit
+fstart() {
+  unit=$(systemctl list-unit-files --type=service --state=inactive,failed,exited,stopped,disabled |
+    awk '{print $1}' | grep service | fzf --ansi --preview="SYSTEMD_COLORS=1 systemctl status --no-pager {}")
+  [ -n "$unit" ] && sudo systemctl start $unit &&
+    journalctl -eu $unit --since "10 sec ago" --no-pager
+}
+
+# fstop - stop systemd unit
+fstop() {
+  unit=$(systemctl list-units --type=service --state=running |
+    awk '{print $1}' | grep service | fzf --ansi --preview="SYSTEMD_COLORS=1 systemctl status --no-pager {}")
+  [ -n "$unit" ] && sudo systemctl stop $unit &&
+    journalctl -eu $unit --since "10 sec ago" --no-pager
+}
+
+# fstat - show systemd unit status
+fstat() {
+  unit=$(systemctl list-unit-files --type=service |
+    awk '{print $1}' | grep service | fzf --ansi --preview="SYSTEMD_COLORS=1 systemctl status --no-pager {}")
+  [ -n "$unit" ] && journalctl -eu $unit --since "10 sec ago" --no-pager
+}
+
+# Make directory and enter into it:
+mkcd () {
+  case "$1" in
+    */..|*/../) cd -- "$1";; # that doesn't make any sense unless the directory already exists
+    /*/../*) (cd "${1%/../*}/.." && mkdir -p "./${1##*/../}") && cd -- "$1";;
+    /*) mkdir -p "$1" && cd "$1";;
+    */../*) (cd "./${1%/../*}/.." && mkdir -p "./${1##*/../}") && cd "./$1";;
+    ../*) (cd .. && mkdir -p "${1#.}") && cd "$1";;
+    *) mkdir -p "./$1" && cd "./$1";;
+  esac
+}
+
 # fkill - kill processes - list only the ones you can kill. Modified the earlier script.
 fkill() {
   local pid
@@ -142,7 +216,7 @@ export FZF_CTRL_R_OPTS="--header='Run command from history' --sort --preview 'ec
 gcb() {
   local tags branches target
   branches=$(
-    git --no-pager branch --all \
+    git --no-pager branch --sort=-committerdate --all \
       --format="%(if)%(HEAD)%(then)%(else)%(if:equals=HEAD)%(refname:strip=3)%(then)%(else)%1B[0;34;1mbranch%09%1B[m%(refname:short)%(end)%(end)" \
     | sed '/^$/d') || return
   tags=$(
@@ -150,7 +224,7 @@ gcb() {
   target=$(
     (echo "$branches"; echo "$tags") |
     fzf --no-hscroll --no-multi -n 2 \
-        --ansi --preview="git --no-pager log -150 --pretty=format:%s '..{2}'") || return
+        --ansi --preview="git log master..HEAD --graph --pretty=format:'%Cgreen(%<(7,trunc)%cr) %C(bold blue)%<(7,trunc)<%an>%Creset %s %C(yellow)%d%Creset' --color=always --abbrev-commit --date=relative '..{2}'") || return
   git checkout $(awk '{print $2}' <<<"$target" )
 }
 
