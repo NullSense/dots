@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-source ~/bin/fsysctl.sh # fzf systemctl functions
-
 # connect to wifi or vpn
 wl(){
   local wifi
