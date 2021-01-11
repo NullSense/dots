@@ -3,7 +3,7 @@
 ######################################################
 font pango:Hack 8 # for window titles
 set $mod Mod4
-set $term kitty
+set $term alacritty
 focus_follows_mouse no
 for_window [class="^.*"] border pixel 1
 smart_borders on # Only show borders when more than 1 window open
@@ -16,9 +16,12 @@ exec --no-startup-id nm-applet
 exec --no-startup-id redshift
 exec --no-startup-id caffeine
 exec --no-startup-id unclutter
-exec --no-startup-id lollypop
 ## Scratchpads
-exec --no-startup-id kitty --title dropdown_term -o font_size=10
+exec $term --title 'dropdown_term'
+## GUI startup
+exec --no-startup-id i3-msg 'workspace $ws1; exec /usr/bin/firefox'
+exec --no-startup-id i3-msg 'workspace $ws2; exec discord'
+exec --no-startup-id i3-msg 'workspace $ws2; exec signal-desktop'
 
 ## Locking
 exec --no-startup-id xset s 60 60
@@ -37,6 +40,7 @@ for_window [class="mpv"] floating enable, sticky enable, exec $HOME/bin/resize.p
 
 ## Problematic windows
 for_window [class="Pavucontrol"] floating enable
+for_window [class="Firefox"] move container to workspace $ws1
 for_window [class="Signal"] move container to workspace $ws2
 for_window [window_role="GtkFileChooserDialog"] resize set 1780 920
 for_window [window_role="GtkFileChooserDialog"] move position center
@@ -119,7 +123,7 @@ bindsym control+Delete mode "$mode_system"
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec kitty
+bindsym $mod+Return exec $term
 
 # kill focused window
 bindsym $mod+Shift+q kill
