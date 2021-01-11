@@ -1,0 +1,169 @@
+* {
+  border: none;
+  border-radius: 0;
+  /* `otf-font-awesome` is required to be installed for icons */
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  min-height: 0;
+}
+
+window#waybar {
+  background-color: #282828;
+}
+window#waybar.hidden {
+  opacity: 0.2;
+}
+
+#workspaces button {
+  padding: 0 0.4em;
+  margin: 0 0.2em;
+  background-color: transparent;
+  color: #ebdbb2;
+  border-bottom: 3px solid transparent;
+}
+/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
+#workspaces button:hover {
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: inherit;
+  border-bottom: 3px solid #83a598;
+}
+#workspaces button.focused {
+  background-color: #83a598;
+  color: #282828;
+}
+#workspaces button.urgent {
+  background-color: #cc241d;
+}
+
+#mode {
+  background-color: #cc241d;
+}
+
+#clock,
+#battery,
+#temperature,
+#backlight,
+#pulseaudio,
+#custom-media,
+#custom-weather,
+#custom-crypto,
+#tray,
+#disk,
+#idle_inhibitor {
+  padding: 0 0.7em;
+  margin: 0 0.3em;
+  color: #ebdbb2;
+}
+
+#clock {
+  background-color: #689d6a;
+  color: #282828;
+}
+
+#battery {
+  background-color: #b8bb26;
+  color: #282828;
+}
+
+#battery.plugged {
+  background-color: #bdae93;
+}
+
+#battery.charging {
+  background-color: #bdae93;
+}
+
+#battery.good {
+  background-color: #b8bb26;
+}
+
+@keyframes blink-warning {
+  to {
+    background-color: #d5c4a1;
+  }
+}
+#battery.warning {
+  background-color: #fe8019;
+  animation-name: blink-warning;
+  animation-duration: 1.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes blink-critical {
+  to {
+    background-color: #ebdbb2;
+  }
+}
+#battery.critical:not(.charging) {
+  background-color: #cc241d;
+  animation-name: blink-critical;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+label:focus {
+  background-color: #000000;
+}
+
+#backlight {
+  background-color: #d79921;
+  color: #282828;
+}
+
+#pulseaudio {
+  background-color: #d65d0e;
+  color: #282828;
+}
+
+#pulseaudio.muted {
+  background-color: #504945;
+  color: #ebdbb2;
+}
+
+#custom-media {
+  background-color: #b8bb26;
+  color: #2a5c45;
+  min-width: 100px;
+}
+
+#custom-media.custom-spotify {
+  background-color: #1db954;
+}
+
+#custom-crypto {
+  background-color: #458588;
+  color: #282828;
+}
+
+#custom-weather {
+  background-color: #d79921;
+  color: #282828;
+}
+
+#temperature {
+  background-color: #458588;
+  color: #282828;
+}
+
+#temperature.critical {
+  background-color: #cc241d;
+}
+
+#tray {
+  background-color: transparent;
+}
+
+#idle_inhibitor {
+  margin-left: 1.2em;
+  background-color: #cc241d;
+  color: #282828;
+}
+
+#idle_inhibitor.activated {
+  background-color: #98971a;
+  color: #282828;
+}
