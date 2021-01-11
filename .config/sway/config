@@ -26,12 +26,17 @@ exec seat * hide_cursor 3
 exec spotify
 exec $term --title 'dropdown_term'
 
-exec swaymsg 'workspace $ws10; exec brave-browser-nightly'
+exec swaymsg 'workspace $ws1; exec firefox -p Work'
+exec swaymsg 'workspace $ws10; exec firefox -p Home'
 
 exec swaymsg 'workspace $ws2; exec $term'
 
 exec swaymsg 'workspace $ws3; exec slack'
 exec swaymsg 'workspace $ws3; exec signal-desktop'
+exec swaymsg 'workspace $ws3; exec discord'
+
+exec swaymsg 'workspace $ws9; exec transmission-gtk'
+exec swaymsg 'workspace $ws9; exec yubioath-desktop'
 
 ### Idle configuration
 exec swayidle -w \
@@ -77,6 +82,7 @@ for_window [class="Signal"] move container to workspace $ws3
 for_window [class="Slack"] move container to workspace $ws3
 for_window [class="Discord"] move container to workspace $ws3
 for_window [class="Navigator"] move position center, resize set 1080 720
+for_window [title="Sharing Indicator$"] floating enable, sticky enable
 
 ##########################################################################################################################################
 # Bindings ###############################################################################################################################
@@ -191,15 +197,19 @@ bindsym $mod+a focus parent
 bindsym $mod+less exec swaymsg move workspace to output left
 bindsym $mod+greater exec swaymsg move workspace to output right
 
-# Set workspace outputs (monitors)
-workspace $ws1 output DP-4
-workspace $ws10 output DP-4
-workspace $ws2 output DP-4
-workspace $ws3 output eDP-1
+set $left eDP-1
+set $right HDMI-A-1
 
-output eDP-1 scale 1 pos 0 60
-output DP-3 pos 1920 0
-focus output DP-3
+# Set workspace outputs (monitors)
+workspace $ws1 output $left
+workspace $ws9 output $left
+workspace $ws10 output $left
+workspace $ws2 output $right
+workspace $ws3 output $left
+
+output $left scale 1 pos 0 60
+output $right pos 1920 0
+focus output $right
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
