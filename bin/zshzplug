@@ -27,6 +27,7 @@ zplug "zsh-users/zsh-completions"
 zplug "plugins/fzf", from:oh-my-zsh
 zplug "MichaelAquilina/zsh-you-should-use"
 zplug "wfxr/forgit"
+zplug "NullSense/fuzzy-sys"
 
 # theme
 eval "$(starship init zsh)"

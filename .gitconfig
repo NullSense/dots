@@ -12,3 +12,7 @@
 [commit]
 	verbose = true
 	gpgsign = true
+[init]
+	defaultBranch = master
+[pull]
+	rebase = false
