@@ -8,7 +8,7 @@ alias pss="pacman -Slq | fzf --multi --preview 'pacman --color=always -Si {1}' |
 alias pqs="pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
 # Trizen
 # search through all available packages, install selected
-alias tss="trizen -SQqs | fzf --bind 'change:reload:(trizen -SQaqs {q})' --multi --preview 'trizen -Sai --forcecolors {1}' | xargs -ro sudo trizen -S"
+alias tss="trizen -SQqs | fzf --bind 'change:reload:(trizen -SQaqs {q})' --multi --preview 'trizen -Sai --forcecolors {1}' | xargs -ro trizen -S"
 
 alias vim="nvim"
 # Docker

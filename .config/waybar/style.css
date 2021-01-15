@@ -47,6 +47,8 @@ window#waybar.hidden {
 #custom-media,
 #custom-weather,
 #custom-crypto,
+#custom-mousebattery,
+#custom-yubikey,
 #tray,
 #disk,
 #idle_inhibitor {
@@ -57,6 +59,11 @@ window#waybar.hidden {
 
 #clock {
   background-color: #689d6a;
+  color: #282828;
+}
+
+#custom-mousebattery {
+  background-color: #b16286;
   color: #282828;
 }
 
@@ -96,8 +103,10 @@ window#waybar.hidden {
     background-color: #ebdbb2;
   }
 }
-#battery.critical:not(.charging) {
+#battery.critical:not(.charging),
+#custom-yubikey.active {
   background-color: #cc241d;
+  color: #000000;
   animation-name: blink-critical;
   animation-duration: 0.5s;
   animation-timing-function: linear;

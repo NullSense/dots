@@ -4,9 +4,19 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode"],
     "modules-center": ["custom/media", "custom/crypto"],
-    "modules-right": ["disk#home", "disk#root", "idle_inhibitor", "pulseaudio", "temperature", "backlight", "battery", "clock", "tray"],
+    "modules-right": ["disk#home", "disk#root", "custom/yubikey", "custom/mousebattery", "idle_inhibitor", "pulseaudio", "backlight", "battery", "clock", "tray"],
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>"
+    },
+    "custom/yubikey": {
+        "exec": "~/.config/waybar/yubikey",
+        "return-type": "json"
+    },
+    "custom/mousebattery": {
+        "return-type": "json",
+        "format": " {percentage}% {icon}",
+        "exec": "~/.config/waybar/mousebattery",
+        "format-icons": ["", "", "", "", ""]
     },
     "idle_inhibitor": {
         "format": "{icon}",
@@ -29,8 +39,8 @@
         "spacing": 15
     },
     "clock": {
-        "tooltip-format": "{:%d-%m-%Y | %H:%M}",
-        "format-alt": "{:%H:%M | %d-%m-%Y}"
+        "tooltip-format": "{:%H:%M | %d-%m-%Y}",
+        "format-alt": "{:%d-%m-%Y | %H:%M}"
     },
     "temperature": {
         "critical-threshold": 85,

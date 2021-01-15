@@ -5,7 +5,7 @@ Description=kmonad keyboard config
 Restart=always
 RestartSec=3
 ExecStart=/usr/bin/kmonad %h/homemod.kbd
-Nice=19
+Nice=-20
 
 [Install]
 WantedBy=default.target

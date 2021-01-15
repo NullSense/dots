@@ -80,7 +80,7 @@ for_window [app_id="electrum"] floating enable, resize set 1280 720
 for_window [app_id="pavucontrol"] floating enable, resize set 1280 720
 for_window [class="Signal"] move container to workspace $ws3
 for_window [class="Slack"] move container to workspace $ws3
-for_window [class="Discord"] move container to workspace $ws3
+for_window [class="discord"] move container to workspace $ws3
 for_window [class="Navigator"] move position center, resize set 1080 720
 for_window [title="Sharing Indicator$"] floating enable, sticky enable
 
@@ -117,6 +117,7 @@ bindsym $mod+Shift+Insert exec wl-paste | 0x0
 
 ## Music player
 bindsym $mod+p exec "playerctl play-pause"
+bindsym XF86AudioPlay exec "playerctl play-pause"
 
 ##########################################################################################################################################
 # SYSTEM BINDS############################################################################################################################
