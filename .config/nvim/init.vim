@@ -287,5 +287,5 @@ if exists('+termguicolors')
   set termguicolors
 endif
 let &t_ut=''
-let g:gruvbox_contrast_dark='soft'
+let g:gruvbox_contrast_dark='medium'
 colorscheme gruvbox
