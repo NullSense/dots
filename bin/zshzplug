@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.zsh_history
+
+# 10ms timeout instead of 40ms
+KEYTIMEOUT=1
+
+# Check if zplug is installed
+if [[ ! -d ~/.zplug ]]; then
+  git clone https://github.com/zplug/zplug ~/.zplug
+  source ~/.zplug/init.zsh && zplug update --self
+fi
+
+# Essential
+source ~/.zplug/init.zsh
+
+autoload -U compinit && compinit
+
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+zplug 'zdharma/fast-syntax-highlighting', \
+      hook-load:'FAST_HIGHLIGHT=()', defer:2
+zplug "b4b4r07/zsh-vimode-visual", defer:3
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-completions"
+zplug "plugins/fzf", from:oh-my-zsh
+zplug "MichaelAquilina/zsh-you-should-use"
+zplug "wfxr/forgit"
+zplug "NullSense/fuzzy-sys"
+
+# theme
+eval "$(starship init zsh)"
+
+# Install packages that have not been installed yet
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    else
+        echo
+    fi
+fi
+
+zplug load
+
+setopt hist_ignore_dups
+setopt hist_reduce_blanks
+setopt hist_ignore_space
+setopt extended_history
+setopt hist_expand
+setopt share_history
+setopt prompt_subst
+
+zstyle ':completion:*' menu select
+bindkey '^ ' autosuggest-accept
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="bold,underline"

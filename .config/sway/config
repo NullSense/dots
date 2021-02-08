@@ -1,0 +1,312 @@
+##########################################################################################################################################
+# Definitions ############################################################################################################################
+##########################################################################################################################################
+
+font pango:Hack Nerd Font 6 # for window titles
+set $mod Mod4
+set $term alacritty
+focus_follows_mouse no
+for_window [class="^.*"] border pixel 1
+default_border pixel 1
+default_floating_border normal
+hide_edge_borders smart
+
+# wallpaper
+output "*" bg ~/Sync/Pictures/Wallpapers/falcon-9-wallpaper-4k.jpg fill
+
+##########################################################################################################################################
+# Startup ################################################################################################################################
+##########################################################################################################################################
+
+exec xset -b # Turns off annoying loud beep
+exec 'nm-applet --indicator'
+exec blueman-applet
+exec mako --margin 16 --padding 8 --border-color "#ebdbb2" --text-color "#ebdbb2" --background-color "#32302f" --border-size 4 --default-timeout 10000 # notification daemon
+exec seat * hide_cursor 3
+exec spotify
+exec $term --title 'dropdown_term'
+
+exec swaymsg 'workspace $ws1; exec firefox -p Work'
+exec swaymsg 'workspace $ws10; exec firefox -p Home'
+
+exec swaymsg 'workspace $ws2; exec $term'
+
+exec swaymsg 'workspace $ws3; exec slack'
+exec swaymsg 'workspace $ws3; exec signal-desktop'
+exec swaymsg 'workspace $ws3; exec discord'
+
+exec swaymsg 'workspace $ws9; exec transmission-gtk'
+exec swaymsg 'workspace $ws9; exec yubioath-desktop'
+
+### Idle configuration
+exec swayidle -w \
+         timeout 300 'swaylock -f -c 000000' \
+         timeout 2600 'swaymsg "output * dpms off"' \
+         resume 'swaymsg "output * dpms on"' \
+         before-sleep 'swaylock -f -c 000000'
+
+# This will lock your screen after 300 seconds of inactivity, then turn off
+# your displays after another 300 seconds, and turn your screens back on when
+# resumed. It will also lock your screen before your computer goes to sleep.
+
+
+##########################################################################################################################################
+# Workspaces #############################################################################################################################
+##########################################################################################################################################
+
+set $ws1 "01 "
+set $ws2 "02 "
+set $ws3 "03 "
+set $ws4 "04 "
+set $ws5 "05 "
+set $ws6 "06 "
+set $ws7 "07 "
+set $ws8 "08 "
+set $ws9 "09 "
+set $ws10 "10 "
+
+##########################################################################################################################################
+# Windows ################################################################################################################################
+##########################################################################################################################################
+
+## Dropdown
+for_window [title="dropdown_term"] move scratchpad, border pixel 3, resize set 400 400
+for_window [class="Spotify"] move scratchpad, fullscreen enable
+for_window [class="mpv"] floating enable, sticky enable
+for_window [app_id="^sway-launcher-desktop$"] floating enable, border pixel 5, resize set width 30 ppt height 30 ppt
+
+## Problematic windows
+for_window [app_id="electrum"] floating enable, resize set 1280 720
+for_window [app_id="pavucontrol"] floating enable, resize set 1280 720
+for_window [class="Signal"] move container to workspace $ws3
+for_window [class="Slack"] move container to workspace $ws3
+for_window [class="discord"] move container to workspace $ws3
+for_window [class="Navigator"] move position center, resize set 1080 720
+for_window [title="Sharing Indicator$"] floating enable, sticky enable
+
+##########################################################################################################################################
+# Bindings ###############################################################################################################################
+##########################################################################################################################################
+
+# start a terminal
+bindsym $mod+Return exec $term
+
+## Notifications
+#bindsym Control+Shift+Space exec makoctl dismiss --all
+
+## Dropdown Spotify
+bindsym $mod+m [class="Spotify"] scratchpad show, fullscreen enable
+
+## Dropdown terminal
+bindsym $mod+u [title="dropdown_term"] scratchpad show, move position center, resize set 1280 720
+
+# launcher
+bindsym $mod+d exec $term --class 'sway-launcher-desktop' -e bash -c '~/Programming/sway-launcher-desktop/sway-launcher-desktop.sh'
+
+# Open link in mpv
+bindsym $mod+y exec mpv --ontop --no-border --force-window --autofit=600x380 --geometry=-12-10 $(wl-paste)
+
+## Screenshots
+bindsym Print exec grimshot --notify copy window
+bindsym control+Print exec grimshot --notify copy window && wl-paste | 0x0
+
+## Show clipboard contents
+bindsym $mod+Insert exec --no-startup-id notify-send -t 2000 "$(wl-paste)"
+## Upload clipboard contents
+bindsym $mod+Shift+Insert exec wl-paste | 0x0
+
+## Music player
+bindsym $mod+p exec "playerctl play-pause"
+bindsym XF86AudioPlay exec "playerctl play-pause"
+
+##########################################################################################################################################
+# SYSTEM BINDS############################################################################################################################
+##########################################################################################################################################
+
+# Volume
+## Increase volume
+bindsym XF86AudioRaiseVolume exec amixer -D pulse sset Master 5%+
+bindsym XF86AudioLowerVolume exec amixer -D pulse sset Master 5%-
+bindsym XF86AudioMute exec amixer -D pulse set Master 1+ toggle && amixer get Master | grep '\[off\]' && notify-send "Audio Muted" || notify-send "Audio On"
+bindsym XF86AudioMicMute exec amixer set Capture toggle && amixer get Capture | grep '\[off\]' && notify-send "Mic Muted" || notify-send "Mic On"
+
+# Backlight
+bindsym XF86MonBrightnessUp exec sudo light -A 5
+bindsym XF86MonBrightnessDown exec sudo light -U 5
+
+# Shutdown, reboot, lock screen
+set $Locker exec lock.sh && sleep 1
+
+set $mode_system System (l) lock, (e) logout, (s) suspend, (r) reboot, (Shift+s) shutdown
+mode "$mode_system" {
+    bindsym l exec exec swaylock, mode "default"
+    bindsym e exec swaymsg exit, mode "default"
+    bindsym s exec systemctl suspend, mode "default"
+    bindsym r exec reboot, mode "default"
+    bindsym Shift+s exec sudo systemctl poweroff -i, mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym control+Delete mode "$mode_system"
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# split orientation toggle
+bindsym $mod+v split toggle
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+#bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+##########################################################################################################################################
+# Workspaces & Monitors####################################################################################################################
+##########################################################################################################################################
+
+## Move focused workspace between monitors
+bindsym $mod+less exec swaymsg move workspace to output left
+bindsym $mod+greater exec swaymsg move workspace to output right
+
+set $left eDP-1
+set $right HDMI-A-1
+
+# Set workspace outputs (monitors)
+workspace $ws1 output $left
+workspace $ws9 output $left
+workspace $ws10 output $left
+workspace $ws2 output $right
+workspace $ws3 output $left
+
+output $left scale 1 pos 0 60
+output $right pos 1920 0
+focus output $right
+
+# switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r reload
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        bindsym h resize shrink width 5 px or 5 ppt
+        bindsym j resize grow height 5 px or 5 ppt
+        bindsym k resize shrink height 5 px or 5 ppt
+        bindsym l resize grow width 5 px or 5 ppt
+
+# same bindings, but for the arrow keys
+        bindsym Left resize shrink width 5 px or 5 ppt
+        bindsym Down resize grow height 5 px or 5 ppt
+        bindsym Up resize shrink height 5 px or 5 ppt
+        bindsym Right resize grow width 5 px or 5 ppt
+
+# back to normal: Enter or Escape or $mod+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+##########################################################################################################################################
+# Bar & Colors ###########################################################################################################################
+##########################################################################################################################################
+
+
+# bg
+set $bgd        #282828
+set $bgs        #32302f
+set $bg1        #3c3836
+set $bg2        #504945
+set $bg3        #665c54
+# fg
+set $fg3        #bdae93
+set $fg2        #d5c4a1
+set $fg1        #ebdbb2
+set $fg0        #fbf1c7
+# colors
+set $red        #cc241d
+set $green      #b8bb26
+set $yellow     #fabd2f
+set $blue       #83a598
+set $purple     #d3869b
+set $aqua       #83c07c
+set $orange     #d65d0e
+
+# set primary gruvbox colorscheme colors
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+        swaybar_command waybar
+        font pango:Hack Nerd Font 6
+}
+
+# class border          |border |backgr |text   |indicator  |child_border
+client.focused          $blue   $blue   $bgs    $orange     $blue
+client.focused_inactive $bg2    $bg2    $fg3    $fg3        $bg2
+client.unfocused        $bg2    $bgd    $fg3    $bg3        $bg2
+client.urgent           $red    $red    $bgs    $red        $red
+
+
+
+##########
+# Inputs #
+##########
+
+input 1739:52620:SYNA8005:00_06CB:CD8C_Touchpad {
+    tap enabled
+    natural_scroll enabled
+}

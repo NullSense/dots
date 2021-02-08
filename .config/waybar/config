@@ -1,0 +1,106 @@
+{
+    "layer": "top", // Waybar at top layer
+    "height": 20, // Waybar height (to be removed for auto height)
+    // Choose the order of the modules
+    "modules-left": ["sway/workspaces", "sway/mode"],
+    "modules-center": ["custom/media", "custom/crypto"],
+    "modules-right": ["disk#home", "disk#root", "custom/yubikey", "custom/mousebattery", "idle_inhibitor", "pulseaudio", "backlight", "battery", "clock", "tray"],
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    "custom/yubikey": {
+        "exec": "~/.config/waybar/yubikey",
+        "return-type": "json"
+    },
+    "custom/mousebattery": {
+        "return-type": "json",
+        "format": " {percentage}% {icon}",
+        "exec": "~/.config/waybar/mousebattery",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "disk#root": {
+        "interval": 30,
+        "format": "{path}: {percentage_used}%",
+        "path": "/"
+    },
+    "disk#home": {
+        "interval": 30,
+        "format": "~: {percentage_used}%",
+        "path": "/home/"
+    },
+    "tray": {
+        "spacing": 15
+    },
+    "clock": {
+        "tooltip-format": "{:%H:%M | %d-%m-%Y}",
+        "format-alt": "{:%d-%m-%Y | %H:%M}"
+    },
+    "temperature": {
+        "critical-threshold": 85,
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "backlight": {
+        "format": "{percent}% {icon}",
+        "format-icons": {
+            "default": ["", "", ""]
+        },
+        "on-scroll-up": "sudo light -A 2",
+        "on-scroll-down": "sudo light -U 2"
+    },
+    "battery": {
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "pulseaudio": {
+        "format": "{volume}% {icon} {format_source}",
+        "format-bluetooth": "{volume}% {icon} {format_source}",
+        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-muted": " {format_source}",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphones": "",
+            "handsfree": "",
+            "headset": "",
+            "default": ["", "", ""]
+        },
+        "scroll-step": 1,
+        "on-click": "pavucontrol",
+        "on-click-middle": "amixer -D pulse set Master 1+ toggle && amixer set Capture toggle"
+    },
+    "custom/media": {
+        "format": "{icon} {}",
+        "return-type": "json",
+        "max-length": 65,
+        "format-icons": {
+            "spotify": "",
+            "default": "🎜"
+        },
+        "escape": true,
+        "on-click-middle": "playerctl play-pause",
+        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
+    },
+    "custom/crypto": {
+        "format": "{}",
+        "interval": 400,
+        "return-type": "json",
+        "exec": "~/.config/waybar/crypto/crypto.py",
+        "exec-if": "ping pro-api.coinmarketcap.com -c1"
+    },
+}

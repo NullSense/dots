@@ -1,7 +1,18 @@
 [user]
 	email = matas234@gmail.com
-	name = Aerial
+	name = NullSense
+	signingkey = CB5590199041EB914A80D18196154ED6A2543B48
 [credential]
-    helper = cache --timeout=3600
+	helper = cache --timeout=3600
+[core]
+	excludesfile = /home/ongo/.gitignore
+	pager = delta --dark
+[rebase]
+	autosquash = true
 [commit]
-    verbose = true
+	verbose = true
+	gpgsign = true
+[init]
+	defaultBranch = master
+[pull]
+	rebase = false

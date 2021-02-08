@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+# connect to wifi or vpn
+wl(){
+  local wifi
+  local ssid
+  local conn
+  local vpn
+
+  nmcli device wifi rescan > /dev/null
+  wifi=$(nmcli -c yes device wifi list | tail -n +2)
+  vpn=$(nmcli -c yes connection show | grep vpn)
+  ssid=$({echo $vpn && echo $wifi} | fzf --ansi | awk '{print $1}')
+
+  echo $ssid
+
+  if [ "x$ssid" != "x" ]; then
+    # check if the SSID has already a connection setup
+    conn=$(nmcli con | grep "$ssid" | awk '{print $1}' | uniq)
+    if [ "x$conn" = "x$ssid" ]; then
+      echo "Please wait while switching to known network $ssid…"
+      # if yes, bring up that connection
+      nmcli con up id "$conn"
+    else
+      echo "Please wait while connecting to new network $ssid…"
+      # if not connect to it and ask for the password
+      nmcli device wifi connect "$ssid"
+    fi
+  fi
+}
+
+# change git branch
+gcb() {
+  local tags branches target
+  branches=$(
+  git --no-pager branch --sort=-committerdate --all \
+    --format="%(if)%(HEAD)%(then)%(else)%(if:equals=HEAD)%(refname:strip=3)%(then)%(else)%1B[0;34;1mbranch%09%1B[m%(refname:short)%(end)%(end)" \
+    | sed '/^$/d') || return
+      tags=$(
+      git --no-pager tag | awk '{print "\x1b[35;1mtag\x1b[m\t" $1}') || return
+      target=$(
+      (echo "$branches"; echo "$tags") |
+        fzf --no-hscroll --no-multi -n 2 \
+        --ansi --preview="git log master..{2} --graph --pretty=format:'%Cgreen(%<(7,trunc)%cr) %C(bold blue)%<(7,trunc)<%an>%Creset %s %C(yellow)%d%Creset' --color=always --abbrev-commit --date=relative") || return
+              git checkout "$(awk '{print $2}' <<<"$target" )"
+            }
+
+# fkill - kill processes - list only the ones you can kill. Modified the earlier script.
+fkill() {
+  local pid
+  if [ "$UID" != "0" ]; then
+    pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
+  else
+    pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+  fi
+
+  if [ "x$pid" != "x" ]
+  then
+    echo $pid | xargs kill -${1:-9}
+  fi
+}
+
+# open file in vim with preview
+fe() (
+  exec < /dev/tty
+  IFS=$'\n' files=($(fzf --preview 'bat --style=numbers --color=always --line-range :30 {}' --query="$1" --multi --select-1 --exit-0))
+  [[ -n "$files" ]] && ${EDITOR:-nvim} "${files[@]}"
+)
+zle -N fe
+bindkey "^p" fe
+
+export FZF_DEFAULT_COMMAND='rg --column --line-number --no-heading --smart-case --files --hidden --follow -g "!{.mozilla,.wine,*cache*,*Cache*,.node*,.electron*,.local,.steam,.cache,.git,Steam,Music,Videos,.vscode*,.gradle,.nvm,.zplug,.forgit,.cargo,.m2,.pyenv}" 2> /dev/null'
+# fzf colors
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+--border
+--color='fg:#ebdbb2,bg:#282828,hl:#928374'
+--color='fg+:#ebdbb2,bg+:#3c3836,hl+:#fb4934'
+--color='info:#8ec07c,prompt:#fb4934,pointer:#fb4934'
+--color='marker:#fb4934,spinner:#fb4934,header:#928374''
+
+export FZF_ALT_C_OPTS="--header='Jump to directory' --preview 'tree -C {} | head -200'"
+export FZF_CTRL_R_OPTS="--header='Run command from history' --sort --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
+

@@ -45,7 +45,7 @@ upload() {
 }
 
 notify() {
-    dunstify -r 2500 -i "$icon" "$title" "$body"
+    notify-send -r 2500 -i "$icon" "$title" "$body"
 }
 
 cleanup() {
@@ -127,14 +127,14 @@ case "$mode" in
 	    esac
 	    if [ "$local" = true ]; then
             echo "$file" | xclip -selection clipboard -t image/png -i "$file";
-                        dunstify -r 2500 -i "$icon"		\
+                        notify-send -r 2500 -i "$icon"		\
                  "$title"			\
                  "$(printf "Screenshot successfully stored locally.\nPATH: %s" "$file")"
 	    else
             output=$(upload)
             url=$(echo "${output##*$'\n'}")
             echo "$url" | xclip -sel c;
-            dunstify -r 2500 -i "$icon"		\
+            notify-send -r 2500 -i "$icon"		\
                  "$title"			\
                  "$(printf "Screenshot successfully uploaded.\nURL: %s" "$url")"
 	    fi
@@ -147,7 +147,7 @@ case "$mode" in
 	if [ "$local" = true ]; then
         video_capture
 	    echo "$file" | xclip -sel c;
-		dunstify -r 2500 -i "$icon"		\
+		notify-send -r 2500 -i "$icon"		\
 			 "$title"			\
 			 "$(printf "Video successfully stored locally.\nPATH: %s" "$file")"
 	else
@@ -156,7 +156,7 @@ case "$mode" in
 	    output=$(upload)
 	    url="$(echo "${output##*$'\n'}")"
 	    echo "$url" | xclip -sel c;
-		dunstify -r 2500 -i "$icon"		\
+		notify-send -r 2500 -i "$icon"		\
 			 "$title"			\
 			 "$(printf "Video successfully uploaded.\nURL: %s" "$url")"
 	fi
