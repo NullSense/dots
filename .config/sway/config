@@ -118,6 +118,8 @@ bindsym $mod+Shift+Insert exec wl-paste | 0x0
 ## Music player
 bindsym $mod+p exec "playerctl play-pause"
 bindsym XF86AudioPlay exec "playerctl play-pause"
+bindsym XF86AudioPrev exec "playerctl previous"
+bindsym XF86AudioNext exec "playerctl next"
 
 ##########################################################################################################################################
 # SYSTEM BINDS############################################################################################################################

@@ -77,6 +77,11 @@ set encoding=utf-8 "windows specific rendering option
 set undofile "persistent undo
 set number "Number lines
 set relativenumber
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
 set scrolloff=3
 set hlsearch "highlight searches
 set incsearch "highlight while searching
