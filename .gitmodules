@@ -1,9 +1,0 @@
-[submodule "bin/imgur.sh"]
-	path = bin/imgur.sh
-	url = https://github.com/tremby/imgur.sh
-[submodule "imgur.sh"]
-	path = imgur.sh
-	url = https://github.com/tremby/imgur.sh
-[submodule ".config/imgur.sh"]
-	path = .config/imgur.sh
-	url = https://github.com/tremby/imgur.sh

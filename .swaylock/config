@@ -1,0 +1,8 @@
+ignore-empty-password
+show-failed-attempts
+image=/home/ongo/Sync/Pictures/Wallpapers/falcon-9-wallpaper-4k.jpg
+indicator-caps-lock
+clock
+indicator
+indicator-radius=200
+indicator-idle-visible
