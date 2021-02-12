@@ -1,7 +1,8 @@
 # My configuration
 
-- [sway](https://github.com/swaywm/sway) (wayland tiling window manager)
-- [waybar](https://github.com/Alexays/Waybar) (sway bar)
+- [Sway](https://github.com/swaywm/sway) (wayland tiling window manager)
+- [Waybar](https://github.com/Alexays/Waybar) (sway bar)
+- [Alacritty](https://github.com/alacritty/alacritty) (GPU accelerated terminal emulator)
 - [heavily customized nvim](https://github.com/neovim/neovim)
 - [lf](https://github.com/gokcehan/lf) (terminal file manager)
 - [fzf](https://github.com/junegunn/fzf) (fuzzy finder)
@@ -10,6 +11,8 @@
 ![https://0x0.st/-Hhn.png](https://0x0.st/-Hhn.png)
 
 ## My keyboard layout for the [Bastyl-Mini](https://bastardkb.com/keebs/)
+
+[My fork](https://github.com/NullSense/qmk_firmware/tree/bastylmini-nullsense/keyboards/bastardkb/bastylmini/keymaps/nullsense)
 
 ### BASE 0: Qwerty with [home row mods](https://precondition.github.io/home-row-mods)
 
