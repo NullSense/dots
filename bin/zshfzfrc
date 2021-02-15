@@ -29,22 +29,6 @@ wl(){
   fi
 }
 
-# change git branch
-gcb() {
-  local tags branches target
-  branches=$(
-  git --no-pager branch --sort=-committerdate --all \
-    --format="%(if)%(HEAD)%(then)%(else)%(if:equals=HEAD)%(refname:strip=3)%(then)%(else)%1B[0;34;1mbranch%09%1B[m%(refname:short)%(end)%(end)" \
-    | sed '/^$/d') || return
-      tags=$(
-      git --no-pager tag | awk '{print "\x1b[35;1mtag\x1b[m\t" $1}') || return
-      target=$(
-      (echo "$branches"; echo "$tags") |
-        fzf --no-hscroll --no-multi -n 2 \
-        --ansi --preview="git log master..{2} --graph --pretty=format:'%Cgreen(%<(7,trunc)%cr) %C(bold blue)%<(7,trunc)<%an>%Creset %s %C(yellow)%d%Creset' --color=always --abbrev-commit --date=relative") || return
-              git checkout "$(awk '{print $2}' <<<"$target" )"
-            }
-
 # fkill - kill processes - list only the ones you can kill. Modified the earlier script.
 fkill() {
   local pid
