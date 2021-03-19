@@ -1,6 +1,6 @@
 "move through wrapped text easier
-"nmap j gj
-"nmap k gk
+nmap j gj
+nmap k gk
 
 "so I don't need to source every time
 autocmd BufWritePost .vimrc source %
@@ -20,30 +20,36 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 "Mappings
 let mapleader="\<Space>"
-noremap <leader>y "+y
+"Clipboard remaps
+nnoremap <leader>y "+y
+vnoremap <leader>y "+y
+"Yank whole file
+nnoremap <leader>Y gg"+yG
+"Paste without replacing yank register
+vnoremap <leader>p "_dP
 
-" Double esc to disable hlsearch
+"Double esc to disable hlsearch
 nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
 
-" Splits and Buffers
-" For easy split navigation (Ctrl + hjkl)
+"Splits and Buffers
+"For easy split navigation (Ctrl + hjkl)
 nnoremap <C-j> <C-W><C-J>
 nnoremap <C-k> <C-W><C-K>
 nnoremap <C-l> <C-W><C-L>
 nnoremap <C-h> <C-W><C-H>
 
-" Resize splits
+"Resize splits
 nnoremap <silent> <s-up>    :resize +2<cr>
 nnoremap <silent> <s-down>  :resize -2<cr>
 nnoremap <silent> <s-left>  :vertical resize -2<cr>
 nnoremap <silent> <s-right> :vertical resize +2<cr>
-" Moving between buffers
+"Moving between buffers
 nnoremap <M-l> :bn<CR>
 nnoremap <M-h> :bprev<CR>
-" Close buffer
+"Close buffer
 nnoremap <M-d> :bp\|bd #<CR>
 
-" Move line up/down
+"Move line up/down
 nnoremap <Leader>j ddp
 nnoremap <Leader>k ddkP
 
@@ -59,30 +65,28 @@ filetype plugin indent on
 
 "Vim general
 highlight Comment cterm=italic
-let g:gruvbox_italic=1
-let g:gruvbox_bold=1
 set tags=tags
-" Better display for messages
+"Better display for messages
 set cmdheight=2
-" You will have bad experience for diagnostic messages when it's default 4000.
-set updatetime=300
-" don't give |ins-completion-menu| messages.
+"You will have bad experience for diagnostic messages when it's default 4000.
+set updatetime=30
+"don't give |ins-completion-menu| messages.
 set shortmess+=c
-" always show signcolumns
+"always show signcolumns
 set signcolumn=yes
 set autoread "reload file on change on disk
 au CursorHold * checktime
 set mouse=a
 set encoding=utf-8 "windows specific rendering option
 set undofile "persistent undo
-set number "Number lines
+set number
 set relativenumber
-augroup numbertoggle
+augroup numbertoggle "no rel nums on non focused buffer
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
-set scrolloff=3
+set scrolloff=8
 set hlsearch "highlight searches
 set incsearch "highlight while searching
 set inccommand=nosplit
@@ -96,7 +100,41 @@ set list "Shows invisible characters
 set hidden "Show hidden buffers
 syntax on "Syntax highlighting
 
-"Install plug
+"Sessions per folder
+function! MakeSession(overwrite)
+  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+  if (filewritable(b:sessiondir) != 2)
+    exe 'silent !mkdir -p ' b:sessiondir
+    redraw!
+  endif
+  let b:filename = b:sessiondir . '/session.vim'
+  if a:overwrite == 0 && !empty(glob(b:filename))
+    return
+  endif
+  exe "mksession! " . b:filename
+endfunction
+
+function! LoadSession()
+  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+  let b:sessionfile = b:sessiondir . "/session.vim"
+  if (filereadable(b:sessionfile))
+    exe 'source ' b:sessionfile
+  else
+    echo "No session loaded."
+  endif
+endfunction
+
+" Adding automatons for when entering or leaving Vim
+if(argc() == 0)
+  au VimEnter * nested :call LoadSession()
+  au VimLeave * :call MakeSession(1)
+else
+  au VimLeave * :call MakeSession(0)
+endif
+
+set ssop-=options "do not store global and local values in a session
+
+"Install plug if not installed
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
     silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -104,68 +142,57 @@ if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
 endif
 
 call plug#begin()
-if empty($SERVER) " Install these if not on a server
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-    Plug 'liuchengxu/vista.vim'
+    Plug 'szw/vim-maximizer'
+    let g:maximizer_set_default_mapping = 0
+    nnoremap <silent><leader>z :maximizertoggle<cr>
+    vnoremap <silent><leader>z :maximizertoggle<cr>gv
+    inoremap <silent><leader>z <c-o>:maximizertoggle<cr>
 
-    "let g:semshi#simplify_markup = v:true
+    Plug 'preservim/tagbar'
+    nmap <Leader>t :TagbarToggle<CR>
+    Plug 'neovim/nvim-lspconfig'
+    Plug 'aca/pylance.nvim', { 'do': './install.sh' }
+    Plug 'nvim-lua/completion-nvim'
+    Plug 'mfussenegger/nvim-dap'
+    Plug 'ThePrimeagen/vim-be-good'
 
-    function MyCustomHighlights()
-        "hi semshiLocal           ctermfg=209 guifg=#ff875f
-        hi semshiLocal           ctermfg=209 guifg=#fe8019
+    Plug 'ripxorip/aerojump.nvim', { 'do': ':UpdateRemotePlugins' }
+    nmap <Leader>as <Plug>(AerojumpSpace)
+    nmap <Leader>ab <Plug>(AerojumpBolt)
 
-        "hi semshiGlobal          ctermfg=214 guifg=#ffaf00
-        "hi semshiImported        ctermfg=214 guifg=#ffaf00 cterm=bold gui=bold
-        hi semshiGlobal          ctermfg=214 guifg=#fabd2f
-        hi semshiImported        ctermfg=214 guifg=#d79921 cterm=bold gui=bold
-         " This one? ^
+    Plug 'vim-test/vim-test'
+    nmap <silent> <Leader>tn :TestNearest<CR>
+    nmap <silent> <Leader>tf :TestFile<CR>
+    nmap <silent> <Leader>tl :TestLast<CR>
 
-        "hi semshiParameter       ctermfg=75  guifg=#5fafff
-        hi semshiParameter       ctermfg=75  guifg=#458588
+    let g:test#strategy = 'neovim'
+    let test#python#runner = 'pytest'
 
-        "hi semshiParameterUnused ctermfg=117 guifg=#87d7ff cterm=underline gui=underline
-        hi semshiParameterUnused ctermfg=117 guifg=#83a598 cterm=underline gui=underline
+    let test#python#pytest#options = {
+                \ 'nearest': '--reuse-db --reruns 0 -n0 -fsvv',
+                \ 'last':    '--reuse-db --reruns 0 -n0 -fsvv',
+                \ 'file':    '--reuse-db --reruns 0 -n0 -fsvv --ff',
+                \}
 
-        "hi semshiFree            ctermfg=218 guifg=#ffafd7
-        hi semshiFree            ctermfg=218 guifg=#b16286
+    if has('nvim') "normal mode terminal
+      tmap <C-o> <C-\><C-n>
+    endif
 
-        "i semshiBuiltin         ctermfg=207 guifg=#ff5fff
-        hi semshiBuiltin         ctermfg=207 guifg=#d3869b
-
-        "hi semshiAttribute       ctermfg=49  guifg=#00ffaf
-        hi semshiAttribute       ctermfg=49  guifg=#689d6a
-
-        hi semshiSelf            ctermfg=249 guifg=#b2b2b2
-        "hi semshiUnresolved      ctermfg=226 guifg=#ffff00 cterm=underline gui=underline
-        hi semshiUnresolved      ctermfg=226 guifg=#fabd2f cterm=underline gui=underline
-
-        "hi semshiSelected        ctermfg=231 guifg=#ffffff ctermbg=161 guibg=#d7005f
-        hi semshiSelected        ctermfg=231 guifg=#ebdbb2 ctermbg=161 guibg=#d3869b
-
-        hi semshiErrorSign       ctermfg=231 guifg=#ebdbb2 ctermbg=160 guibg=#cc241d
-        hi semshiErrorChar       ctermfg=231 guifg=#ebdbb2 ctermbg=160 guibg=#cc241d
-        sign define semshiError text=E> texthl=semshiErrorSign
-    endfunction
-    autocmd FileType python call MyCustomHighlights()
-
-    function! DisableExtras()
-        call nvim_win_set_option(g:float_preview#win, 'number', v:false)
-        call nvim_win_set_option(g:float_preview#win, 'relativenumber', v:false)
-        call nvim_win_set_option(g:float_preview#win, 'cursorline', v:false)
-    endfunction
-
-    autocmd User FloatPreviewWinOpen call DisableExtras()
+    inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+    set completeopt=menuone,noinsert,noselect
     set completeopt-=preview
-
-    let g:python3_host_prog = '/usr/bin/python3'
-    let g:python2_host_prog = '/usr/bin/python2'
-    Plug 'tpope/vim-repeat'
-    Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-    Plug 'pangloss/vim-javascript'
-    Plug 'sheerun/vim-polyglot'
-    Plug 'junegunn/fzf.vim'
+    Plug 'mbbill/undotree'
+    nnoremap <Leader>u :UndotreeToggle<CR>
+    if has("persistent_undo")
+        set undodir=$HOME"/.vim/undotree"
+        set undofile
+    endif
     Plug 'tpope/vim-fugitive'
+    Plug 'tpope/vim-repeat'
+    Plug 'junegunn/fzf', {'do': {-> fzf#install()}}
+    Plug 'junegunn/fzf.vim'
+    Plug 'ojroques/nvim-lspfuzzy'
     let g:fzf_action = {
                 \ 'ctrl-h': 'split',
                 \ 'ctrl-v': 'vsplit'
@@ -181,116 +208,129 @@ if empty($SERVER) " Install these if not on a server
     endfunction
 
     command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-    Plug 'airblade/vim-gitgutter'
+    "git gutter
+    if has('nvim') || has('patch-8.0.902')
+      Plug 'mhinz/vim-signify'
+    else
+      Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
+    endif
 
     "Markdown
     Plug 'plasticboy/vim-markdown'
     Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
     let g:livedown_autorun = 1
-endif
 
-Plug 'tmhedberg/SimpylFold'
-Plug 'prabirshrestha/async.vim'
-Plug 'editorconfig/editorconfig-vim'
-Plug 'scrooloose/nerdcommenter'
-Plug 'luochen1990/rainbow'
-let g:rainbow_active = 1
-Plug 'tpope/vim-surround'
-Plug 'morhetz/gruvbox'
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'majutsushi/tagbar'
-Plug 'airblade/vim-rooter'
-Plug 'vim-airline/vim-airline'
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#hunks#non_zero_only = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline#extensions#vista#enabled = 1
-let g:airline#extensions#coc#enabled = 0
-let g:airline#extensions#branch#format = 1
- let g:airline#extensions#branch#displayed_head_limit = 8
-let g:airline_extensions = ['hunks', 'branch', 'tabline', 'coc']
+    Plug 'morhetz/gruvbox'
+    "Theming
+    if exists('+termguicolors')
+      let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+      let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+      set termguicolors
+    endif
+    let &t_ut=''
+    let g:gruvbox_contrast_dark='medium'
+    let g:gruvbox_italic=1
+    let g:gruvbox_bold=1
 
-"let g:airline_section_x = ''
-let g:airline_section_y = ''
+    Plug 'ptzz/lf.vim'
+    Plug 'voldikss/vim-floaterm'
+    Plug 'blueyed/vim-diminactive'
+    Plug 'camspiers/lens.vim'
+    let g:lens#width_resize_min = 60
+    let g:lens#width_resize_max = 100
+    Plug 'kevinhwang91/nvim-hlslens'
+    noremap <silent> n <Cmd>execute('normal! ' . v:count1 . 'n')<CR>
+                \<Cmd>lua require('hlslens').start()<CR>
+    noremap <silent> N <Cmd>execute('normal! ' . v:count1 . 'N')<CR>
+                \<Cmd>lua require('hlslens').start()<CR>
+    noremap * *<Cmd>lua require('hlslens').start()<CR>
+    noremap # #<Cmd>lua require('hlslens').start()<CR>
+    noremap g* g*<Cmd>lua require('hlslens').start()<CR>
+    noremap g# g#<Cmd>lua require('hlslens').start()<CR>
 
-set statusline^=%{coc#status()}
+    Plug 'prabirshrestha/async.vim'
+    Plug 'editorconfig/editorconfig-vim'
+    Plug 'scrooloose/nerdcommenter'
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'romgrk/nvim-treesitter-context'
+    Plug 'nvim-treesitter/nvim-treesitter-refactor'
+    set foldmethod=expr
+    set foldexpr=nvim_treesitter#foldexpr()
+    Plug 'p00f/nvim-ts-rainbow'
+    Plug 'tpope/vim-surround'
+    Plug 'tommcdo/vim-exchange'
+    Plug 'norcalli/nvim-colorizer.lua'
+    Plug 'vim-airline/vim-airline'
+    let g:airline_powerline_fonts = 1
+    let g:airline#extensions#hunks#non_zero_only = 1
+    let g:airline#extensions#tabline#formatter = 'unique_tail'
+    let g:airline#extensions#vista#enabled = 1
+    let g:airline#extensions#coc#enabled = 0
+    let g:airline#extensions#branch#format = 1
+     let g:airline#extensions#branch#displayed_head_limit = 8
+    let g:airline_extensions = ['hunks', 'branch', 'tabline', 'coc']
+    let g:airline_section_y = ''
 call plug#end()
 
-"nmap <C-m> :TagbarToggle<CR>
-nmap <C-m> :Vista!!<CR>
-
-"Plugin settings
-set updatetime=100 " gitgutter
-
-"CoC
-autocmd CursorHold * silent call CocActionAsync('highlight')
-nmap <C-n> :CocCommand explorer --toggle --position=floating --floating-position=left-center --floating-width=60<CR>
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-" position. Coc only does snippet and additional edit on confirm.
-if has('patch8.1.1068')
-  " Use `complete_info` if your (Neo)Vim version supports it.
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
-
-" Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-" Remap for rename current word
-nmap <silent> <leader>r <Plug>(coc-rename)
-nmap <silent> <leader>a <plug>(coc-codeaction)
-
-" Use <TAB> for selections ranges.
-" NOTE: Requires 'textDocument/selectionRange' support from the language server.
-" coc-tsserver, coc-python are the examples of servers that support it.
-nmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <TAB> <Plug>(coc-range-select)
-
-"Theming
-if exists('+termguicolors')
-  let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-endif
-let &t_ut=''
-let g:gruvbox_contrast_dark='medium'
 colorscheme gruvbox
+
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+  },
+  rainbow = {
+    enable = true,
+  },
+  indent = {
+    enable = true,
+  },
+  refactor = {
+    highlight_definitions = { enable = true },
+    highlight_current_scope = { enable = true },
+  },
+}
+
+local lspconfig = require('lspconfig')
+
+require 'pylance'
+lspconfig.pylance.setup{
+on_attach=require'completion'.on_attach,
+  settings = {
+    python = {
+      analysis = {
+        typeCheckingMode = "basic",
+        completeFunctionParens = true,
+      }
+    }
+  }
+}
+
+--vim.lsp.callbacks["textDocument/publishDiagnostics"] = function() end
+require('lspfuzzy').setup {}
+require('colorizer').setup()
+EOF
+let g:diagnostic_enable_virtual_text = 1
+let g:diagnostic_enable_underline = 0
+let g:diagnostic_auto_popup_while_jump = 1
+let g:diagnostic_insert_delay = 1
+"let g:python3_host_prog = '/usr/bin/python3'
+"let g:python2_host_prog = '/usr/bin/python2'
+
+nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gi    <cmd>lua vim.lsp.buf.implementation()<CR>
+"nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> <Leader>D   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> <Leader>w    <cmd>lua vim.lsp.buf.code_action()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> [d <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
+nnoremap <silent> ]d <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
+nnoremap <silent> <Leader>r <cmd>lua vim.lsp.buf.rename()<CR>
+nnoremap <silent> <Leader>e <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+nnoremap <silent> <Leader>aa <cmd>lua vim.lsp.buf.code_action()<CR>
+
+"for diminactive
+highlight ColorColumn ctermbg=0 guibg=#1d2021
