@@ -1,7 +1,8 @@
 # My configuration
 
-Font: Hack
-Color scheme: Gruvbox
+**Font**: Hack
+
+**Color scheme**: Gruvbox
 
 - [Neovim](https://github.com/neovim/neovim) (The **best** editor)
 - [Sway](https://github.com/swaywm/sway) (wayland tiling window manager)
