@@ -30,6 +30,8 @@ colors:
     cyan:    '#8ec07c'
     white:   '#ebdbb2'
 
+save_to_clipboard: true
+
 # Font configuration (changes require restart)
 font:
   size: 9

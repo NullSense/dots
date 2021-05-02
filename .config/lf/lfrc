@@ -42,22 +42,23 @@ cmd pv-all-imgs &{{
 
 map Oi pv-all-imgs
 
-# move files async
+# move files async with rsync
 cmd paste &{{
-    load=$(lf -remote 'load')
-    mode=$(echo "$load" | sed -n '1p')
-    list=$(echo "$load" | sed '1d')
-    if [ $mode = 'copy' ]; then
-        rsync -av --ignore-existing --progress $list . \
-        | stdbuf -i0 -o0 -e0 tr '\r' '\n' \
-        | while read line; do
-            lf -remote "send $id echo $line"
-        done
-    elif [ $mode = 'move' ]; then
-        mv -n $list .
-    fi
-    lf -remote 'send load'
-    lf -remote 'send clear'
+    set -- $(lf -remote load)
+    mode="$1"
+    shift
+    case "$mode" in
+        copy)
+            rsync -av --ignore-existing --progress -- "$@" . |
+            stdbuf -i0 -o0 -e0 tr '\r' '\n' |
+            while IFS= read -r line; do
+                lf -remote "send $id echo $line"
+            done
+            ;;
+        move) mv -n -- "$@" .;;
+    esac
+    lf -remote "send load"
+    lf -remote "send clear"
 }}
 
 # leave some space at the top and the bottom of the screen
@@ -134,20 +135,6 @@ cmd open ${{
   open "$f"
 }}
 
-
-map r ${{
-# get 'basename' of the selection
-filename="${f##*/}"
-# quote it so we won't deal with quotes in the lf -remote command
-  filename="$(printf '%q' "$filename")"
-    filename="${filename// /<space>}"
-    lf -remote "send $id push :rename<space>$filename<a-b><c-b>"
-}}
-
-# rename current file without overwrite
-#cmd rename %[ -e $1 ] && printf "file exists" || mv $f $1
-
-
 # make sure trash folder exists
 %mkdir -p ~/.trash
 
@@ -155,16 +142,6 @@ filename="${f##*/}"
 # (also see 'man mv' for backup/overwrite options)
 cmd trash %set -f; mv $fx ~/.trash
 
-# define a custom 'delete' command
- cmd delete ${{
-     set -f
-     printf "$fx\n"
-     printf "delete?[y/n]"
-     read ans
-     [ $ans = "y" ] && rm -rf $fx
- }}
-
-# use '<delete>' key for either 'trash' or 'delete' command
 map Dd trash
 map DD delete
 

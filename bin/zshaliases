@@ -3,6 +3,7 @@
 # Aliases
 # Pacman
 # search through all available packages, install selected
+alias psyu="sudo pacman -Syu"
 alias pss="pacman -Slq | fzf --multi --preview 'pacman --color=always -Si {1}' | xargs -ro sudo pacman -S"
 # List all your installed packages, and then remove selected packages:
 alias pqs="pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
@@ -36,5 +37,9 @@ alias cat="bat"
 alias find="fd"
 alias pytest="pytest --reuse-db --reruns 0 -n auto"
 alias pyl="pytest --reuse-db --lf -n0 -fsvv"
-alias back="cd ~/work/mx-backend/src && pyenv activate mx-backend-3.6.8"
+alias back="cd ~/work/mx-backend/src && poetry shell"
 alias front="cd ~/work/mx-webapp && nvm use"
+
+alias vimrc="vim ~/.vimrc"
+
+alias wayrestart="killall -SIGUSR2 waybar"

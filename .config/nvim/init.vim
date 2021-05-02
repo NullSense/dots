@@ -18,6 +18,25 @@ autocmd BufReadPost,FileReadPost,BufNewFile * call system("tmux rename-window " 
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
+function! QuickFixOpenAll()
+  if empty(getqflist())
+    return
+  endif
+  let modifier = "tabe"
+  let s:prev_val = ""
+  for d in getqflist()
+    let s:curr_val = bufname(d.bufnr)
+    if (s:curr_val != s:prev_val)
+      exec modifier." " . s:curr_val
+      let modifier = 'vert sb'
+    endif
+    let s:prev_val = s:curr_val
+  endfor
+endfunction
+
+command! QuickFixOpenAll call QuickFixOpenAll()
+nnoremap <leader>oa :QuickFixOpenAll<cr>
+
 "Mappings
 let mapleader="\<Space>"
 "Clipboard remaps
@@ -56,7 +75,7 @@ nnoremap <Leader>k ddkP
 "Indentation
 set autoindent
 set smartindent
-set tabstop=8
+set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set expandtab
@@ -78,7 +97,6 @@ set autoread "reload file on change on disk
 au CursorHold * checktime
 set mouse=a
 set encoding=utf-8 "windows specific rendering option
-set undofile "persistent undo
 set number
 set relativenumber
 augroup numbertoggle "no rel nums on non focused buffer
@@ -101,16 +119,13 @@ set hidden "Show hidden buffers
 syntax on "Syntax highlighting
 
 "Sessions per folder
-function! MakeSession(overwrite)
+function! MakeSession()
   let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
   if (filewritable(b:sessiondir) != 2)
     exe 'silent !mkdir -p ' b:sessiondir
     redraw!
   endif
   let b:filename = b:sessiondir . '/session.vim'
-  if a:overwrite == 0 && !empty(glob(b:filename))
-    return
-  endif
   exe "mksession! " . b:filename
 endfunction
 
@@ -127,12 +142,11 @@ endfunction
 " Adding automatons for when entering or leaving Vim
 if(argc() == 0)
   au VimEnter * nested :call LoadSession()
-  au VimLeave * :call MakeSession(1)
-else
-  au VimLeave * :call MakeSession(0)
 endif
 
-set ssop-=options "do not store global and local values in a session
+au VimLeave * :call MakeSession()
+
+"set ssop-=options "do not store global and local values in a session
 
 "Install plug if not installed
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
@@ -144,51 +158,32 @@ endif
 call plug#begin()
     Plug 'szw/vim-maximizer'
     let g:maximizer_set_default_mapping = 0
-    nnoremap <silent><leader>z :maximizertoggle<cr>
-    vnoremap <silent><leader>z :maximizertoggle<cr>gv
-    inoremap <silent><leader>z <c-o>:maximizertoggle<cr>
+    nnoremap <silent><leader>z :MaximizerToggle<cr>
+    vnoremap <silent><leader>z :MaximizerToggle<cr>gv
+    inoremap <silent><leader>z <c-o>:MaximizerToggle<cr>
 
     Plug 'preservim/tagbar'
     nmap <Leader>t :TagbarToggle<CR>
     Plug 'neovim/nvim-lspconfig'
-    Plug 'aca/pylance.nvim', { 'do': './install.sh' }
-    Plug 'nvim-lua/completion-nvim'
-    Plug 'mfussenegger/nvim-dap'
-    Plug 'ThePrimeagen/vim-be-good'
-
-    Plug 'ripxorip/aerojump.nvim', { 'do': ':UpdateRemotePlugins' }
-    nmap <Leader>as <Plug>(AerojumpSpace)
-    nmap <Leader>ab <Plug>(AerojumpBolt)
-
-    Plug 'vim-test/vim-test'
-    nmap <silent> <Leader>tn :TestNearest<CR>
-    nmap <silent> <Leader>tf :TestFile<CR>
-    nmap <silent> <Leader>tl :TestLast<CR>
-
-    let g:test#strategy = 'neovim'
-    let test#python#runner = 'pytest'
-
-    let test#python#pytest#options = {
-                \ 'nearest': '--reuse-db --reruns 0 -n0 -fsvv',
-                \ 'last':    '--reuse-db --reruns 0 -n0 -fsvv',
-                \ 'file':    '--reuse-db --reruns 0 -n0 -fsvv --ff',
-                \}
-
+    Plug 'hrsh7th/nvim-compe'
+    inoremap <silent><expr> <C-Space> compe#complete()
+    inoremap <silent><expr> <CR>      compe#confirm('<CR>')
+    inoremap <silent><expr> <C-e>     compe#close('<C-e>')
+    inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
+    inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
     if has('nvim') "normal mode terminal
       tmap <C-o> <C-\><C-n>
     endif
 
-    inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-    set completeopt=menuone,noinsert,noselect
-    set completeopt-=preview
+    "inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+    "inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+    set completeopt=menuone,noselect
     Plug 'mbbill/undotree'
     nnoremap <Leader>u :UndotreeToggle<CR>
-    if has("persistent_undo")
-        set undodir=$HOME"/.vim/undotree"
-        set undofile
-    endif
-    Plug 'tpope/vim-fugitive'
+    set undofile
+    set undodir=$HOME"/.vim/undotree"
+    set undolevels=1000
+    set undoreload=10000
     Plug 'tpope/vim-repeat'
     Plug 'junegunn/fzf', {'do': {-> fzf#install()}}
     Plug 'junegunn/fzf.vim'
@@ -209,11 +204,7 @@ call plug#begin()
 
     command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
     "git gutter
-    if has('nvim') || has('patch-8.0.902')
-      Plug 'mhinz/vim-signify'
-    else
-      Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
-    endif
+    Plug 'mhinz/vim-signify'
 
     "Markdown
     Plug 'plasticboy/vim-markdown'
@@ -221,6 +212,8 @@ call plug#begin()
     let g:livedown_autorun = 1
 
     Plug 'morhetz/gruvbox'
+    Plug 'folke/lsp-colors.nvim'
+    Plug 'onsails/lspkind-nvim'
     "Theming
     if exists('+termguicolors')
       let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
@@ -228,11 +221,13 @@ call plug#begin()
       set termguicolors
     endif
     let &t_ut=''
+    set background=dark
     let g:gruvbox_contrast_dark='medium'
     let g:gruvbox_italic=1
     let g:gruvbox_bold=1
 
-    Plug 'ptzz/lf.vim'
+    Plug 'preservim/nerdtree'
+    nnoremap <C-t> :NERDTreeFind<CR>
     Plug 'voldikss/vim-floaterm'
     Plug 'blueyed/vim-diminactive'
     Plug 'camspiers/lens.vim'
@@ -257,8 +252,19 @@ call plug#begin()
     set foldmethod=expr
     set foldexpr=nvim_treesitter#foldexpr()
     Plug 'p00f/nvim-ts-rainbow'
+    Plug 'tmsvg/pear-tree'
+    let g:pear_tree_smart_openers = 1
+    let g:pear_tree_smart_closers = 1
+    let g:pear_tree_smart_backspace = 1
+    " Disable automapping so we can fix Coc mapping.
+    let g:pear_tree_map_special_keys = 0
+
+    " Default mappings:
+    imap <BS> <Plug>(PearTreeBackspace)
+    imap <Esc> <Plug>(PearTreeFinishExpansion)
+    " Get PearTreeExpand working with coc.nvim
+    imap <expr> <CR> pumvisible() ? compe#confirm('<CR>') : "\<Plug>(PearTreeExpand)"
     Plug 'tpope/vim-surround'
-    Plug 'tommcdo/vim-exchange'
     Plug 'norcalli/nvim-colorizer.lua'
     Plug 'vim-airline/vim-airline'
     let g:airline_powerline_fonts = 1
@@ -276,51 +282,169 @@ colorscheme gruvbox
 
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  ensure_installed = "maintained",  -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   highlight = {
-    enable = true,              -- false will disable the whole extension
+    enable = true,               -- false will disable the whole extension
   },
   rainbow = {
     enable = true,
   },
   indent = {
-    enable = true,
+    enable = false,
   },
   refactor = {
     highlight_definitions = { enable = true },
     highlight_current_scope = { enable = true },
+    smart_rename = { enable = false },
   },
 }
 
-local lspconfig = require('lspconfig')
+require'compe'.setup {
+  enabled = true;
+  autocomplete = true;
+  debug = false;
+  min_length = 1;
+  preselect = 'enable';
+  throttle_time = 80;
+  source_timeout = 200;
+  incomplete_delay = 400;
+  max_abbr_width = 100;
+  max_kind_width = 100;
+  max_menu_width = 100;
+  documentation = true;
 
-require 'pylance'
-lspconfig.pylance.setup{
-on_attach=require'completion'.on_attach,
-  settings = {
-    python = {
-      analysis = {
-        typeCheckingMode = "basic",
-        completeFunctionParens = true,
-      }
-    }
-  }
+  source = {
+    path = true;
+    buffer = true;
+    calc = true;
+    nvim_lsp = true;
+    nvim_lua = true;
+    vsnip = false;
+    treesitter = true;
+    tags = true;
+    spell = true;
+    calc = true;
+  };
 }
 
---vim.lsp.callbacks["textDocument/publishDiagnostics"] = function() end
+local on_attach = function(client)
+  if client.resolved_capabilities.document_formatting then
+    vim.cmd [[augroup lsp_formatting]]
+    vim.cmd [[autocmd!]]
+    vim.cmd [[autocmd BufWritePre <buffer> :lua vim.lsp.buf.formatting_sync({},1000)]]
+    vim.cmd [[augroup END]]
+  end
+end
+
 require('lspfuzzy').setup {}
-require('colorizer').setup()
+require('colorizer').setup{}
+
+--require'lspconfig'.pyright.setup{}
+require'lspconfig'.html.setup{
+    init_options = {
+        configurationSection = { "html" },
+        embeddedLanguages = {
+            css = true,
+            javascript = true
+        }
+    }
+}
+require"lspconfig".cssls.setup {on_attach = on_attach}
+require"lspconfig".bashls.setup {on_attach = on_attach}
+require"lspconfig".dockerls.setup {on_attach = on_attach}
+require'lspconfig'.jsonls.setup {
+    commands = {
+      Format = {
+        function()
+          vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
+        end
+      }
+    }
+}
+require"lspconfig".yamlls.setup {on_attach = on_attach}
+
+require"lspconfig".tsserver.setup {
+  on_attach = function(client)
+    if client.config.flags then
+      client.config.flags.allow_incremental_sync = true
+    end
+    client.resolved_capabilities.document_formatting = false
+  end
+}
+
+local eslint = {
+    lintCommand = "node_modules/.bin/eslint_d --ext .js,.jsx,.ts,.tsx -c .eslintrc.js -f visualstudio --stdin --stdin-filename ${INPUT}",
+    lintIgnoreExitCode = true,
+    lintStdin = true,
+    foratStdin= true,
+    lintFormats = {
+        "%f(%l,%c): %tarning %m",
+        "%f(%l,%c): %rror %m"
+    },
+    lintSource = "eslint"
+}
+
+local prettier = {
+    formatCommand = "node_modules/.bin/prettier"
+}
+
+local isort = {
+    formatCommand = "isort -rc -",
+    formatStdin = true,
+    lintFormats = {"%f:%l:%c: %m"},
+}
+
+local flake8 = {
+    lintCommand = "flake8 --max-line-length 100 --stdin-display-name ${INPUT} -",
+    lintStdin = true,
+    lintIgnoreExitCode = true,
+    lintFormats = {"%f:%l:%c: %m"},
+    lintSource = "flake8"
+}
+
+local black = {
+    formatCommand = "black --fast -",
+    formatStdin = true
+}
+
+require "lspconfig".efm.setup {
+    on_attach = on_attach,
+    init_options = {documentFormatting = true},
+    settings = {
+        rootMarkers = {".git/"},
+        languages = {
+            javascript = {eslint},
+            javascriptreact = {eslint},
+            typescript = {eslint},
+            typescriptreact = {eslint},
+            python = {black, isort, flake8},
+        }
+    },
+    filetypes = {"javascript", "javascriptreact", "typescript", "typescriptreact", "python"},
+}
+
+
+require("lspkind").init(
+    {
+        with_text = true,
+        symbol_map = {
+            Folder = ""
+        }
+    }
+)
+
 EOF
+highlight link CompeDocumentation NormalFloat
 let g:diagnostic_enable_virtual_text = 1
 let g:diagnostic_enable_underline = 0
 let g:diagnostic_auto_popup_while_jump = 1
 let g:diagnostic_insert_delay = 1
-"let g:python3_host_prog = '/usr/bin/python3'
-"let g:python2_host_prog = '/usr/bin/python2'
+let g:python3_host_prog = '/usr/bin/python3'
+let g:python2_host_prog = '/usr/bin/python2'
 
 nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> gi    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> gI    <cmd>lua vim.lsp.buf.implementation()<CR>
 "nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
 nnoremap <silent> <Leader>D   <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
