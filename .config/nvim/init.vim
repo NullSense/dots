@@ -5,6 +5,9 @@ nmap k gk
 "so I don't need to source every time
 autocmd BufWritePost .vimrc source %
 
+autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 1000)
+autocmd BufWritePre *.py.in lua vim.lsp.buf.formatting_sync(nil, 1000)
+
 "Load file to last position of cursor
 autocmd BufReadPost *
       \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
@@ -96,7 +99,7 @@ set signcolumn=yes
 set autoread "reload file on change on disk
 au CursorHold * checktime
 set mouse=a
-set encoding=utf-8 "windows specific rendering option
+set encoding=UTF-8 "windows specific rendering option
 set number
 set relativenumber
 augroup numbertoggle "no rel nums on non focused buffer
@@ -118,36 +121,6 @@ set list "Shows invisible characters
 set hidden "Show hidden buffers
 syntax on "Syntax highlighting
 
-"Sessions per folder
-function! MakeSession()
-  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
-  if (filewritable(b:sessiondir) != 2)
-    exe 'silent !mkdir -p ' b:sessiondir
-    redraw!
-  endif
-  let b:filename = b:sessiondir . '/session.vim'
-  exe "mksession! " . b:filename
-endfunction
-
-function! LoadSession()
-  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
-  let b:sessionfile = b:sessiondir . "/session.vim"
-  if (filereadable(b:sessionfile))
-    exe 'source ' b:sessionfile
-  else
-    echo "No session loaded."
-  endif
-endfunction
-
-" Adding automatons for when entering or leaving Vim
-if(argc() == 0)
-  au VimEnter * nested :call LoadSession()
-endif
-
-au VimLeave * :call MakeSession()
-
-"set ssop-=options "do not store global and local values in a session
-
 "Install plug if not installed
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
     silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
@@ -163,31 +136,26 @@ call plug#begin()
     inoremap <silent><leader>z <c-o>:MaximizerToggle<cr>
 
     Plug 'preservim/tagbar'
+    Plug 'dstein64/vim-startuptime'
     nmap <Leader>t :TagbarToggle<CR>
     Plug 'neovim/nvim-lspconfig'
-    Plug 'hrsh7th/nvim-compe'
-    inoremap <silent><expr> <C-Space> compe#complete()
-    inoremap <silent><expr> <CR>      compe#confirm('<CR>')
-    inoremap <silent><expr> <C-e>     compe#close('<C-e>')
-    inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
-    inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
-    if has('nvim') "normal mode terminal
-      tmap <C-o> <C-\><C-n>
-    endif
-
-    "inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-    "inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+    Plug 'hrsh7th/cmp-nvim-lsp'
+    Plug 'hrsh7th/cmp-buffer'
+    Plug 'hrsh7th/cmp-path'
+    Plug 'hrsh7th/cmp-cmdline'
+    Plug 'hrsh7th/nvim-cmp'
+    Plug 'L3MON4D3/LuaSnip'
+    Plug 'saadparwaiz1/cmp_luasnip'
+    Plug 'ray-x/lsp_signature.nvim'
     set completeopt=menuone,noselect
-    Plug 'mbbill/undotree'
-    nnoremap <Leader>u :UndotreeToggle<CR>
-    set undofile
-    set undodir=$HOME"/.vim/undotree"
-    set undolevels=1000
-    set undoreload=10000
     Plug 'tpope/vim-repeat'
+    Plug 'andymass/vim-matchup'
     Plug 'junegunn/fzf', {'do': {-> fzf#install()}}
     Plug 'junegunn/fzf.vim'
     Plug 'ojroques/nvim-lspfuzzy'
+    Plug 'APZelos/blamer.nvim'
+    let g:blamer_enabled = 1
+    let g:blamer_delay = 300
     let g:fzf_action = {
                 \ 'ctrl-h': 'split',
                 \ 'ctrl-v': 'vsplit'
@@ -211,23 +179,19 @@ call plug#begin()
     Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
     let g:livedown_autorun = 1
 
-    Plug 'morhetz/gruvbox'
+    Plug 'ellisonleao/gruvbox.nvim'
     Plug 'folke/lsp-colors.nvim'
     Plug 'onsails/lspkind-nvim'
     "Theming
-    if exists('+termguicolors')
-      let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
-      let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
-      set termguicolors
-    endif
-    let &t_ut=''
+    set termguicolors
     set background=dark
     let g:gruvbox_contrast_dark='medium'
     let g:gruvbox_italic=1
     let g:gruvbox_bold=1
 
-    Plug 'preservim/nerdtree'
-    nnoremap <C-t> :NERDTreeFind<CR>
+    Plug 'kyazdani42/nvim-web-devicons' " for file icons
+    Plug 'kyazdani42/nvim-tree.lua'
+    nnoremap <C-n> :NvimTreeToggle<CR>
     Plug 'voldikss/vim-floaterm'
     Plug 'blueyed/vim-diminactive'
     Plug 'camspiers/lens.vim'
@@ -252,37 +216,126 @@ call plug#begin()
     set foldmethod=expr
     set foldexpr=nvim_treesitter#foldexpr()
     Plug 'p00f/nvim-ts-rainbow'
-    Plug 'tmsvg/pear-tree'
-    let g:pear_tree_smart_openers = 1
-    let g:pear_tree_smart_closers = 1
-    let g:pear_tree_smart_backspace = 1
-    " Disable automapping so we can fix Coc mapping.
-    let g:pear_tree_map_special_keys = 0
-
-    " Default mappings:
-    imap <BS> <Plug>(PearTreeBackspace)
-    imap <Esc> <Plug>(PearTreeFinishExpansion)
-    " Get PearTreeExpand working with coc.nvim
-    imap <expr> <CR> pumvisible() ? compe#confirm('<CR>') : "\<Plug>(PearTreeExpand)"
     Plug 'tpope/vim-surround'
     Plug 'norcalli/nvim-colorizer.lua'
-    Plug 'vim-airline/vim-airline'
-    let g:airline_powerline_fonts = 1
-    let g:airline#extensions#hunks#non_zero_only = 1
-    let g:airline#extensions#tabline#formatter = 'unique_tail'
-    let g:airline#extensions#vista#enabled = 1
-    let g:airline#extensions#coc#enabled = 0
-    let g:airline#extensions#branch#format = 1
-     let g:airline#extensions#branch#displayed_head_limit = 8
-    let g:airline_extensions = ['hunks', 'branch', 'tabline', 'coc']
-    let g:airline_section_y = ''
+    Plug 'nvim-lualine/lualine.nvim'
+    Plug 'windwp/nvim-autopairs'
+    "Plug 'vim-airline/vim-airline'
+    "let g:airline_powerline_fonts = 1
+    "let g:airline#extensions#hunks#non_zero_only = 1
+    "let g:airline#extensions#tabline#formatter = 'unique_tail'
+    "let g:airline#extensions#coc#enabled = 0
+    "let g:airline#extensions#branch#format = 1
+     "let g:airline#extensions#branch#displayed_head_limit = 8
+    "let g:airline_extensions = ['hunks', 'branch', 'tabline']
+    "let g:airline_section_y = ''
 call plug#end()
 
 colorscheme gruvbox
 
+
 lua <<EOF
+require('nvim-autopairs').setup{}
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'auto',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    always_divide_middle = true,
+  },
+  sections = {
+    lualine_a = {
+      { 'mode', fmt = function(str) return str:sub(1,1) end }
+      },
+    lualine_b = {
+      { 'branch', fmt = function(str) return str:sub(1,7) end }, 'diff', 'diagnostics'
+      },
+    lualine_c = {'filename'},
+    lualine_x = {'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  inactive_sections = {
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+  },
+  tabline = {
+      lualine_a = {
+    {
+      'buffers',
+      show_filename_only = true,   -- Shows shortened relative path when set to false.
+      show_modified_status = true, -- Shows indicator when the buffer is modified.
+    }
+  }
+  },
+}
+require "lsp_signature".setup()
+local cmp = require'cmp'
+  cmp.setup({
+    snippet = {
+      expand = function(args)
+        require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+      end,
+    },
+    mapping = {
+      ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+      ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+      ['<C-e>'] = cmp.mapping({
+        i = cmp.mapping.abort(),
+        c = cmp.mapping.close(),
+      }),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    },
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'luasnip' }, -- For luasnip users.
+    }, {
+      { name = 'buffer' },
+    })
+  })
+
+  -- Set configuration for specific filetype.
+  cmp.setup.filetype('gitcommit', {
+    sources = cmp.config.sources({
+      { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it. 
+    }, {
+      { name = 'buffer' },
+    })
+  })
+
+  -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline('/', {
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+
+  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline(':', {
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+    })
+  })
+
+  local lspkind = require('lspkind')
+cmp.setup {
+  formatting = {
+    format = lspkind.cmp_format({
+      mode = 'symbol',
+      maxwidth = 50,
+    })
+  }
+}
+
+require'nvim-tree'.setup {
+}
+
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained",  -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   highlight = {
     enable = true,               -- false will disable the whole extension
   },
@@ -299,34 +352,6 @@ require'nvim-treesitter.configs'.setup {
   },
 }
 
-require'compe'.setup {
-  enabled = true;
-  autocomplete = true;
-  debug = false;
-  min_length = 1;
-  preselect = 'enable';
-  throttle_time = 80;
-  source_timeout = 200;
-  incomplete_delay = 400;
-  max_abbr_width = 100;
-  max_kind_width = 100;
-  max_menu_width = 100;
-  documentation = true;
-
-  source = {
-    path = true;
-    buffer = true;
-    calc = true;
-    nvim_lsp = true;
-    nvim_lua = true;
-    vsnip = false;
-    treesitter = true;
-    tags = true;
-    spell = true;
-    calc = true;
-  };
-}
-
 local on_attach = function(client)
   if client.resolved_capabilities.document_formatting then
     vim.cmd [[augroup lsp_formatting]]
@@ -339,7 +364,7 @@ end
 require('lspfuzzy').setup {}
 require('colorizer').setup{}
 
---require'lspconfig'.pyright.setup{}
+require'lspconfig'.pyright.setup{}
 require'lspconfig'.html.setup{
     init_options = {
         configurationSection = { "html" },
@@ -349,18 +374,7 @@ require'lspconfig'.html.setup{
         }
     }
 }
-require"lspconfig".cssls.setup {on_attach = on_attach}
-require"lspconfig".bashls.setup {on_attach = on_attach}
-require"lspconfig".dockerls.setup {on_attach = on_attach}
-require'lspconfig'.jsonls.setup {
-    commands = {
-      Format = {
-        function()
-          vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
-        end
-      }
-    }
-}
+
 require"lspconfig".yamlls.setup {on_attach = on_attach}
 
 require"lspconfig".tsserver.setup {
@@ -423,18 +437,7 @@ require "lspconfig".efm.setup {
     filetypes = {"javascript", "javascriptreact", "typescript", "typescriptreact", "python"},
 }
 
-
-require("lspkind").init(
-    {
-        with_text = true,
-        symbol_map = {
-            Folder = ""
-        }
-    }
-)
-
 EOF
-highlight link CompeDocumentation NormalFloat
 let g:diagnostic_enable_virtual_text = 1
 let g:diagnostic_enable_underline = 0
 let g:diagnostic_auto_popup_while_jump = 1

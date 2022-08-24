@@ -6,13 +6,13 @@ font pango:Hack Nerd Font 6 # for window titles
 set $mod Mod4
 set $term alacritty
 focus_follows_mouse no
-for_window [class="^.*"] border pixel 1
-default_border pixel 1
+for_window [class="^.*"] border pixel 2
+default_border pixel 2
 default_floating_border normal
 hide_edge_borders smart
 
 # wallpaper
-output "*" bg ~/Sync/Pictures/Wallpapers/falcon-9-wallpaper-4k.jpg fill
+output "*" bg ~/Sync/Pictures/photography/Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg fill
 
 ##########################################################################################################################################
 # Startup ################################################################################################################################
@@ -27,16 +27,15 @@ exec spotify
 exec $term --title 'dropdown_term'
 
 exec swaymsg 'workspace $ws1; exec firefox -p Work'
-exec swaymsg 'workspace $ws10; exec firefox -p Home'
+# exec swaymsg 'workspace $ws10; exec firefox -p Home'
 
 exec swaymsg 'workspace $ws2; exec $term'
 
 exec swaymsg 'workspace $ws3; exec slack'
-exec swaymsg 'workspace $ws3; exec signal-desktop'
-exec swaymsg 'workspace $ws3; exec discord'
+# exec swaymsg 'workspace $ws3; exec signal-desktop'
+# exec swaymsg 'workspace $ws3; exec discord'
 
 exec swaymsg 'workspace $ws9; exec transmission-gtk'
-exec swaymsg 'workspace $ws9; exec yubioath-desktop'
 
 ### Idle configuration
 exec swayidle -w \
@@ -88,11 +87,8 @@ for_window [title="Sharing Indicator$"] floating enable, sticky enable
 # Bindings ###############################################################################################################################
 ##########################################################################################################################################
 
-# start a terminal
+## Start a terminal
 bindsym $mod+Return exec $term
-
-## Notifications
-#bindsym Control+Shift+Space exec makoctl dismiss --all
 
 ## Dropdown Spotify
 bindsym $mod+m [class="Spotify"] scratchpad show, fullscreen enable
@@ -103,9 +99,6 @@ bindsym $mod+u [title="dropdown_term"] scratchpad show, move position center, re
 # launcher
 bindsym $mod+d exec $term --class 'sway-launcher-desktop' -e bash -c '~/Programming/sway-launcher-desktop/sway-launcher-desktop.sh'
 
-# Open link in mpv
-bindsym $mod+y exec mpv --ontop --no-border --force-window --autofit=600x380 --geometry=-12-10 $(wl-paste)
-
 ## Screenshots
 bindsym Print exec grimshot --notify copy window
 bindsym control+Print exec grimshot --notify copy window && wl-paste | 0x0
@@ -114,6 +107,8 @@ bindsym control+Print exec grimshot --notify copy window && wl-paste | 0x0
 bindsym $mod+Insert exec --no-startup-id notify-send -t 2000 "$(wl-paste)"
 ## Upload clipboard contents
 bindsym $mod+Shift+Insert exec wl-paste | 0x0
+## Escape quotes and backslashes and notify-send
+bindsym $mod+Control+Insert exec escaper
 
 ## Music player
 bindsym $mod+p exec "playerctl play-pause"
@@ -137,7 +132,7 @@ bindsym XF86MonBrightnessUp exec sudo light -A 5
 bindsym XF86MonBrightnessDown exec sudo light -U 5
 
 # Shutdown, reboot, lock screen
-set $Locker exec lock.sh && sleep 1
+bindsym Control+Alt+Delete exec swaylock
 
 set $mode_system System (l) lock, (e) logout, (s) suspend, (r) reboot, (Shift+s) shutdown
 mode "$mode_system" {
@@ -312,3 +307,5 @@ input 1739:52620:SYNA8005:00_06CB:CD8C_Touchpad {
     tap enabled
     natural_scroll enabled
 }
+
+exec "systemctl --user import-environment"

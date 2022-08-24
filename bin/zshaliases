@@ -11,6 +11,8 @@ alias pqs="pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo 
 # search through all available packages, install selected
 alias tss="trizen -SQqs | fzf --bind 'change:reload:(trizen -SQaqs {q})' --multi --preview 'trizen -Sai --forcecolors {1}' | xargs -ro trizen -S"
 
+alias sedit="sudoedit"
+
 alias vim="nvim"
 # Docker
 alias dcu="docker-compose up"
@@ -19,7 +21,6 @@ alias dcr="docker-compose restart"
 
 # git aliases
 alias gs='git st'
-alias gcp='git cherry-pick'
 alias gl="git log master..HEAD --graph --pretty=format:'%Cred%h%Creset %Cgreen(%<(10,trunc)%cr) %C(bold blue)%<(16,trunc)<%an>%Creset %s %C(yellow)%d%Creset' --abbrev-commit --date=relative"
 alias gll="git log master --graph --pretty=format:'%Cred%h%Creset %Cgreen(%<(10,trunc)%cr) %C(bold blue)%<(16,trunc)<%an>%Creset %s %C(yellow)%d%Creset' --abbrev-commit --date=relative"
 alias gri='git rebase -i'

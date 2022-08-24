@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export FORGIT_COPY_CMD='wl-copy'
+
 # connect to wifi or vpn
 wl(){
   local wifi
@@ -44,10 +46,25 @@ fkill() {
   fi
 }
 
+gcbb() {
+  local tags branches target
+  branches=$(
+  git --no-pager branch --sort=-committerdate --all \
+    --format="%(if)%(HEAD)%(then)%(else)%(if:equals=HEAD)%(refname:strip=3)%(then)%(else)%1B[0;34;1mbranch%09%1B[m%(refname:short)%(end)%(end)" \
+    | sed '/^$/d') || return
+      tags=$(
+      git --no-pager tag | awk '{print "\x1b[35;1mtag\x1b[m\t" $1}') || return
+      target=$(
+      (echo "$branches"; echo "$tags") |
+        fzf --no-hscroll --no-multi -n 2 \
+        --ansi --preview="git log master..{2} --graph --pretty=format:'%Cgreen(%<(7,trunc)%cr) %C(bold blue)%<(7,trunc)<%an>%Creset %s %C(yellow)%d%Creset' --color=always --abbrev-commit --date=relative") || return
+              git checkout "$(awk '{print $2}' <<<"$target" )"
+}
+
 # open file in vim with preview
 fe() (
   exec < /dev/tty
-  IFS=$'\n' files=($(fzf --preview 'bat --style=numbers --color=always --line-range :30 {}' --query="$1" --multi --select-1 --exit-0))
+  IFS=$'\n' files=($(fzf --preview 'bat --style=numbers --color=always --line-range :90 {}' --query="$1" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && ${EDITOR:-nvim} "${files[@]}"
 )
 zle -N fe
@@ -57,6 +74,8 @@ export FZF_DEFAULT_COMMAND='rg --column --line-number --no-heading --smart-case 
 # fzf colors
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
 --border
+--bind='alt-k:preview-up,alt-p:preview-up'
+--bind='alt-j:preview-down,alt-n:preview-down'
 --color='fg:#ebdbb2,bg:#282828,hl:#928374'
 --color='fg+:#ebdbb2,bg+:#3c3836,hl+:#fb4934'
 --color='info:#8ec07c,prompt:#fb4934,pointer:#fb4934'

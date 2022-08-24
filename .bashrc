@@ -200,3 +200,7 @@ ex=:\
 bind -x '"\C-p": fe;'
 bind -x $'"\C-l": clear;'
 bind '"\C-o":"lfcd\C-m"'
+
+# >>>> Vagrant command completion (start)
+. /opt/vagrant/embedded/gems/2.2.14/gems/vagrant-2.2.14/contrib/bash/completion.sh
+# <<<<  Vagrant command completion (end)

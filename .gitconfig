@@ -7,6 +7,13 @@
 [core]
 	excludesfile = /home/ongo/.gitignore
 	pager = delta --dark
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    features = line-numbers decorations
+    syntax-theme = gruvbox
+[delta "decorations"]
+    file-style = bold blue ul
 [rebase]
 	autosquash = true
 [commit]

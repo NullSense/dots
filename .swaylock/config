@@ -1,8 +1,11 @@
 ignore-empty-password
 show-failed-attempts
-image=/home/ongo/Sync/Pictures/Wallpapers/falcon-9-wallpaper-4k.jpg
+image=~/Sync/Pictures/photography/Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg
+disable-caps-lock-text
 indicator-caps-lock
 clock
 indicator
-indicator-radius=200
+indicator-radius=400
 indicator-idle-visible
+daemonize
+
