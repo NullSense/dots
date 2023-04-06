@@ -34,17 +34,17 @@ save_to_clipboard: true
 
 # Font configuration (changes require restart)
 font:
-  size: 9
+  size: 11
   normal:
-    family: Hack
+    family: SourceCodePro
     style: Regular
 
   bold:
-    family: Hack
+    family: SourceCodePro
     style: Bold
 
   italic:
-    family: Hack
+    family: SourceCodePro
     style: Italic
 
 #key_bindings:

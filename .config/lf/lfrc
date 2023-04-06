@@ -71,8 +71,13 @@ set drawbox on
 set incsearch on
 
 # set previewer
-set previewer ~/.config/lf/pv.sh
+#set previewer ~/.config/lf/pv.sh
 map i $~/.config/lf/pv.sh $f | less -R
+
+set previewer ctpv
+set cleaner ctpvclear
+&ctpv -s $id
+&ctpvquit $id
 
 # Image preview
 #map - $~/.config/lf/draw_img.sh $f
@@ -104,7 +109,8 @@ map Up $0x0 -f "$f"
 map Ex extract "$fs"
 
 # open stuff with rifle
-map o !rifle $f
+#map o !rifle $f
+map o open $f
 
 # define a custom 'open' command
 # This command is called when current file is not a directory. You may want to

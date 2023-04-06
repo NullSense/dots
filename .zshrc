@@ -1,4 +1,4 @@
-export PATH=$HOME/bin/:$HOME/.cargo/bin:$HOME/.gem/ruby/2.7.0/bin:$HOME/.pyenv/bin:$HOME/.poetry/bin:$HOME/.local/bin:$HOME/.nvm/versions/node/v16.0.0/bin:$PATH
+export PATH=$HOME/bin/:$HOME/.cargo/bin:$HOME/.local/share/gem/ruby/3.0.0/bin:$HOME/.pyenv/bin:$HOME/.poetry/bin:$HOME/.local/bin:$HOME/.nvm/versions/node/v16.0.0/bin:$(yarn global bin):$PATH
 export XDG_CURRENT_DESKTOP=sway
 export MANPAGER='nvim +Man!'
 export NVM_LAZY_LOAD=true
@@ -12,9 +12,11 @@ export QT_FONT_DPI=96
 export QT_QPA_PLATFORM=wayland
 export QT_WAYLAND_FORCE_DPI=physical
 export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
 #export SDL_VIDEODRIVER=x11
 export QT_DEBUG_PLUGINS=1
 export COLORTERM=truecolor
+export TERM=xterm-256color
 
 source ~/bin/zshaliases # aliases
 source ~/bin/zshzplug # zplug plugin manager

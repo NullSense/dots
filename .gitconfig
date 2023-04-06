@@ -1,7 +1,7 @@
 [user]
-	email = matas234@gmail.com
-	name = NullSense
-	signingkey = CB5590199041EB914A80D18196154ED6A2543B48
+    email = matas234@gmail.com
+    name = NullSense
+    signingkey = CB5590199041EB914A80D18196154ED6A2543B48
 [credential]
 	helper = cache --timeout=3600
 [core]
@@ -11,14 +11,13 @@
     diffFilter = delta --color-only
 [delta]
     features = line-numbers decorations
-    syntax-theme = gruvbox
+    syntax-theme = gruvbox-dark
 [delta "decorations"]
     file-style = bold blue ul
 [rebase]
 	autosquash = true
 [commit]
 	verbose = true
-	gpgsign = true
 [init]
 	defaultBranch = master
 [pull]

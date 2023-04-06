@@ -2,6 +2,34 @@
 
 export FORGIT_COPY_CMD='wl-copy'
 
+# pacman helper
+psf() {
+  mode='install'
+
+  while true; do
+    list_cmd="pacman -Slq"
+
+    [ "$mode" = 'uninstall' ] && list_cmd="pacman -Qq"
+
+    result=$(sh -c "$list_cmd" | fzf --multi --preview "pacman --color=always -Si {1}" --expect=ctrl-space --header="$(echo $mode | tr '[:lower:]' '[:upper:]') packages (Ctrl-Space to switch)")
+
+    key=$(head -1 <<< "$result")
+    pkgs=($(tail -n +2 <<< "$result"))
+
+    if [ "$key" = 'ctrl-space' ]; then
+      mode=$( [ "$mode" = 'install' ] && echo 'uninstall' || echo 'install' )
+    elif [ "${#pkgs[@]}" -gt 0 ]; then
+      if [ "$mode" = 'install' ]; then
+        sudo pacman -S "${pkgs[@]}" && break
+      else
+        sudo pacman -Rns "${pkgs[@]}" && break
+      fi
+    else
+      break
+    fi
+  done
+}
+
 # connect to wifi or vpn
 wl(){
   local wifi

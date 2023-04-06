@@ -2,7 +2,7 @@
 # Definitions ############################################################################################################################
 ##########################################################################################################################################
 
-font pango:Hack Nerd Font 6 # for window titles
+font pango:Hack 8
 set $mod Mod4
 set $term alacritty
 focus_follows_mouse no
@@ -12,7 +12,7 @@ default_floating_border normal
 hide_edge_borders smart
 
 # wallpaper
-output "*" bg ~/Sync/Pictures/photography/Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg fill
+output "*" bg ~/Downloads/pillars.jpg fill
 
 ##########################################################################################################################################
 # Startup ################################################################################################################################
@@ -31,18 +31,18 @@ exec swaymsg 'workspace $ws1; exec firefox -p Work'
 
 exec swaymsg 'workspace $ws2; exec $term'
 
-exec swaymsg 'workspace $ws3; exec slack'
-# exec swaymsg 'workspace $ws3; exec signal-desktop'
-# exec swaymsg 'workspace $ws3; exec discord'
+exec swaymsg 'workspace $ws3; exec slack --enable-features=UseOzonePlatform --ozone-platform=wayland'
+exec swaymsg 'workspace $ws3; exec signal-desktop --enable-features=UseOzonePlatform --ozone-platform=wayland'
+exec swaymsg 'workspace $ws3; exec discord --enable-features=UseOzonePlatform --ozone-platform=wayland'
 
-exec swaymsg 'workspace $ws9; exec transmission-gtk'
+#exec swaymsg 'workspace $ws9; exec transmission-gtk'
 
 ### Idle configuration
 exec swayidle -w \
          timeout 300 'swaylock -f -c 000000' \
          timeout 2600 'swaymsg "output * dpms off"' \
          resume 'swaymsg "output * dpms on"' \
-         before-sleep 'swaylock -f -c 000000'
+         before-sleep 'swaylock -f -c 000000' \
 
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
@@ -97,11 +97,21 @@ bindsym $mod+m [class="Spotify"] scratchpad show, fullscreen enable
 bindsym $mod+u [title="dropdown_term"] scratchpad show, move position center, resize set 1280 720
 
 # launcher
-bindsym $mod+d exec $term --class 'sway-launcher-desktop' -e bash -c '~/Programming/sway-launcher-desktop/sway-launcher-desktop.sh'
+bindsym $mod+d exec $term --class 'sway-launcher-desktop' -e bash -c 'sway-launcher-desktop'
 
 ## Screenshots
-bindsym Print exec grimshot --notify copy window
 bindsym control+Print exec grimshot --notify copy window && wl-paste | 0x0
+bindsym Print mode "$screenshot_mode"
+
+set $screenshot_mode screenshot_mode (e) Edit with Swappy, (s) Save to clipboard
+mode "$screenshot_mode" {
+    bindsym e exec grimshot --notify save window - | swappy -f -, mode "default"
+    bindsym s exec grimshot --notify copy window, mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
 
 ## Show clipboard contents
 bindsym $mod+Insert exec --no-startup-id notify-send -t 2000 "$(wl-paste)"
@@ -111,8 +121,8 @@ bindsym $mod+Shift+Insert exec wl-paste | 0x0
 bindsym $mod+Control+Insert exec escaper
 
 ## Music player
-bindsym $mod+p exec "playerctl play-pause"
-bindsym XF86AudioPlay exec "playerctl play-pause"
+bindsym --locked $mod+p exec "playerctl play-pause"
+bindsym --locked XF86AudioPlay exec "playerctl play-pause"
 bindsym XF86AudioPrev exec "playerctl previous"
 bindsym XF86AudioNext exec "playerctl next"
 
@@ -124,23 +134,24 @@ bindsym XF86AudioNext exec "playerctl next"
 ## Increase volume
 bindsym XF86AudioRaiseVolume exec amixer -D pulse sset Master 5%+
 bindsym XF86AudioLowerVolume exec amixer -D pulse sset Master 5%-
-bindsym XF86AudioMute exec amixer -D pulse set Master 1+ toggle && amixer get Master | grep '\[off\]' && notify-send "Audio Muted" || notify-send "Audio On"
-bindsym XF86AudioMicMute exec amixer set Capture toggle && amixer get Capture | grep '\[off\]' && notify-send "Mic Muted" || notify-send "Mic On"
+bindsym --locked XF86AudioMute exec amixer -D pulse set Master 1+ toggle && amixer get Master | grep '\[off\]' && notify-send "Audio Muted" || notify-send "Audio On"
+bindsym --locked XF86AudioMicMute exec amixer set Capture toggle && amixer get Capture | grep '\[off\]' && notify-send "Mic Muted" || notify-send "Mic On"
 
 # Backlight
-bindsym XF86MonBrightnessUp exec sudo light -A 5
-bindsym XF86MonBrightnessDown exec sudo light -U 5
+bindsym --locked XF86MonBrightnessUp exec /usr/bin/light -A 5
+bindsym --locked XF86MonBrightnessDown exec /usr/bin/light -U 5
+
 
 # Shutdown, reboot, lock screen
 bindsym Control+Alt+Delete exec swaylock
 
 set $mode_system System (l) lock, (e) logout, (s) suspend, (r) reboot, (Shift+s) shutdown
 mode "$mode_system" {
-    bindsym l exec exec swaylock, mode "default"
+    bindsym l exec swaylock, mode "default"
     bindsym e exec swaymsg exit, mode "default"
     bindsym s exec systemctl suspend, mode "default"
     bindsym r exec reboot, mode "default"
-    bindsym Shift+s exec sudo systemctl poweroff -i, mode "default"
+    bindsym Shift+s exec systemctl poweroff -i, mode "default"
 
     # back to normal: Enter or Escape
     bindsym Return mode "default"
@@ -205,9 +216,6 @@ workspace $ws10 output $left
 workspace $ws2 output $right
 workspace $ws3 output $left
 
-output $left scale 1 pos 0 60
-output $right pos 1920 0
-focus output $right
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -288,7 +296,7 @@ set $orange     #d65d0e
 # finds out, if available)
 bar {
         swaybar_command waybar
-        font pango:Hack Nerd Font 6
+        font pango:Hack 8
 }
 
 # class border          |border |backgr |text   |indicator  |child_border
@@ -298,6 +306,10 @@ client.unfocused        $bg2    $bgd    $fg3    $bg3        $bg2
 client.urgent           $red    $red    $bgs    $red        $red
 
 
+exec_always {
+    gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark'
+    gsettings set org.gnome.desktop.interface icon-theme 'Arc'
+}
 
 ##########
 # Inputs #
