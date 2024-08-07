@@ -38,7 +38,7 @@ command=df -h ~ | tail -1 | awk '{print $4}'
 interval=30
 
 [time]
-label=:
+label= :
 command=date '+%H:%M'
 #command=date '%H:%M : %Y-%m-%d '
 interval=5

@@ -94,7 +94,6 @@ sub playerctl {
 
     print(join(" - ", @metadata)) if @metadata;
 
-    
     push(@metadata, $status) if $status;
 }
 

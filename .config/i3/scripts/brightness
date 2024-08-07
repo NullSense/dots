@@ -9,13 +9,13 @@ case $BLOCK_BUTTON in
 esac
 
 if (( $brightness > 75 )); then
-    icon=
+    icon=󰃠
 elif (( $brightness > 50 )); then
-    icon=
+    icon=󰃟
 elif (( $brightness > 25 )); then
-    icon=
+    icon=󰃝
 elif (( $brightness >= 0 )); then
-    icon=
+    icon=󰃞
 fi
 
 echo $icon: $brightness%
