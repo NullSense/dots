@@ -1,5 +1,5 @@
 -- so I don't need to source every time
-vim.api.nvim_command('autocmd BufWritePost source $MYVIMRC')
+vim.api.nvim_command('autocmd BufWritePost $MYVIMRC source %')
 
 -- Show vim file open name in tmux
 vim.cmd("autocmd BufReadPost,FileReadPost,BufNewFile * call system('tmux rename-window ' .. expand('%'))")
@@ -178,7 +178,7 @@ require("lazy").setup({
             -- Autocompletion
             { 'hrsh7th/nvim-cmp' },
             { 'hrsh7th/cmp-nvim-lsp' },
-            { 'L3MON4D3/LuaSnip' },
+            --{ 'L3MON4D3/LuaSnip' },
             { "hrsh7th/cmp-buffer" },
             { "hrsh7th/cmp-path" },
             { "hrsh7th/cmp-cmdline" },
@@ -258,10 +258,16 @@ local lsp = require('lsp-zero').preset({})
 lsp.on_attach(function(client, bufnr)
     lsp.default_keymaps({ buffer = bufnr })
 
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
-    vim.keymap.set('n', '<space>f', vim.lsp.buf.format, { buffer = true })
-    vim.keymap.set('n', '<space>r', vim.lsp.buf.rename, { buffer = true })
-    vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, { buffer = true })
+    local bufopts = { noremap = true, silent = true, buffer = bufnr }
+    vim.keymap.set('n', '<space>f', vim.lsp.buf.format, bufopts)
+    vim.keymap.set('n', '<space>r', vim.lsp.buf.rename, bufopts)
+    vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+
+    -- Diagnostics key mappings
+    vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, bufopts)
+    vim.keymap.set('n', ']d', vim.diagnostic.goto_next, bufopts)
+    vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, bufopts)
+    vim.keymap.set("n", "<leader>e", '<Cmd>LspDiagnostics 0<CR>', bufopts)
 
     lsp.buffer_autoformat()
 
@@ -353,22 +359,13 @@ require('lualine').setup {
         }
     },
 }
---
--- require('lspconfig').tsserver.setup {
---     on_attach = function(client)
---         if client.config.flags then
---             client.config.flags.allow_incremental_sync = true
---         end
---         client.server_capabilities.document_formatting = false
---     end
--- }
 
 local eslint = {
     lintCommand =
-    "node_modules/.bin/eslint_d --ext .js,.jsx,.ts,.tsx -c .eslintrc.js -f visualstudio --stdin --stdin-filename ${INPUT}",
+    "node_modules/.bin/eslint_d --ext .js,.jsx,.ts,.tsx,.json -c .eslintrc.js -f visualstudio --stdin --stdin-filename ${INPUT}",
     lintIgnoreExitCode = true,
     lintStdin = true,
-    foratStdin = true,
+    formatStdin = true,
     lintFormats = {
         "%f(%l,%c): %tarning %m",
         "%f(%l,%c): %rror %m"
@@ -390,26 +387,18 @@ local black = { formatCommand = "black --fast -", formatStdin = true }
 
 require('lspconfig').efm.setup {
     on_attach = on_attach,
-    init_options = { documentFormatting = true },
+    init_options = { documentFormatting = true, codeAction = true },
     settings = {
         rootMarkers = { ".git/" },
         languages = {
-            javascript = { eslint },
-            javascriptreact = { eslint },
-            typescript = { eslint },
-            typescriptreact = { eslint },
+            javascript = { eslint, prettier },
+            javascriptreact = { eslint, prettier },
+            typescript = { eslint, prettier },
+            typescriptreact = { eslint, prettier },
             python = { black, isort, flake8 }
         }
     },
     filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "python" }
 }
-
-
--- Global mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
-vim.keymap.set("n", "<leader>e", '<Cmd>LspDiagnostics 0<CR>', { noremap = true })
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 
 vim.g.python3_host_prog = '/usr/bin/python3'
