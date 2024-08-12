@@ -1,6 +1,3 @@
--- so I don't need to source every time
-vim.api.nvim_command('autocmd BufWritePost $MYVIMRC source %')
-
 -- Show vim file open name in tmux
 vim.cmd("autocmd BufReadPost,FileReadPost,BufNewFile * call system('tmux rename-window ' .. expand('%'))")
 
@@ -47,7 +44,6 @@ vim.opt.completeopt = 'menuone,noselect'
 vim.opt.shada = "!,'300,<50,s10,%"
 vim.opt.undodir = os.getenv("HOME") .. "/.config/nvim/undodir"
 vim.opt.undofile = true
---vim.opt.shada = "'1000,!,<200,s1000,h,/100,'"
 vim.cmd('syntax on') -- Syntax highlighting
 
 -- lazy.nvim bootstrap
@@ -207,12 +203,7 @@ require("lazy").setup({
     { "kevinhwang91/nvim-hlslens",   config = function() require("hlslens").setup {} end },
     "prabirshrestha/async.vim",
     "editorconfig/editorconfig-vim",
-    {
-        'numToStr/Comment.nvim',
-        config = function()
-            require('Comment').setup()
-        end
-    },
+    "numToStr/Comment.nvim",
     {
         "nvim-treesitter/nvim-treesitter",
         opts = {
@@ -272,15 +263,16 @@ lsp.on_attach(function(client, bufnr)
     lsp.buffer_autoformat()
 
     lsp.set_sign_icons({
-        error = '',
-        warn = '',
-        hint = '',
-        info = '»'
+        error = '✘',
+        warn = '▲',
+        hint = '⚑',
+        info = '»',
     })
 end)
 lsp.setup()
 
 require("mason").setup()
+require("Comment").setup()
 require("lsp_signature").setup()
 require("lspfuzzy").setup()
 
@@ -385,16 +377,17 @@ local flake8 = {
 
 local black = { formatCommand = "black --fast -", formatStdin = true }
 
+require'lspconfig'.marksman.setup{}
 require('lspconfig').efm.setup {
     on_attach = on_attach,
     init_options = { documentFormatting = true, codeAction = true },
     settings = {
         rootMarkers = { ".git/" },
         languages = {
-            javascript = { eslint, prettier },
-            javascriptreact = { eslint, prettier },
-            typescript = { eslint, prettier },
-            typescriptreact = { eslint, prettier },
+            javascript = { eslint },
+            javascriptreact = { eslint },
+            typescript = { eslint },
+            typescriptreact = { eslint },
             python = { black, isort, flake8 }
         }
     },

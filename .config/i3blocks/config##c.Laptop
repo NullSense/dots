@@ -40,7 +40,6 @@ interval=30
 [time]
 label= :
 command=date '+%H:%M'
-#command=date '%H:%M : %Y-%m-%d '
 interval=5
 
 [date]

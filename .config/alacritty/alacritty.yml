@@ -1,6 +1,9 @@
 # Colors (Gruvbox dark)
+env:
+  TERM: xterm-256color
 colors:
   # Default colors
+  truecolor: true
   primary:
     # hard contrast: background = '#1d2021'
     # background: '#282828'
@@ -30,7 +33,7 @@ colors:
     cyan:    '#8ec07c'
     white:   '#ebdbb2'
 
-save_to_clipboard: true
+    #save_to_clipboard: true
 
 # Font configuration (changes require restart)
 font:

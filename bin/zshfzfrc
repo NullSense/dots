@@ -99,15 +99,12 @@ zle -N fe
 bindkey "^p" fe
 
 export FZF_DEFAULT_COMMAND='rg --column --line-number --no-heading --smart-case --files --hidden --follow -g "!{.mozilla,.wine,*cache*,*Cache*,.node*,.electron*,.local,.steam,.cache,.git,Steam,Music,Videos,.vscode*,.gradle,.nvm,.zplug,.forgit,.cargo,.m2,.pyenv}" 2> /dev/null'
-# fzf colors
+
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
 --border
 --bind='alt-k:preview-up,alt-p:preview-up'
 --bind='alt-j:preview-down,alt-n:preview-down'
---color='fg:#ebdbb2,bg:#282828,hl:#928374'
---color='fg+:#ebdbb2,bg+:#3c3836,hl+:#fb4934'
---color='info:#8ec07c,prompt:#fb4934,pointer:#fb4934'
---color='marker:#fb4934,spinner:#fb4934,header:#928374''
+--color='bg+:#3c3836,bg:#32302f,spinner:#fb4934,hl:#928374,fg:#ebdbb2,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:#ebdbb2,prompt:#fb4934,hl+:#fb4934''
 
 export FZF_ALT_C_OPTS="--header='Jump to directory' --preview 'tree -C {} | head -200'"
 export FZF_CTRL_R_OPTS="--header='Run command from history' --sort --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"

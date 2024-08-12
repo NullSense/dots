@@ -1,12 +1,12 @@
 ######################################################
 # Basic Definitions ##################################
 ######################################################
-font pango:Hack 8 # for window titles
+font pango:Hack Nerd Font 6
 set $mod Mod4
 set $term alacritty
 focus_follows_mouse no
 for_window [class="^.*"] border pixel 1
-smart_borders on # Only show borders when more than 1 window open
+smart_borders on
 
 ######################################################
 # STARTUP EXECUTIONS ################################
@@ -24,8 +24,8 @@ exec --no-startup-id i3-msg 'workspace $ws2; exec discord'
 exec --no-startup-id i3-msg 'workspace $ws2; exec signal-desktop'
 
 ## Locking
-exec --no-startup-id xset s 60 60
-exec --no-startup-id xset dpms 180
+exec --no-startup-id xset s 360 360
+exec --no-startup-id xset dpms 360
 ## Start XSS for lock on lid shutdown
 exec --no-startup-id xss-lock -n ~/bin/dim-screen.sh -- ~/bin/lock.sh
 
@@ -45,6 +45,9 @@ for_window [class="Signal"] move container to workspace $ws2
 for_window [window_role="GtkFileChooserDialog"] resize set 1780 920
 for_window [window_role="GtkFileChooserDialog"] move position center
 for_window [class="Mtpaint"] floating enable # Screenshot editor
+
+## Launcher
+for_window [title="sway-launcher-desktop"] floating enable, border pixel 5
 
 ######################################################
 # Bindings ###########################################
@@ -129,7 +132,7 @@ bindsym $mod+Return exec $term
 bindsym $mod+Shift+q kill
 
 # Start rofi
-bindsym $mod+d exec dmenu_run_history
+bindsym $mod+d exec --no-startup-id alacritty -t 'sway-launcher-desktop' -e bash -c 'sway-launcher-desktop'
 
 # change focus
 bindsym $mod+h focus left
